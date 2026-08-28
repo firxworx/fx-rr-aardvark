@@ -1,0 +1,85 @@
+/*
+ * Global styles to apply to form elements.
+ *
+ * Form controls are styled by `data-slot` so component files can avoid repeating the same styles and
+ * to consolidate look-and-feel in one place for consistency and ease of revision.
+ *
+ * Applies opinionated touch-manipulation on buttons to eliminate 300ms delay on touch-screens;
+ * this must be manually changed on a component className if a long-press or context menu is required.
+ *
+ * Unsets chrome/webkit autofill styles and reintroduces default pointer cursor on all
+ * buttons from earlier versions of tailwind (a common UI/UX choice for web despite
+ * differences vs. common OS defaults).
+ */
+
+@layer base {
+  [role="button"],
+  [data-slot="button"]:not([role="checkbox"]):not([role="switch"]):not([role="radio"]):not([role="combobox"]),
+  button:not([role="checkbox"]):not([role="switch"]):not([role="radio"]):not([role="combobox"]) {
+    @apply touch-manipulation cursor-pointer select-none outline-none;
+    @apply disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50;
+    @apply [&_svg]:pointer-events-none;
+  }
+
+  button,
+  input,
+  textarea,
+  select,
+  [role="combobox"],
+  [data-slot="button"],
+  [data-slot="input"],
+  [data-slot="textarea"],
+  [data-slot="select"],
+  [data-slot="select-trigger"],
+  [data-slot="switch"] {
+    @apply focus-visible:cx-focus-ring;
+    @apply aria-invalid:focus-visible:cx-focus-ring-invalid;
+  }
+
+  input,
+  textarea,
+  select,
+  [data-slot="input"],
+  [data-slot="textarea"],
+  [data-slot="checkbox"],
+  [data-slot="radio-group-item"],
+  [data-slot="select"],
+  [data-slot="select-trigger"],
+  span[role="slider"] {
+    @apply placeholder:text-muted-foreground;
+    @apply disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  input,
+  textarea {
+    @apply outline-none;
+  }
+
+  /*
+   * Field parts (label, description, error).
+   */
+  [data-slot="label"] {
+    @apply select-none;
+    @apply data-disabled:pointer-events-none data-disabled:opacity-50;
+  }
+
+  /*
+   * Unset chrome/webkit autofill styles.
+   *
+   * The inset shadow has to repaint the control's own surface: set `--input-box-shadow-color` on
+   * any container that places inputs on a surface other than the page background.
+   */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus {
+    /* biome-ignore lint/complexity/noImportantStyles: !important necessary to override browser built-in (special case) */
+    -webkit-box-shadow: 0 0 0px 1000px var(--input-box-shadow-color, var(--color-background)) inset !important;
+    -webkit-text-fill-color: var(--color-foreground);
+  }
+}

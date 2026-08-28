@@ -1,0 +1,156 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/geist-mono";
+
+@import "./palette.css";
+@import "./typeset.css";
+@import "./utilities.css";
+
+@import "./animations.css";
+@import "./forms.css";
+@import "./shadcn.css";
+
+@source "../../../apps/**/*.{ts,tsx}";
+@source "../../../components/**/*.{ts,tsx}";
+@source "../**/*.{ts,tsx}";
+
+/*
+ * shadcn/tailwind.css: `shimmer`, `scroll-fade`, `no-scrollbar`, custom `data-*` variants, `accordion`
+ * https://github.com/shadcn-ui/ui/blob/main/packages/shadcn/src/tailwind.css
+ */
+
+/*
+ * custom dark variant supports color palette defined using css `light-dark()`.
+ * replaces shadcn/ui default with dark class: `@custom-variant dark (&:is(.dark *));`
+ */
+@custom-variant dark {
+  &:is(.dark, .dark *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:not(:is(.light, .light *)) {
+      @slot;
+    }
+  }
+}
+
+/*
+ * tailwind v4 restore hover on laptops with touchscreens.
+ *
+ * @see https://github.com/tailwindlabs/tailwindcss/discussions/17225
+ * @see https://github.com/tailwindlabs/tailwindcss/issues/17421
+ */
+@custom-variant hover (&:hover);
+
+@theme {
+  --breakpoint-xmin: 20rem; /* considering... calc(20rem + 1px) */
+  --breakpoint-xs: 23.4375rem; /* 375px iPhone SE; iPhone 15+16 are 390 */
+  --breakpoint-xm: 25rem; /* 400px */
+
+  /* enable 'max-w-typeset' to limit line length for better readability */
+  /* ensure fontsize adjust is present on fallbacks to prevent layout shift when fonts load */
+  --container-typeset: 70ch;
+
+  /* 1024px @ 16px equivalent to 5xl */
+  --container-layout: 64rem;
+
+  /*
+   * custom semantic radius for controls (buttons, inputs, toggle items) and wrappers (segmented, toggle group, etc)
+   * preferred over tweaking --radius-* in shadcn.css and helps centralize customization and achieve
+   *  consistency across components from different registries.
+   */
+  --radius-control: var(--radius-md);
+
+  /* +1 spacing step (4px) ensures wrapper corners are concentric with `p-1` around its controls */
+  --radius-control-wrapper: calc(var(--radius-control) + var(--spacing));
+
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-inter);
+}
+
+:root {
+  --font-inter: "Inter Variable", "Arial", ui-sans-serif, system-ui, sans-serif;
+  --font-geist-mono: "Geist Mono Variable", ui-monospace, monospace;
+
+  color-scheme: light dark;
+  color: var(--foreground);
+  background-color: var(--background);
+
+  &.light {
+    color-scheme: only light;
+  }
+  &.dark {
+    color-scheme: only dark;
+  }
+}
+
+@layer base {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 220ms;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(*),
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation-duration: 0.01ms;
+    }
+  }
+
+  *,
+  *::before,
+  *::after {
+    scrollbar-width: thin;
+    scrollbar-color: var(--P-scrollbar-thumb) var(--P-scrollbar-track);
+  }
+
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scrollbar-gutter: stable both-edges;
+    scrollbar-width: thin;
+    scrollbar-color: var(--P-scrollbar-thumb) var(--P-scrollbar-track);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    /* relative enables backdrop-filter to work in iOS26+ safari per base-ui docs */
+    @apply relative bg-background text-foreground font-sans antialiased;
+    @apply selection:bg-P-selection selection:text-P-selection-fg;
+  }
+
+  b,
+  strong {
+    @apply font-semibold;
+  }
+}
+
+/*
+ * Component classes to disable scrollbars so Base UI does not need to inject style/script tags when
+ * comoponents such as ScrollArea.Viewport want to hide the scrollbar.
+ *
+ * Apps should add Base UI `<CSPProvider>` with `disableStyleElements` to the component tree.
+ * @see https://base-ui.com/react/utils/csp-provider
+ */
+@layer components {
+  .base-ui-disable-scrollbar {
+    scrollbar-width: none;
+  }
+  .base-ui-disable-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}

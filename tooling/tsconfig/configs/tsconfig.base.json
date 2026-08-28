@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Default",
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "strict": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "stableTypeOrdering": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "inlineSources": false,
+    "preserveWatchOutput": true,
+    "noUnusedLocals": false, // dev ergonomics (rr examples use true but it can be noisy in dev)
+    "noUnusedParameters": false,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
+    // "useDefineForClassFields": true // new/upcoming
+    // "moduleDetection": "force", (default auto; 'force' in newer rr7 examples)
+    // Recognize all CSS files as module imports.
+    // declare module "*.css" {} may be required (or vite env might include it)
+    "noUncheckedSideEffectImports": true
+  },
+  "exclude": ["node_modules"]
+}

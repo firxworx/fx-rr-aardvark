@@ -1,0 +1,46 @@
+{
+  "name": "web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "react-router dev",
+    "build": "react-router build",
+    "preview": "npm run build && vite preview",
+    "deploy": "react-router build && NODE_ENV=production WRANGLER_SEND_METRICS=false wrangler deploy",
+    "deploy:preview": "react-router build && NODE_ENV=preview wrangler deploy --env preview",
+    "deploy:version": "react-router build && wrangler versions upload",
+    "deploy:promote": "wrangler versions deploy",
+    "start": "wrangler dev --persist-to=../../.wrangler/state",
+    "shot": "node scripts/shot.ts",
+    "typegen": "wrangler types --config=./wrangler.jsonc && react-router typegen",
+    "typecheck": "pnpm run typegen && pnpm tsc --project tsconfig.json --noEmit",
+    "postinstall": "node -e \"process.exit(require('node:fs').existsSync('wrangler.jsonc') ? 0 : 1)\" && pnpm run typegen || echo 'skipped typegen: no wrangler.jsonc yet (run pnpm run setup)'"
+  },
+  "dependencies": {
+    "@base-ui/react": "catalog:",
+    "@react-router/fs-routes": "catalog:",
+    "@workspace/core": "workspace:*",
+    "@workspace/tsconfig": "workspace:*",
+    "@workspace/ui": "workspace:*",
+    "clsx": "catalog:",
+    "isbot": "catalog:",
+    "lucide-react": "catalog:",
+    "nuqs": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "react-router": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "catalog:",
+    "@playwright/test": "catalog:",
+    "@react-router/dev": "catalog:",
+    "@tailwindcss/vite": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "wrangler": "catalog:"
+  }
+}

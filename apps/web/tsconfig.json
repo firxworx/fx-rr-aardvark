@@ -1,0 +1,21 @@
+{
+  "extends": "@workspace/tsconfig/react-router",
+  "compilerOptions": {
+    "rootDirs": [".", "./.react-router/types"],
+    "types": ["vite/client", "node"],
+    "paths": {
+      "@/workers/*": ["./workers/*"],
+      "@/*": ["./app/*"]
+    }
+  },
+  "include": [
+    ".react-router/types/**/*",
+    "app/**/*",
+    "app/**/.server/**/*",
+    "app/**/.client/**/*",
+    "workers/**/*",
+    "scripts/**/*",
+    "worker-configuration.d.ts"
+  ],
+  "exclude": ["node_modules"]
+}

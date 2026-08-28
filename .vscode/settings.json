@@ -1,0 +1,110 @@
+{
+  "js/ts.experimental.useTsgo": true, // typescript v7.0
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true,
+  "js/ts.preferences.preferTypeOnlyAutoImports": true,
+  "js/ts.preferences.autoImportSpecifierExcludeRegexes": ["node_modules"],
+  "js/ts.preferences.importModuleSpecifier": "non-relative",
+
+  // ensure vscode uses pnpm vs. npm
+  "npm.packageManager": "pnpm",
+
+  // ensure json schemas of config files are downloaded and trusted for intellisense
+  "json.schemaDownload.enable": true,
+  "json.schemaDownload.trustedDomains": {
+    "https://biomejs.dev/": true,
+    "https://unpkg.com": true
+  },
+  "json.schemas": [
+    {
+      "fileMatch": ["components.json"],
+      "url": "https://ui.shadcn.com/schema.json"
+    }
+  ],
+
+  // ensure these align with tailwind configuration for intellisense to compute correct values
+  "tailwindCSS.rootFontSize": 16,
+  "tailwindCSS.codeActions": true,
+  "tailwindCSS.classFunctions": ["clsx", "cva", "cn", "cx"],
+
+  // ensure tailwind intellisense works in packages (it can be flaky in a workspace/monorepo)
+  // https://github.com/tailwindlabs/tailwindcss/issues/13136
+  // https://github.com/tailwindlabs/tailwindcss-intellisense
+  "tailwindCSS.experimental.configFile": {
+    "packages/ui/src/styles/globals.css": "packages/**/src/**",
+    "apps/web/app/styles/app.css": "apps/web/**"
+  },
+
+  // ensure eslint and prettier are disabled to avoid conflicts with biome
+  "eslint.enable": false,
+  "prettier.enable": false,
+
+  "editor.defaultFormatter": "biomejs.biome",
+  "editor.trimAutoWhitespace": true,
+  "editor.insertSpaces": false,
+  "editor.renderWhitespace": "all",
+  "editor.tabCompletion": "on", // vs. "onlySnippets"
+
+  // biome code actions on save
+  "editor.codeActionsOnSave": {
+    "source.fixAll.biome": "explicit",
+    "source.organizeImports": "never",
+    "source.organizeImports.biome": "explicit" // "always" // vs. "never" to disable biome organizing imports on save (vs. "explicit")
+  },
+
+  // ensure intellisense autocomplete for tailwind classes
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+
+  // editor automatic formatting
+  "editor.formatOnPaste": false,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": false,
+
+  // editor guides for legibility
+  "editor.guides.bracketPairs": true,
+  "editor.guides.highlightActiveIndentation": true,
+  "editor.guides.indentation": true,
+  "editor.guides.bracketPairsHorizontal": "active",
+
+  "files.associations": {
+    "*.css": "tailwindcss",
+    "*.js": "javascript",
+    "*.jsx": "javascriptreact",
+    "*.json": "json",
+    "*.ts": "typescript",
+    "*.tsx": "typescriptreact",
+    "*.yml": "yaml",
+    "*.yaml": "yaml",
+    "tsconfig.json": "jsonc",
+    "tsconfig.*.json": "jsonc"
+  },
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+  "files.trimTrailingWhitespaceInRegexAndStrings": true,
+
+  "[css]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  }
+}

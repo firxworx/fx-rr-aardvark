@@ -1,0 +1,9 @@
+{
+  "extends": "./tooling/tsconfig/configs/tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "outDir": "./build"
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "build", "dist", "**/*.js", "**/*.cjs", "**/*.mjs", "*.wip.ts"]
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "ignoreBinaries": ["awk"],
+  "ignoreDependencies": ["@napi-rs/canvas", "@napi-rs/image"], // screenshot tooling
+  "workspaces": {
+    // uncomment for ad-hoc scripts outside of workspace (e.g. scripts/**/*.ts)
+    // ".": {
+    //   "entry": ["scripts/**/*.ts"]
+    // },
+    "apps/web": {
+      // support filesystem routes @react-router/fs-routes
+      // the react-router plugin is auto-detected here from apps/web/package.json
+      // and contributes app/root.tsx, entry.client.tsx, entry.server.tsx, workers/app.ts
+      "entry": ["app/routes/**/*.{ts,tsx}"],
+      "project": ["**/*.{ts,tsx,css}"],
+
+      // cloudflare:workers and other virtual modules are workerd built-ins not npm dependencies
+      "ignoreDependencies": ["cloudflare"]
+    },
+    "packages/core": {
+      "includeEntryExports": true
+    },
+    "packages/ui": {
+      "includeEntryExports": true,
+      "project": ["**/*.{ts,tsx,css}"],
+      "ignoreDependencies": ["react-router", "@tailwindcss/postcss", "@workspace/core"]
+    }
+  },
+  // ignore entries are resolved from the repo root
+  "ignore": []
+}

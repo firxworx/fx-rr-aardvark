@@ -1,0 +1,21 @@
+/*
+ * Custom tailwind utilities and variants.
+ *
+ * https://tailwindcss.com/docs/adding-custom-styles#adding-custom-utilities
+ * https://tailwindcss.com/docs/adding-custom-styles#adding-custom-variants
+ */
+@utility extend-touch-target {
+  @media (pointer: coarse) {
+    @apply relative touch-manipulation after:absolute after:-inset-2;
+  }
+}
+
+@utility cx-focus-ring {
+  @apply outline-none ring-offset-transparent;
+  @apply ring-3 ring-ring/50 ring-offset-0;
+}
+
+@utility cx-focus-ring-invalid {
+  @apply outline-none ring-offset-transparent;
+  @apply ring-3 ring-destructive/25 ring-offset-0;
+}

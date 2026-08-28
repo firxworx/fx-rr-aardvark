@@ -1,0 +1,55 @@
+/*
+ * Palette / design tokens — Tailwind v4 + CSS `light-dark()`
+ *
+ * Naming conventions:
+ * - `x` + `x-fg`    — shadcn-style pair: `x` is a surface/control color, `-fg` is text/icons on that color
+ * - `fg` + `bg`     — foreground/background always abbreviated as `fg`/`bg`
+ * - `*-light-theme` / `*-dark-theme` — raw per-theme values for cases where `light-dark()` must be bypassed
+ *   (e.g. inset badge inside a button that keeps its theme regardless of mode)
+ *
+ * Colors are defined using oklch color space and oklab is used for color-mix().
+ *
+ * shadcn palette equivalencies unused in this project are commented out on a line-by-line basis
+ * so they can be easily added as required during dev as new components are added.
+ */
+
+@theme inline {
+  /*
+   * global look and feel
+   */
+  --color-P-selection: var(--P-selection);
+  --color-P-selection-fg: var(--P-selection-fg);
+  --color-P-scrollbar-track: var(--P-scrollbar-track);
+  --color-P-scrollbar-thumb: var(--P-scrollbar-thumb);
+
+  /*
+   * typographical palette are foreground colors legible on default or surface backgrounds
+   */
+  --color-P-link: var(--P-link);
+  --color-P-link-hover: var(--P-link-hover);
+}
+
+:root {
+  /*
+   * custom white/black in oklch vs. rgb (intentionally no corresponding --color-P-*)
+   */
+  --P-white: oklch(1 0 0);
+  --P-black: oklch(0 0 0);
+
+  /*
+   * global look and feel
+   */
+  --P-selection: light-dark(var(--color-sky-200), var(--color-sky-800));
+  --P-selection-fg: light-dark(var(--color-sky-800), var(--color-sky-50));
+  --P-scrollbar-track: transparent;
+  --P-scrollbar-thumb: light-dark(var(--color-neutral-300), var(--color-neutral-700));
+
+  /*
+   * typographical palette are foreground colors legible on default or surface backgrounds
+   */
+  --P-link: light-dark(var(--color-sky-800), var(--color-sky-300));
+  --P-link-hover: light-dark(
+    color-mix(in oklab, var(--color-sky-800) 50%, var(--color-sky-700)),
+    color-mix(in oklab, var(--color-sky-300) 50%, var(--color-sky-200))
+  );
+}

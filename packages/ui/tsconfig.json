@@ -1,0 +1,14 @@
+{
+  "extends": "@workspace/tsconfig/react-library",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "paths": {
+      // still required?
+      // "@workspace/ui/lib/utils": ["./src/lib/style"],
+      "@workspace/ui/*": ["./src/*"]
+    },
+    "types": ["vite/client"]
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"],
+  "exclude": ["node_modules", "dist", "src/**/*.test.ts", "src/**/*.test.tsx", "src/**/_wip/**/*"]
+}

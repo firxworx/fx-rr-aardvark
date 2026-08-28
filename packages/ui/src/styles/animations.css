@@ -1,0 +1,128 @@
+/*
+ * css animations.
+ */
+@theme {
+  /*
+   * shadcn accordion animations with added opacity.
+   */
+  --animate-accordion-down: accordion-down var(--tw-animation-duration, var(--tw-duration, 200ms))
+    var(--tw-ease, ease-out) var(--tw-animation-delay, 0s) var(--tw-animation-iteration-count, 1)
+    var(--tw-animation-direction, normal) var(--tw-animation-fill-mode, none);
+
+  --animate-accordion-up: accordion-up var(--tw-animation-duration, var(--tw-duration, 200ms)) var(--tw-ease, ease-out)
+    var(--tw-animation-delay, 0s) var(--tw-animation-iteration-count, 1) var(--tw-animation-direction, normal)
+    var(--tw-animation-fill-mode, none);
+
+  /*
+   * coss-ui skeleton animation
+   * https://coss.com/ui/docs/styling
+   */
+  --animate-skeleton: skeleton 2s -1s infinite linear;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+      opacity: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height, var(--accordion-panel-height, auto));
+      opacity: 1;
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height, var(--accordion-panel-height, auto));
+      opacity: 1;
+    }
+    to {
+      height: 0;
+      opacity: 0;
+    }
+  }
+
+  @keyframes skeleton {
+    to {
+      background-position: -200% 0;
+    }
+  }
+}
+
+/*
+ * coss-ui toast
+ *
+ * https://coss.com/ui/docs/components/toast
+ * https://github.com/cosscom/coss/blob/5ed9f805efec3491ce7ccbd68958b4ed0aadb1c4/packages/ui/src/styles/globals.css#L86C1-L149C1
+ */
+@theme inline {
+  --animate-toast-success-odd: toast-success-odd 0.32s cubic-bezier(0.5, 1, 0.89, 1);
+  --animate-toast-success-even: toast-success-even 0.32s cubic-bezier(0.5, 1, 0.89, 1);
+  --animate-toast-error-odd: toast-error-odd 0.28s cubic-bezier(0.5, 1, 0.89, 1);
+  --animate-toast-error-even: toast-error-even 0.28s cubic-bezier(0.5, 1, 0.89, 1);
+
+  @keyframes toast-success-odd {
+    0% {
+      scale: 1;
+    }
+    30% {
+      scale: 1.025;
+    }
+    60% {
+      scale: 0.99;
+    }
+    100% {
+      scale: 1;
+    }
+  }
+
+  @keyframes toast-error-odd {
+    0% {
+      translate: 0 0;
+    }
+    25% {
+      translate: -3px 0;
+    }
+    50% {
+      translate: 3px 0;
+    }
+    75% {
+      translate: -3px 0;
+    }
+    100% {
+      translate: 0 0;
+    }
+  }
+
+  @keyframes toast-success-even {
+    0% {
+      scale: 1;
+    }
+    30% {
+      scale: 1.025;
+    }
+    60% {
+      scale: 0.99;
+    }
+    100% {
+      scale: 1;
+    }
+  }
+
+  @keyframes toast-error-even {
+    0% {
+      translate: 0 0;
+    }
+    25% {
+      translate: -3px 0;
+    }
+    50% {
+      translate: 3px 0;
+    }
+    75% {
+      translate: -3px 0;
+    }
+    100% {
+      translate: 0 0;
+    }
+  }
+}

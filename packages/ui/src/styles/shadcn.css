@@ -1,0 +1,155 @@
+/*
+ * Source of truth for theme tokens related to coss-ui and shadcn/ui.
+ *
+ * Revised from original to use `light-dark()` instead of a separate set of `.dark`
+ * theme tokens for a single set of css variables that work in both light and dark mode.
+ */
+:root {
+  --radius: 0.625rem;
+
+  /* surface & text */
+  --background: light-dark(var(--color-white), color-mix(in srgb, var(--color-neutral-950) 95%, var(--color-white)));
+  --foreground: light-dark(var(--color-neutral-800), var(--color-neutral-100));
+  --card: light-dark(var(--color-white), color-mix(in srgb, var(--color-neutral-950) 93.1%, var(--color-white)));
+  --card-foreground: light-dark(var(--color-neutral-800), var(--color-neutral-100));
+  --popover: light-dark(var(--color-white), color-mix(in srgb, var(--color-neutral-950) 93.1%, var(--color-white)));
+  --popover-foreground: light-dark(var(--color-neutral-800), var(--color-neutral-100));
+
+  /* intent */
+  --primary: light-dark(var(--color-neutral-800), var(--color-neutral-100));
+  --primary-foreground: light-dark(var(--color-neutral-50), var(--color-neutral-800));
+  --secondary: light-dark(
+    color-mix(in oklab, var(--color-black) 4%, transparent),
+    color-mix(in oklab, var(--color-white) 4%, transparent)
+  );
+  --secondary-foreground: light-dark(var(--color-neutral-800), var(--color-neutral-100));
+  --muted: light-dark(
+    color-mix(in oklab, var(--color-black) 4%, transparent),
+    color-mix(in oklab, var(--color-white) 4%, transparent)
+  );
+  --muted-foreground: light-dark(
+    color-mix(in srgb, var(--color-neutral-500) 90%, var(--color-black)),
+    color-mix(in srgb, var(--color-neutral-500) 90%, var(--color-white))
+  );
+  --accent: light-dark(
+    color-mix(in oklab, var(--color-black) 4%, transparent),
+    color-mix(in oklab, var(--color-white) 4%, transparent)
+  );
+  --accent-foreground: light-dark(var(--color-neutral-800), var(--color-neutral-100));
+
+  /* chrome */
+  --border: light-dark(
+    color-mix(in oklab, var(--color-black) 8%, transparent),
+    color-mix(in oklab, var(--color-white) 6%, transparent)
+  );
+  --input: light-dark(
+    color-mix(in oklab, var(--color-black) 10%, transparent),
+    color-mix(in oklab, var(--color-white) 8%, transparent)
+  );
+  --ring: light-dark(var(--color-sky-400), var(--color-sky-500));
+
+  /*
+   * status tokens - coss-ui only (except for destructive which is shared)
+   *
+   * shadcn/ui defines `--destructive` alone and expects `text-white` foreground;
+   * coss-ui uses status tokens like `--destructive` as surface background
+   * with `*--foreground` companion for text/icons.
+   *
+   * this can lead to styling differences when integrating coss-ui and shadcn/ui components
+   * so take care to ensure any destructive text is legible and the overall look-and-feel is consistent.
+   */
+  --destructive: light-dark(var(--color-red-500), color-mix(in oklab, var(--color-red-500) 90%, var(--color-white)));
+  --destructive-foreground: light-dark(var(--color-red-700), var(--color-red-400));
+  --info: var(--color-blue-500);
+  --info-foreground: light-dark(var(--color-blue-700), var(--color-blue-400));
+  --success: var(--color-emerald-500);
+  --success-foreground: light-dark(var(--color-emerald-700), var(--color-emerald-400));
+  --warning: var(--color-amber-500);
+  --warning-foreground: light-dark(var(--color-amber-700), var(--color-amber-400));
+
+  /* chart- shadcn/ui only */
+  --chart-1: light-dark(var(--color-blue-600), var(--color-blue-400));
+  --chart-2: light-dark(var(--color-amber-500), var(--color-amber-400));
+  --chart-3: light-dark(var(--color-teal-600), var(--color-teal-400));
+  --chart-4: light-dark(var(--color-rose-600), var(--color-rose-400));
+  --chart-5: light-dark(var(--color-violet-600), var(--color-violet-400));
+
+  /* sidebar - shared */
+  --sidebar: light-dark(var(--color-neutral-50), color-mix(in srgb, var(--color-neutral-950) 97%, var(--color-white)));
+  --sidebar-foreground: light-dark(
+    color-mix(in srgb, var(--color-neutral-800) 64%, var(--color-neutral-50)),
+    color-mix(in srgb, var(--color-neutral-100) 64%, var(--color-neutral-950))
+  );
+  --sidebar-primary: light-dark(var(--color-neutral-800), var(--color-neutral-100));
+  --sidebar-primary-foreground: light-dark(var(--color-neutral-50), var(--color-neutral-800));
+  --sidebar-accent: light-dark(
+    color-mix(in oklab, var(--color-black) 4%, transparent),
+    color-mix(in oklab, var(--color-white) 4%, transparent)
+  );
+  --sidebar-accent-foreground: light-dark(var(--color-neutral-800), var(--color-neutral-100));
+  --sidebar-border: light-dark(
+    color-mix(in oklab, var(--color-black) 6%, transparent),
+    color-mix(in oklab, var(--color-white) 5%, transparent)
+  );
+  --sidebar-ring: var(--color-neutral-400);
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* surface & text - shared */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  /* intent - shared */
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  /* chrome - shared */
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* status - coss-ui only (shadcn has destructive too) */
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+
+  /* chart utilities - shadcn/ui only */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* sidebar - shared */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}

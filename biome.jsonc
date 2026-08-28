@@ -1,0 +1,232 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "files": {
+    "includes": [
+      "**",
+      "!**/*.sql",
+      "!**/drizzle",
+      "!**/migrations",
+      "!**/coverage",
+      "!**/node_modules/**/*",
+      "!**/dist/**/*",
+      "!**/build/**/*",
+      "!**/.react-router/**/*",
+      "!**/worker-configuration.d.ts",
+      "!**/apps/**/fonts.css",
+      "!**/apps/**/public/**/*.svg",
+      "!.vscode/**/*.code-snippets"
+
+      // examples to disable biome for certain files/folders
+      // "!**/packages/ui/src/_shadcn/**/*", // when using custom directory for cli-managed components
+      // "!**/packages/ui/src/**/*", // disable biome for all ui package source files
+    ]
+  },
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "defaultBranch": "main",
+    "useIgnoreFile": true
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 120,
+    "formatWithErrors": true,
+    "lineEnding": "lf"
+  },
+  "javascript": {
+    "formatter": {
+      "enabled": true,
+      "quoteStyle": "single",
+      "trailingCommas": "all",
+      "semicolons": "asNeeded",
+      "jsxQuoteStyle": "double"
+    }
+  },
+  "json": {
+    "parser": {
+      "allowComments": true,
+      "allowTrailingCommas": false
+    },
+    "formatter": {
+      "enabled": true
+    }
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true,
+      "allowWrongLineComments": false,
+      "cssModules": false
+    }
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        // https://biomejs.dev/assist/actions/organize-imports/
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "groups": [
+              ["cloudflare:*", ":NODE:", ":BUN:"],
+              [
+                "hono",
+                "hono/**",
+                "react",
+                "react/**",
+                "react*/**",
+                "react-router",
+                "react-router/**",
+                "@react-router",
+                "@react-router/**",
+                "next",
+                "next/**"
+              ],
+              [":URL:", ":PACKAGE_WITH_PROTOCOL:", ":PACKAGE:", "!@workspace/**"],
+              ":BLANK_LINE:",
+              ["./+types/**", "*/+types/**"],
+              ":BLANK_LINE:",
+              ["@workspace/**", "!@workspace/ui/**"],
+              ["@workspace/ui/**"],
+              [":ALIAS:", ":PATH:"] // :ALIAS: covers #, @/, ~, $, or %
+            ]
+          }
+        }
+      }
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "recommended",
+      "suspicious": {
+        "preset": "recommended"
+      },
+      "style": {
+        "useImportType": "warn",
+        "noParameterAssign": "off",
+        "useAsConstAssertion": "error",
+        "useDefaultParameterLast": "error",
+        "useEnumInitializers": "error",
+        "useSelfClosingElements": "error",
+        "useSingleVarDeclarator": "error",
+        "noUnusedTemplateLiteral": "error",
+        "useNumberNamespace": "error",
+        "noInferrableTypes": "error",
+        "noUselessElse": "error",
+        "noRestrictedImports": {
+          "level": "error",
+          "options": {
+            "patterns": [
+              {
+                "group": ["**/node_modules/**", "*/node_modules/*"],
+                "message": "Do not import directly from node_modules: this is likely an accidental auto-import that will break bundler."
+              }
+            ]
+          }
+        }
+      },
+      "correctness": {
+        "noEmptyPattern": "off",
+        "noUnusedVariables": "warn",
+        "noUnusedImports": "warn",
+        "useExhaustiveDependencies": "warn"
+      }
+    }
+  },
+  "overrides": [
+    // support component and props/value patterns that prefer indexed keys
+    {
+      "includes": ["**/*.tsx"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "useLiteralKeys": "off"
+          }
+        }
+      }
+    },
+    // looser standards for shadcn cli managed components (for ease of maintainability / merging)
+    {
+      "includes": ["**/_shadcn/**/*.tsx"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "noLabelWithoutControl": "off",
+            "useSemanticElements": "off"
+          },
+          "suspicious": {
+            "noArrayIndexKey": "off",
+            "noDoubleEquals": "off",
+            "noExplicitAny": "off"
+          }
+        }
+      }
+    },
+    // loosen rules for tests to allow `any`
+    {
+      "includes": ["**/test*/**", "**/e2e/**", "**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noForEach": "off",
+            "useLiteralKeys": "off"
+          },
+          "correctness": {
+            "noUnusedImports": "off"
+          },
+          "style": {
+            "noNonNullAssertion": "off"
+          },
+          "suspicious": {
+            "noExplicitAny": "off"
+          }
+        }
+      }
+    },
+    // config files
+    {
+      "includes": ["**/drizzle.config.ts"],
+      "linter": {
+        "rules": {
+          "nursery": {},
+          "style": {
+            "noProcessEnv": "off"
+          }
+        }
+      }
+    },
+    // ui components a11y
+    {
+      "includes": ["**/packages/ui/src/**/*.tsx"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            // most are aria-hidden or otherwise have default title
+            "noSvgWithoutTitle": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["apps/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["**/node_modules/**"],
+                    "message": "Do not import directly from node_modules."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

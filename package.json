@@ -1,0 +1,49 @@
+{
+  "name": "fx-rr-aardvark",
+  "type": "module",
+  "license": "MIT",
+  "private": true,
+  "description": "",
+  "keywords": [],
+  "scripts": {
+    "setup:workspace": "node scripts/setup.ts",
+    "dev": "pnpm -r --stream dev",
+    "start": "pnpm -r --stream start",
+    "build": "pnpm -r build",
+    "deploy": "pnpm --filter web deploy",
+    "test": "CI=true NODE_ENV=test pnpm -r --stream run test",
+    "shot": "pnpm --filter web shot",
+    "typegen": "pnpm -r typegen",
+    "typecheck": "pnpm -r typecheck",
+    "check": "pnpm biome check .",
+    "check:fix": "pnpm biome check --fix .",
+    "preflight": "pnpm check:fix && pnpm typecheck && pnpm build",
+    "knip": "pnpm dlx knip",
+    "clean": "rm -rf node_modules && pnpm -r exec -- rm -rf node_modules && rm pnpm-lock.yaml",
+    "reset": "pnpm dlx rimraf --glob ./**/node_modules && pnpm dlx rimraf --glob ./**/dist && pnpm dlx rimraf --glob ./**/build && pnpm dlx rimraf --glob ./**/.react-router && pnpm dlx rimraf --glob ./**/.wrangler",
+    "kill:port": "bash -c 'pids=$(lsof -i :$0 | grep LISTEN | awk \"{print \\$2}\"); if [[ -z $pids ]]; then echo \"No process found running on port $0\"; else echo \"Killing: $pids\"; echo $pids | xargs kill; fi'",
+    "kill:vscode-server": "ps uxa | grep .vscode-server | awk '{print $2}' | xargs kill"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.21.0",
+      "onFail": "download"
+    }
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "@clack/prompts": "catalog:",
+    "@napi-rs/canvas": "catalog:",
+    "@napi-rs/image": "catalog:",
+    "@testing-library/dom": "catalog:",
+    "@testing-library/jest-dom": "catalog:",
+    "@testing-library/react": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "jsdom": "catalog:",
+    "syncpack": "catalog:",
+    "typescript": "catalog:",
+    "vite-node": "catalog:",
+    "vitest": "catalog:"
+  }
+}

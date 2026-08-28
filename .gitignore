@@ -1,0 +1,127 @@
+# Workspace Template
+apps/web/wrangler.jsonc
+
+# Agents / Claude Code
+.agents/*
+.claude/*
+!.claude/settings.json
+!.claude/commands/
+!.claude/agents/
+.claude/settings.local.json
+
+# Allow Custom Skills (fx-* namespace)
+!.agents/skills/fx-*
+!.claude/skills/fx-*
+
+# Docs Drafts & Notes
+/docs/_*/
+/docs.draft/
+/docs.notes
+
+# Workflow
+_notes*/
+_wip*/
+*.notes.*
+*.wip.*
+
+# Local Overrides
+lefthook-local.yml
+
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Build Outputs
+dist/
+build/
+out/
+
+# Framework
+.react-router
+.next
+
+# Environment
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.env
+.envrc
+
+# Cloudflare (Wrangler)
+.wrangler/
+.mf
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+
+# Debug Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Testing
+coverage
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+.playwright-cli/
+.shots/
+
+# Editors
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+
+# TypeScript
+*.tsbuildinfo
+
+# Cache
+.cache
+.turbo
+
+# Private Keys & Certificates
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.p8
+id_rsa
+id_dsa
+id_ecdsa
+id_ed25519
+*.ppk
+
+# SSH/GPG
+.ssh/
+*.gpg
+*.asc
+
+# Cloud Provider Credentials
+.aws/
+aws.json
+.azure/
+gcloud-*.json
+*-service-account*.json
+service-account*.json
+gha-creds-*.json
+
+# Misc Security Precautions
+*.token
+.vault-token
+kubeconfig
+*.kubeconfig

@@ -1,0 +1,9 @@
+ENVIRONMENT = "development"  # development | preview | production
+SITE_URL="http://localhost:5173"
+
+# values set to __GENERATE_SECRET__ are replaced with a generated secret by `pnpm run setup`
+
+# example to generate secret and save to cloudflare
+# openssl rand -base64 32 | pnpm wrangler secret put EXAMPLE_SECRET_NAME --env=""
+
+TOAST_COOKIE_SECRET=__GENERATE_SECRET__

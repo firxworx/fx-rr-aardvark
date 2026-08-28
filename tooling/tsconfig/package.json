@@ -1,0 +1,18 @@
+{
+  "name": "@workspace/tsconfig",
+  "version": "0.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "files": [
+    "configs"
+  ],
+  "exports": {
+    "./base": "./configs/tsconfig.base.json",
+    "./react-library": "./configs/tsconfig.react-library.json",
+    "./react-router": "./configs/tsconfig.react-router.json",
+    "./worker": "./configs/tsconfig.worker.json"
+  },
+  "devDependencies": {
+    "typescript": "catalog:"
+  }
+}
