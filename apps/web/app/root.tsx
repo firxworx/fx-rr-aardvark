@@ -9,7 +9,7 @@ import type { Route } from './+types/root'
 
 import { DEFAULT_THEME_MODE } from '@workspace/core/conventions'
 import { AnchoredToastProvider, ToastProvider, toastManager } from '@workspace/ui/components/toast'
-import { DEFAULT_LOCALE } from '@/constants'
+import { DEFAULT_LOCALE, DEFAULT_META_DESCRIPTION, DEFAULT_META_TITLE } from '@/constants'
 import { env } from '@/env.server'
 import { AppLayout } from '@/layout/app-layout'
 import { GeneralErrorBoundary } from '@/layout/error-boundary'
@@ -50,8 +50,9 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   })
 }
 
-// uncomment to enable meta function for SEO
-// export function meta({ loaderData, location }: Route.MetaArgs): Route.MetaDescriptors {}
+export function meta(): Route.MetaDescriptors {
+  return [{ title: DEFAULT_META_TITLE }, { name: 'description', content: DEFAULT_META_DESCRIPTION }]
+}
 
 export function Layout({ children }: { children: React.ReactNode }): React.JSX.Element {
   const data = useLoaderData<typeof loader | undefined>()
