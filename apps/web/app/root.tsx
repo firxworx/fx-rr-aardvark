@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { data, Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from 'react-router'
 import { CSPProvider, DirectionProvider } from '@base-ui/react'
 import { Tooltip } from '@base-ui/react/tooltip'
+import interLatinUrl from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url'
 import { NuqsAdapter } from 'nuqs/adapters/react-router/v8'
 import type { $ZodConfig } from 'zod/v4/core'
 
@@ -16,6 +17,8 @@ import { GeneralErrorBoundary } from '@/layout/error-boundary'
 import { useNonceContext } from '@/lib/nonce.context'
 import { getTheme } from '@/lib/theme.server'
 import { getToast, toastMiddleware } from '@/middleware/toast.middleware.server'
+
+import '@fontsource-variable/inter'
 import stylesheet from '@/styles/app.css?url'
 
 /**
@@ -30,6 +33,7 @@ export const middleware = [toastMiddleware()]
  * Remember CSP must be updated when linking to external resources e.g. CDNs, fonts, analytics, etc.
  */
 export const links: Route.LinksFunction = () => [
+  { rel: 'preload', href: interLatinUrl, as: 'font', type: 'font/woff2', crossOrigin: 'anonymous' },
   { rel: 'stylesheet', href: stylesheet },
   { rel: 'icon', href: '/favicon.ico', sizes: '48x48' },
   { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },

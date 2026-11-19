@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@base-ui/react": "catalog:",
+    "@fontsource-variable/inter": "catalog:",
     "@react-router/fs-routes": "catalog:",
     "@workspace/core": "workspace:*",
     "@workspace/tsconfig": "workspace:*",
@@ -39,6 +40,7 @@
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
+    "fontaine": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
     "wrangler": "catalog:"

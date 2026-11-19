@@ -1,6 +1,7 @@
 import { reactRouter } from '@react-router/dev/vite'
 import { cloudflare } from '@cloudflare/vite-plugin'
 import tailwindcss from '@tailwindcss/vite'
+import { FontaineTransform } from 'fontaine'
 import { defineConfig, type UserConfig } from 'vite'
 
 /**
@@ -26,6 +27,11 @@ export default defineConfig(
       cloudflare({
         viteEnvironment: { name: 'ssr' },
         persistState: { path: '../../.wrangler/state' },
+      }),
+      FontaineTransform.vite({
+        fallbacks: {
+          'Inter Variable': ['Segoe UI', 'Helvetica Neue', 'Arial', 'Noto Sans'],
+        },
       }),
       tailwindcss(),
       reactRouter(),
