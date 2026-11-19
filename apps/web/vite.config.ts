@@ -30,10 +30,8 @@ export default defineConfig(
       }),
       FontaineTransform.vite({
         fallbacks: {
-          'Inter Variable': ['Segoe UI', 'Helvetica Neue', 'Arial', 'Liberation Sans', 'DejaVu Sans', 'Noto Sans'],
-          'Geist Mono Variable': ['Consolas', 'Menlo', 'DejaVu Sans Mono', 'Liberation Mono', 'Noto Sans Mono'],
+          'Inter Variable': ['Segoe UI', 'Helvetica Neue', 'Arial', 'Noto Sans'],
         },
-        fallbackName: (name) => `${name} fallback`,
       }),
       tailwindcss(),
       reactRouter(),

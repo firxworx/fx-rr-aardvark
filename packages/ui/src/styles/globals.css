@@ -65,13 +65,11 @@
   --radius-control-wrapper: calc(var(--radius-control) + var(--spacing));
 
   --font-sans: var(--font-inter);
-  --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-inter);
 }
 
 :root {
   --font-inter: "Inter Variable", "Inter Variable fallback", ui-sans-serif, system-ui, sans-serif;
-  --font-geist-mono: "Geist Mono Variable", "Geist Mono Variable fallback", ui-monospace, monospace;
 
   color-scheme: light dark;
   color: var(--foreground);
