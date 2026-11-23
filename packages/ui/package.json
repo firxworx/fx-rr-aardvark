@@ -22,8 +22,6 @@
   },
   "dependencies": {
     "@base-ui/react": "catalog:",
-    "@fontsource-variable/geist-mono": "catalog:",
-    "@fontsource-variable/inter": "catalog:",
     "@workspace/core": "workspace:*",
     "change-case": "catalog:",
     "class-variance-authority": "catalog:",
