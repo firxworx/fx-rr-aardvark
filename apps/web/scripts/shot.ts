@@ -280,6 +280,16 @@ function toRouteSlug(route: string): string {
 }
 
 /**
+ * Known benign console messages excluded from diagnostics so `--strict` does not fail on them.
+ *
+ * - `bluetooth`: the Permissions-Policy header (`@workspace/core/security-headers`) intentionally
+ *   includes `bluetooth=()`. Chromium on Linux (Playwright's bundled browser) has Web Bluetooth off by
+ *   default and warns "Unrecognized feature" on every page. An upcoming Chromium release is expected to
+ *   fix this; remove the entry once it no longer appears.
+ */
+const IGNORED_CONSOLE_MESSAGES: RegExp[] = [/Permissions-Policy header: Unrecognized feature: 'bluetooth'/]
+
+/**
  * Attach listeners that collect error-level diagnostics for the lifetime of a page.
  */
 function collectDiagnostics(page: Page): CaptureDiagnostic[] {
@@ -287,8 +297,9 @@ function collectDiagnostics(page: Page): CaptureDiagnostic[] {
 
   page.on('console', (message: ConsoleMessage) => {
     const type = message.type()
+    const isIgnored = IGNORED_CONSOLE_MESSAGES.some((pattern) => pattern.test(message.text()))
 
-    if (type === 'error' || type === 'warning') {
+    if ((type === 'error' || type === 'warning') && !isIgnored) {
       diagnostics.push({ kind: 'console', detail: `[${type}] ${message.text()}` })
     }
   })

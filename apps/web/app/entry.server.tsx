@@ -3,6 +3,7 @@ import type { EntryContext, HandleErrorFunction } from 'react-router'
 import { isRouteErrorResponse, type RouterContextProvider, ServerRouter } from 'react-router'
 import { isbot } from 'isbot'
 
+import { createContentSecurityPolicy, serializeContentSecurityPolicy } from '@workspace/core/csp'
 import { nonceContext } from '@/context.server'
 import { NonceContextProvider } from '@/lib/nonce.context'
 
@@ -24,9 +25,10 @@ export default async function handleRequest(
   // retrieve nonce created in worker entrypoint and provided to react-router
   const { nonce } = contextProvider.get(nonceContext)
 
-  // add a basic content security policy (CSP) header with noncec value for inline scripts
-  // larger example: https://gist.github.com/wenzf/cf43d7adade3110e16ca8b1931c9afa5/503eb48cd38f206a1d43ecfb6a67f45bbcbe2e41
-  responseHeaders.set('Content-Security-Policy', `script-src 'self' 'nonce-${nonce}' 'strict-dynamic';`)
+  // add content security policy (CSP) header with nonce value (refer to @workspace/core/csp for the policy)
+  // mode distinguishes vite dev server vs. production builds (not cloudflare environments; see ENVIRONMENT var)
+  const csp = createContentSecurityPolicy({ nonce, isDevelopment: import.meta.env.MODE === 'development' })
+  responseHeaders.set('Content-Security-Policy', serializeContentSecurityPolicy(csp))
 
   /*
    * Note the current release of Base UI <CSPProvider> failed to handle the nonce properly
@@ -61,7 +63,6 @@ export default async function handleRequest(
     await body.allReady
   }
 
-  // remember that headers may also be set via hono prior to react-router handling the request
   responseHeaders.set('Content-Type', 'text/html')
   return new Response(body, {
     headers: responseHeaders,

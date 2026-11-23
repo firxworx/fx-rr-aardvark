@@ -30,7 +30,7 @@ export const indexFeatures = [
   },
   {
     title: 'csp',
-    description: <>Nonce generation plus a minimal content security policy.</>,
+    description: <>Strict nonce-based content security policy.</>,
   },
   {
     title: 'search engines',
