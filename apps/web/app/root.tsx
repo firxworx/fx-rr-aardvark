@@ -18,6 +18,7 @@ import { useNonceContext } from '@/lib/nonce.context'
 import { getTheme } from '@/lib/theme.server'
 import { getToast, toastMiddleware } from '@/middleware/toast.middleware.server'
 
+// inter @font-face css is bundled into the root route css (rendered by <Links />); see preload in links()
 import '@fontsource-variable/inter'
 import stylesheet from '@/styles/app.css?url'
 
