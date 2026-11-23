@@ -9,7 +9,8 @@
     "./conventions": "./src/conventions.ts",
     "./csp": "./src/csp.ts",
     "./errors": "./src/errors.ts",
-    "./helpers": "./src/helpers.ts"
+    "./helpers": "./src/helpers.ts",
+    "./security-headers": "./src/security-headers.ts"
   },
   "scripts": {
     "test": "vitest",
