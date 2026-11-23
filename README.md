@@ -15,6 +15,7 @@ App:
 - react-router v8 for cloudflare workers (stock worker entrypoint; no custom server)
 - nuqs for working with search/query params as state with strong typing and validation
 - CSP (strict nonce-based policy via `@workspace/core/csp`) with nonce generation in worker entrypoint
+- security headers (HSTS, referrer/permissions policies, etc.) via `@workspace/core/security-headers` plus `public/_headers` for static assets
 - theme (light/dark/system) with route/action, hooks, and an example theme selector component
 
 Styling:

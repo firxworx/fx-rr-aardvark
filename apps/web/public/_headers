@@ -1,0 +1,17 @@
+# Security headers for static assets served by Cloudflare Workers Static Assets.
+#
+# Static assets bypass the worker so headers applied in `workers/app.ts` do not apply to them.
+# Keep in sync with `SECURITY_HEADERS` in `packages/core/src/security-headers.ts`.
+#
+# https://developers.cloudflare.com/workers/static-assets/headers/
+
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: same-origin
+  X-Frame-Options: DENY
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  Origin-Agent-Cluster: ?1
+  X-XSS-Protection: 0
+  Permissions-Policy: fullscreen=(self), payment=(), sync-xhr=(), camera=(), microphone=(), geolocation=(), usb=(), accelerometer=(), gyroscope=(), magnetometer=(), bluetooth=()
