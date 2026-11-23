@@ -30,7 +30,7 @@ import stylesheet from '@/styles/app.css?url'
 export const middleware = [toastMiddleware()]
 
 /**
- * Refer to `entry.server.tsx` and `workers/app.ts` for security headers.
+ * Refer to `entry.server.tsx` and `workers/app.ts` for security headers; the CSP is defined in `@workspace/core/csp`.
  * Remember CSP must be updated when linking to external resources e.g. CDNs, fonts, analytics, etc.
  */
 export const links: Route.LinksFunction = () => [
