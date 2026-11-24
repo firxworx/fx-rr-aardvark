@@ -1,21 +1,17 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "ignoreBinaries": ["awk"],
-  "ignoreDependencies": ["@napi-rs/canvas", "@napi-rs/image"], // screenshot tooling
+  "ignoreBinaries": [],
+  "ignoreDependencies": ["@napi-rs/image"],
   "workspaces": {
-    // uncomment for ad-hoc scripts outside of workspace (e.g. scripts/**/*.ts)
-    // ".": {
-    //   "entry": ["scripts/**/*.ts"]
-    // },
     "apps/web": {
-      // support filesystem routes @react-router/fs-routes
-      // the react-router plugin is auto-detected here from apps/web/package.json
-      // and contributes app/root.tsx, entry.client.tsx, entry.server.tsx, workers/app.ts
+      // `app/routes/**/*.{ts,tsx}` supports filesystem routes with `@react-router/fs-routes`
+      // knip's react-router plugin is auto-detected per dependency in `apps/web/package.json`
+      // the plugin contributes: `app/root.tsx`, `entry.client.tsx`, `entry.server.tsx`, `workers/app.ts`
       "entry": ["app/routes/**/*.{ts,tsx}"],
       "project": ["**/*.{ts,tsx,css}"],
 
-      // cloudflare:workers and other virtual modules are workerd built-ins not npm dependencies
-      "ignoreDependencies": ["cloudflare"]
+      // cloudflare no longer needs to be added to ignore cloudflare:* virtual modules (workerd built-ins)
+      "ignoreDependencies": []
     },
     "packages/core": {
       "includeEntryExports": true
@@ -23,7 +19,7 @@
     "packages/ui": {
       "includeEntryExports": true,
       "project": ["**/*.{ts,tsx,css}"],
-      "ignoreDependencies": ["react-router", "@tailwindcss/postcss", "@workspace/core"]
+      "ignoreDependencies": ["@tailwindcss/postcss", "@workspace/core", "react-router", "zod"]
     }
   },
   // ignore entries are resolved from the repo root
