@@ -7,9 +7,21 @@
   "observability": {
     "enabled": true
   },
-  // environment variables (default production; set per environment; see .dev.vars for local development overrides)
+  // top level is the production environment; other environments are defined in `env` below
+  // environment variables (set per environment; see .dev.vars for local development overrides)
   "vars": {
     "ENVIRONMENT": "production",
     "SITE_URL": "__SITE_URL__" // environment domain (e.g., preview, staging, production)
+  },
+  // `vars` and bindings are not inherited from the top level: repeat them for every environment
+  // the environment is selected at build time with CLOUDFLARE_ENV (see scripts in package.json)
+  "env": {
+    // deploys as a separate worker named `<name>-preview`
+    "preview": {
+      "vars": {
+        "ENVIRONMENT": "preview",
+        "SITE_URL": "__PREVIEW_SITE_URL__"
+      }
+    }
   }
 }

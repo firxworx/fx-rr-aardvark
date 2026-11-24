@@ -5,7 +5,7 @@ import * as z from 'zod'
  * Zod schema for validating server environment variables.
  */
 const zEnv = z.object({
-  ENVIRONMENT: z.enum(['development', 'production']),
+  ENVIRONMENT: z.enum(['development', 'preview', 'production']),
   SITE_URL: z.url().refine((value) => !value.endsWith('/'), {
     error: 'SITE_URL must not have a trailing slash to support CORS, cookies, and canonical URLs.',
   }),
