@@ -57,7 +57,6 @@ catalog:
   syncpack: "^15.3.4"
   typescript: "^7.0.2"
   vite: "^8.3.8"
-  vite-node: "^6.0.0"
   vitest: "^5.1.1"
   "@types/node": "^26.6.6"
 
@@ -79,7 +78,3 @@ catalog:
 
   # scripts / tooling
   "@clack/prompts": "^1.9.0"
-
-  # utilities
-  change-case: "^5.4.4"
-  date-fns: "^4.4.0"

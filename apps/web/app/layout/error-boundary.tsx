@@ -69,7 +69,7 @@ export function ProductionErrorDisplay({ message, detail }: ErrorDisplayProps): 
           <p className="text-base text-muted-foreground text-pretty">{detail}</p>
         </div>
 
-        <Link to="/" className={buttonVariants()} viewTransition>
+        <Link to="/" className={buttonVariants()}>
           Back to home
         </Link>
       </div>

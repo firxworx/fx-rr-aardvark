@@ -16,13 +16,15 @@ function subscribe() {
  *
  * Example: Disable a button that needs JS to work.
  * ```tsx
- * let hydrated = useHydrated();
+ * const hydrated = useIsHydrated();
  * return (
  *   <button type="button" disabled={!hydrated} onClick={doSomethingCustom}>
  *     Click me
  *   </button>
  * );
  * ```
+ *
+ * @public
  */
 export function useIsHydrated(): boolean {
   return useSyncExternalStore(

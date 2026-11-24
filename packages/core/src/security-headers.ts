@@ -2,6 +2,7 @@
  * Security response headers (other than CSP; refer to `@workspace/core/csp`).
  *
  * Worker responses receive these headers via `applySecurityHeaders()` in the worker entrypoint.
+ *
  * Static assets are served by Cloudflare Workers Static Assets without invoking the worker so the
  * same headers are declared in the app's `public/_headers` file: **keep both in sync**.
  *

@@ -242,8 +242,10 @@ function AnchoredToasts({
 
 export const toastManager: ReturnType<typeof Toast.createToastManager> = Toast.createToastManager()
 
+/** @public */
 export const anchoredToastManager: ReturnType<typeof Toast.createToastManager> = Toast.createToastManager()
 
+/** @public */
 export type ToastPosition = 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'
 
 export interface ToastProviderProps extends Toast.Provider.Props {
@@ -282,4 +284,5 @@ export function AnchoredToastProvider({
   )
 }
 
+/** @public */
 export { Toast as ToastPrimitive }

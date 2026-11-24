@@ -40,6 +40,9 @@ Deploys via wrangler; app has `wrangler.jsonc`.
 - Always prefer Tailwind logical property utilities (`ms-`, `me-`, `ps-`,
   `pe-`, `start-`, `end-`) instead of physical ones (`ml-`, `mr-`, `pl-`,
   `pr-`, `left-`, `right-`).
+- Navigation is animated by React `<ViewTransition>` (`RouteTransition` in `apps/web` root). Never use the deprecated
+  react-router `viewTransition` prop/option or call `document.startViewTransition()`. Consider view transitions in any
+  UI/UX work. See `docs/styling.md`.
 
 ## TypeScript conventions
 
@@ -48,6 +51,8 @@ Deploys via wrangler; app has `wrangler.jsonc`.
 - Full parameter names: `event` vs. `e`, `error` vs. `e` or `err`
 - 2-space indentation
 - zod v4 schema names prefixed with `z` (e.g. `zUserProfile`)
+- zod v4 namespace import: `import * as z from 'zod'` (not `import { z }` or a default import) per zod docs;
+  bundlers can tree-shake a namespace import but not the `z` object
 - Formatting/linting is Biome (incl. Markdown and YAML) — do not add ESLint/Prettier config
 
 ## `apps/web`

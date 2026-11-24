@@ -4,9 +4,6 @@
   "type": "module",
   "private": true,
   "sideEffects": false,
-  "imports": {
-    "#/*": "./src/*"
-  },
   "exports": {
     "./globals.css": "./src/styles/globals.css",
     "./constants": "./src/constants.ts",
@@ -16,17 +13,14 @@
     "./variants/*": "./src/variants/*.ts"
   },
   "scripts": {
-    "script:generate:extended-palette": "pnpm vite-node scripts/generate-extended-palette.ts",
     "test": "vitest",
     "typecheck": "tsc --project tsconfig.json --noEmit"
   },
   "dependencies": {
     "@base-ui/react": "catalog:",
     "@workspace/core": "workspace:*",
-    "change-case": "catalog:",
     "class-variance-authority": "catalog:",
     "clsx": "catalog:",
-    "date-fns": "catalog:",
     "lucide-react": "catalog:",
     "shadcn": "catalog:",
     "tailwind-merge": "catalog:",

@@ -1,5 +1,3 @@
-import { isRecord } from '@workspace/core/helpers'
-
 export interface GetErrorMessageOptions {
   fallback?: string
 }
@@ -8,11 +6,24 @@ export interface ToErrorOptions extends GetErrorMessageOptions {}
 
 const DEFAULT_FALLBACK_MESSAGE = 'Unknown Error'
 
+/**
+ * Intentionally relaxed object check local to this module: matches any non-null object including
+ * class instances and errors from other realms (which fail `instanceof Error`) so that their
+ * `message`, `error`, and `name` properties can be inspected.
+ */
+function isObjectLike(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null
+}
+
 function isNonEmptyString(value: unknown): value is string {
   return typeof value === 'string' && value.trim().length > 0
 }
 
 function stringify(value: unknown): string {
+  if (value instanceof Error) {
+    return String(value) // e.g. `TypeError` (`JSON.stringify()` of an Error is `{}`)
+  }
+
   try {
     const json = JSON.stringify(value)
     return json === undefined ? String(value) : json
@@ -30,12 +41,9 @@ function extract(value: unknown, depth: number): string | undefined {
     return value
   }
 
-  if (value instanceof Error) {
-    return isNonEmptyString(value.message) ? value.message : extract(value.cause, depth + 1)
-  }
-
-  if (isRecord(value)) {
-    return extract(value.message, depth + 1) ?? extract(value.error, depth + 1)
+  // errors (including cross-realm errors), error-like objects, and wrapper objects such as `{ error }`
+  if (isObjectLike(value)) {
+    return extract(value.message, depth + 1) ?? extract(value.error, depth + 1) ?? extract(value.cause, depth + 1)
   }
 
   return undefined
@@ -46,6 +54,9 @@ function extract(value: unknown, depth: number): string | undefined {
  *
  * Effectively this function normalizes an `Error` instance, error-like object, or string error
  * into a string with fallback to "Unknown Error".
+ *
+ * Checks `message`, then `error`, then `cause` (recursively, to a limited depth) for the first
+ * non-empty string.
  *
  * This implementation always returns a truthy value to support logic downstream from the
  * caller that determines if an error condition is present based on this function's return value.
@@ -101,7 +112,7 @@ export function toError(maybeError: unknown, options?: ToErrorOptions): Error {
 
   const error = new Error(message, { cause: maybeError })
 
-  if (isRecord(maybeError) && isNonEmptyString(maybeError.name)) {
+  if (isObjectLike(maybeError) && isNonEmptyString(maybeError.name)) {
     error.name = maybeError.name
   }
 

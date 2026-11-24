@@ -14,7 +14,7 @@
     "test": "CI=true NODE_ENV=test pnpm -r --stream run test",
     "shot": "pnpm --filter web shot",
     "typegen": "pnpm -r typegen",
-    "typecheck": "pnpm -r typecheck",
+    "typecheck": "tsc --project tsconfig.json --noEmit && pnpm -r typecheck",
     "check": "pnpm biome check .",
     "check:fix": "pnpm biome check --fix .",
     "preflight": "pnpm check:fix && pnpm typecheck && pnpm build",
@@ -39,11 +39,11 @@
     "@testing-library/dom": "catalog:",
     "@testing-library/jest-dom": "catalog:",
     "@testing-library/react": "catalog:",
+    "@types/node": "catalog:",
     "@vitejs/plugin-react": "catalog:",
     "jsdom": "catalog:",
     "syncpack": "catalog:",
     "typescript": "catalog:",
-    "vite-node": "catalog:",
     "vitest": "catalog:"
   }
 }

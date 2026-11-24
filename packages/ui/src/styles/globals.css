@@ -84,17 +84,24 @@
 }
 
 @layer base {
+  /* root: everything outside a `<ViewTransition>` boundary; .route: `RouteTransition` (apps/web root) */
   ::view-transition-old(root),
-  ::view-transition-new(root) {
+  ::view-transition-new(root),
+  ::view-transition-group(.route),
+  ::view-transition-old(.route),
+  ::view-transition-new(.route) {
     animation-duration: 220ms;
     animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
+  /* reduced motion is CSS-only (React does not handle it). `animation: none` also drops delays, and view transition */
+  /* promises still resolve. `!important` is required: `(*)` has zero specificity so `(root)`/`(.route)` would win */
   @media (prefers-reduced-motion: reduce) {
     ::view-transition-group(*),
-    ::view-transition-old(root),
-    ::view-transition-new(root) {
-      animation-duration: 0.01ms;
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+      /* biome-ignore lint/complexity/noImportantStyles: reduced motion must override all view transition styles */
+      animation: none !important;
     }
   }
 

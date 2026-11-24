@@ -1,9 +1,9 @@
 {
   "extends": "./tooling/tsconfig/configs/tsconfig.base.json",
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "outDir": "./build"
+    "types": ["node"]
   },
-  "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "build", "dist", "**/*.js", "**/*.cjs", "**/*.mjs", "*.wip.ts"]
+  // root-level config files and workspace scripts only: apps and packages have their own tsconfig
+  "include": ["*.ts", "scripts/**/*.ts"],
+  "exclude": ["*.wip.ts"]
 }

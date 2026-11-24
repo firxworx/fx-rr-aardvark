@@ -38,24 +38,27 @@ import {
   type SessionIdStorageStrategy,
   type SessionStorage,
 } from 'react-router'
-import z from 'zod'
+import * as z from 'zod'
 
 import { env } from '@/env.server'
 
+/** @public */
 export type AppToastMessage = z.infer<typeof zAppToastMessage>
-export type AppToastCookieOptions = Partial<SessionIdStorageStrategy['cookie']>
-export type FlashSessionValues = z.infer<typeof zFlashSessionValues>
 
-export const TOAST_COOKIE_NAME = 'app_toast_session'
-export const FLASH_SESSION = 'flash'
+type AppToastCookieOptions = Partial<SessionIdStorageStrategy['cookie']>
+
+const TOAST_COOKIE_NAME = 'app_toast_session'
+const FLASH_SESSION = 'flash'
 
 const TOAST_COOKIE_SECRET = env.TOAST_COOKIE_SECRET
 
-const toastContext = createContext<z.infer<typeof zAppToastMessage> | null>(null)
-const sessionToastContext = createContext<z.infer<typeof zAppToastMessage> | null>(null)
+const toastContext = createContext<AppToastMessage | null>(null)
+const sessionToastContext = createContext<AppToastMessage | null>(null)
 
 /**
  * Zod schema for toast message that aligns with `@workspace/ui/components/toast`.
+ *
+ * Omit `type` for a default toast (no icon); `loading` is excluded because only client code can resolve it.
  *
  * Refer to the types exported by `@base-ui/react/toast` for typing of the arguments
  * accepted by the toast manager's `add()` method.
@@ -71,8 +74,8 @@ const zAppToastMessage = z.looseObject({
   title: z.string(),
   description: z.string().optional(),
   duration: z.number().int().nonnegative().optional(),
-  type: z.custom<'info' | 'success' | 'error' | 'warning'>(),
-  priority: z.custom<'low' | 'high'>().optional(),
+  type: z.enum(['info', 'success', 'warning', 'error']).optional(),
+  priority: z.enum(['low', 'high']).optional(),
 })
 
 const zFlashSessionValues = z.object({
@@ -152,6 +155,12 @@ export function toastMiddleware(options?: { customSession?: SessionStorage }): M
   }
 }
 
+/**
+ * Set a server-initiated toast from a loader, action, or middleware. It displays when the root loader next runs
+ * (e.g. the revalidation after an action).
+ *
+ * @public
+ */
 export const setToast = (
   context: RouterContextProvider | Readonly<RouterContextProvider>,
   toast: AppToastMessage | null,

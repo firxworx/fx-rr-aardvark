@@ -5,12 +5,11 @@
   "private": true,
   "sideEffects": false,
   "exports": {
-    "./conventions/*": "./src/conventions/*.ts",
-    "./conventions": "./src/conventions.ts",
     "./csp": "./src/csp.ts",
-    "./errors": "./src/errors.ts",
-    "./helpers": "./src/helpers.ts",
-    "./security-headers": "./src/security-headers.ts"
+    "./errors": "./src/errors/index.ts",
+    "./helpers": "./src/helpers/index.ts",
+    "./security-headers": "./src/security-headers.ts",
+    "./theme": "./src/theme.ts"
   },
   "scripts": {
     "test": "vitest",

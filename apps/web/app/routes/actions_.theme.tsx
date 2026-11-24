@@ -2,7 +2,7 @@ import { data } from 'react-router'
 
 import type { Route } from './+types/actions_.theme'
 
-import { THEME_INPUT_NAME, zThemeMode } from '@workspace/core/conventions'
+import { THEME_INPUT_NAME, zThemeMode } from '@workspace/core/theme'
 import { getThemeSetCookieHeaderValue } from '@/lib/theme.server'
 
 export async function action({ request }: Route.ActionArgs) {

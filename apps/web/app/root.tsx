@@ -8,12 +8,13 @@ import type { $ZodConfig } from 'zod/v4/core'
 
 import type { Route } from './+types/root'
 
-import { DEFAULT_THEME_MODE } from '@workspace/core/conventions'
+import { DEFAULT_THEME_MODE } from '@workspace/core/theme'
 import { AnchoredToastProvider, ToastProvider, toastManager } from '@workspace/ui/components/toast'
-import { DEFAULT_LOCALE, DEFAULT_META_DESCRIPTION, DEFAULT_META_TITLE } from '@/constants'
+import { DEFAULT_LOCALE, DEFAULT_META_DESCRIPTION, DEFAULT_META_TITLE, IS_DEV_BUILD } from '@/constants'
 import { env } from '@/env.server'
 import { AppLayout } from '@/layout/app-layout'
 import { GeneralErrorBoundary } from '@/layout/error-boundary'
+import { RouteTransition } from '@/layout/route-transition'
 import { CSP_NONCE_META_PROPERTY, useNonceContext } from '@/lib/nonce.context'
 import { getTheme } from '@/lib/theme.server'
 import { getToast, toastMiddleware } from '@/middleware/toast.middleware.server'
@@ -111,21 +112,26 @@ export default function App({ loaderData }: Route.ComponentProps): React.JSX.Ele
   }
 
   // render server-initiated toasts obtained from root loader data
+  // deferred because on a full page load this effect runs before the parent `ToastProvider` subscribes to `toastManager`
+  // (react runs child effects first) and the manager drops toasts added without a subscriber
   useEffect(() => {
     if (!toast) {
       return
     }
 
     const defaultTimeoutMs = 5000
-    const isServerToastType = ['info', 'success', 'warning', 'error'].includes(toast.type ?? '')
 
-    toastManager.add({
-      ...(isServerToastType && { type: toast.type }),
-      title: toast.title ?? toast.message,
-      description: toast.description,
-      timeout: toast.duration ?? defaultTimeoutMs,
-      priority: toast.priority,
-    })
+    const timer = setTimeout(() => {
+      toastManager.add({
+        type: toast.type,
+        title: toast.title,
+        description: toast.description,
+        timeout: toast.duration ?? defaultTimeoutMs,
+        priority: toast.priority,
+      })
+    }, 0)
+
+    return () => clearTimeout(timer)
   }, [toast])
 
   return (
@@ -139,7 +145,9 @@ export default function App({ loaderData }: Route.ComponentProps): React.JSX.Ele
       <CSPProvider disableStyleElements>
         <NuqsAdapter>
           <AppLayout>
-            <Outlet />
+            <RouteTransition>
+              <Outlet />
+            </RouteTransition>
           </AppLayout>
         </NuqsAdapter>
       </CSPProvider>
@@ -148,5 +156,5 @@ export default function App({ loaderData }: Route.ComponentProps): React.JSX.Ele
 }
 
 export function ErrorBoundary(): React.JSX.Element {
-  return <GeneralErrorBoundary isDevelopment={import.meta.env.DEV} />
+  return <GeneralErrorBoundary isDevelopment={IS_DEV_BUILD} />
 }
