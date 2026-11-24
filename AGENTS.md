@@ -48,7 +48,7 @@ Deploys via wrangler; app has `wrangler.jsonc`.
 - Full parameter names: `event` vs. `e`, `error` vs. `e` or `err`
 - 2-space indentation
 - zod v4 schema names prefixed with `z` (e.g. `zUserProfile`)
-- Formatting/linting is Biome — do not add ESLint/Prettier config
+- Formatting/linting is Biome (incl. Markdown and YAML) — do not add ESLint/Prettier config
 
 ## `apps/web`
 
@@ -64,3 +64,10 @@ Deploys via wrangler; app has `wrangler.jsonc`.
 
 - Do not add dependencies without asking; prefer platform solutions.
 - Dependency versions are managed with pnpm catalog and enforced with `syncpack`.
+
+## Markdown
+
+- Biome formats and lints Markdown and YAML too; `AGENTS.md`/`CLAUDE.md`, `docs/**`, and `.claude/**` are lint-only
+  (not formatted) because Biome pads every table column to its widest cell.
+- In docs meant for people, prefer lists over very wide tables.
+- Use a trailing `\` for hard line breaks, not trailing spaces (trailing whitespace is trimmed).
