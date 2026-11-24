@@ -29,6 +29,11 @@ export const THEME_INPUT_NAME = 'theme'
 
 /**
  * Fetcher key (`react-router`) of fetcher used to handle theme change requests.
+ *
+ * Reserved for an optimistic (instant) theme switch: submit the theme form with this fetcher key and
+ * read the pending value in the root via `useFetchers()` to prefer it over the root loader's theme.
+ *
+ * @public
  */
 export const THEME_FETCHER_KEY = 'theme'
 
