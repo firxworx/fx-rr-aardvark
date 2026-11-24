@@ -3,7 +3,7 @@
   "name": "__WORKER_NAME__",
   "main": "./workers/app.ts",
   "compatibility_date": "__COMPATIBILITY_DATE__",
-  "compatibility_flags": ["nodejs_compat", "nodejs_compat_populate_process_env"],
+  "compatibility_flags": ["nodejs_compat"],
   "observability": {
     "enabled": true
   },
