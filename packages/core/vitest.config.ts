@@ -6,9 +6,6 @@ import { defineProject } from 'vitest/config'
  * @see https://github.com/vitest-dev/vitest/tree/main/examples/projects
  */
 export default defineProject({
-  resolve: {
-    tsconfigPaths: true,
-  },
   test: {
     globals: false,
     environment: 'jsdom',

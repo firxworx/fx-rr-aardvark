@@ -4,9 +4,17 @@
  * All custom errors should extend this class so `instanceof` checks and workspace helper
  * functions behave consistently across runtimes (Node, Cloudflare Workers, browsers).
  *
- * Note that `new.target.name` can be mangled by minifiers in client bundles so subclasses
- * should explicitly set `override readonly name = '...'` to ensure correct resolution in
- * logging, serialization, etc.
+ * The error `name` is set from the subclass constructor name (`new.target.name`). Class names can be
+ * mangled by minifiers in client bundles so subclasses should declare an explicit static name
+ * (`static override readonly name = '...'`) to ensure the correct `name` in logging, serialization, etc.
+ *
+ * Like native errors, `name` is not an enumerable property so it does not appear in `Object.keys()`,
+ * object spread, or `JSON.stringify()` output.
+ *
+ * @example
+ * export class PaymentDeclinedError extends CustomError {
+ *   static override readonly name = 'PaymentDeclinedError'
+ * }
  */
 export abstract class CustomError extends Error {
   constructor(message?: string, options?: ErrorOptions) {
@@ -28,20 +36,20 @@ export abstract class CustomError extends Error {
  * @see https://www.strictmode.io/articles/invariant
  */
 export class InvariantAssertionError extends CustomError {
-  override readonly name = 'InvariantAssertionError'
+  static override readonly name = 'InvariantAssertionError'
 }
 
 /**
  * Error for when data integrity is compromised and an unexpected result is returned,
- * e.g. expected data missing, multiple rows returned one expected, etc.
+ * e.g. expected data missing, multiple rows returned when one was expected, etc.
  */
 export class DataIntegrityError extends CustomError {
-  override readonly name = 'DataIntegrityError'
+  static override readonly name = 'DataIntegrityError'
 }
 
 /**
  * Error for when data was not found when a result was expected.
  */
 export class DataNotFoundError extends CustomError {
-  override readonly name = 'DataNotFoundError'
+  static override readonly name = 'DataNotFoundError'
 }

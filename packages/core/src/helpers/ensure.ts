@@ -66,9 +66,6 @@ function pickSingleResult<T>(result: T[] | T): NonNullable<T> | undefined {
  * single values to support database libraries such as drizzle where different query methods
  * return results in different shapes.
  *
- * This function uses `await` internally; it does not handle cross-boundary edge cases
- * such as between web-workers (i.e. it does not check "if thenable" cases).
- *
  * @throws {DataIntegrityError} if the result is an array with multiple items
  * @throws {DataNotFoundError} if the result is nullish, an empty array, or an array with a nullish item
  */

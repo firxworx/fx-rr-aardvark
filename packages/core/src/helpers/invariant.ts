@@ -3,7 +3,10 @@ import { getHttpReasonPhrase } from './http-status'
 
 type InvariantMessage = string | (() => string) | undefined
 
-const DEFAULT_ERROR_MESSAGE: string = 'Invariant assertion failed'
+const DEFAULT_ERROR_MESSAGE = 'Invariant assertion failed'
+
+/** Status codes that must not have a response body per the Fetch standard. */
+const NULL_BODY_STATUSES: ReadonlySet<number> = new Set([204, 205, 304])
 
 /**
  * Resolves a lazy or literal message to a trimmed string; returns `undefined` if blank.
@@ -17,7 +20,10 @@ function resolveMessage(message: InvariantMessage): string | undefined {
  * Creates the `Response` thrown by `invariantResponse()` and `invariantNotFoundResponse()`.
  *
  * `status` defaults to `defaultStatus` and `statusText` defaults to the status reason phrase (if known).
- * The body is the given message with fallback to the reason phrase then to a generic `HTTP <status>`.
+ * The body is the given message with fallback to the reason phrase then to a generic `HTTP <status>`,
+ * except for null body statuses (`204`, `205`, `304`) where a body is not permitted.
+ *
+ * As with the `Response` constructor, a `status` outside of 200-599 throws a `RangeError`.
  */
 function createInvariantResponse(
   message: InvariantMessage,
@@ -27,7 +33,9 @@ function createInvariantResponse(
   const status = responseInit?.status ?? defaultStatus
   const reasonPhrase = getHttpReasonPhrase(status)
 
-  return new Response(resolveMessage(message) ?? reasonPhrase ?? `HTTP ${status}`, {
+  const body = NULL_BODY_STATUSES.has(status) ? null : (resolveMessage(message) ?? reasonPhrase ?? `HTTP ${status}`)
+
+  return new Response(body, {
     ...responseInit,
     status,
     statusText: responseInit?.statusText ?? reasonPhrase ?? '',
@@ -37,7 +45,7 @@ function createInvariantResponse(
 /**
  * Throws custom `InvariantAssertionError` if the given condition is falsy.
  *
- * The `invariant()` function conceptually similar to Node's built-in `assert()`.
+ * The `invariant()` function is conceptually similar to Node's built-in `assert()`.
  * This version is intended for use across the stack.
  *
  * Based on `@epic-web/invariant` which in turn was inspired by and based on the `tiny-invariant` package

@@ -1,8 +1,9 @@
+import { runInNewContext } from 'node:vm'
 import { describe, expect, it } from 'vitest'
 
 import { getErrorMessage, toError } from '../src/errors/error-utils'
 
-// pnpm --filter @workspace/core test test/errors.test.ts
+// pnpm --filter @workspace/core test test/error-utils.test.ts
 
 describe('getErrorMessage', () => {
   it('returns message from instances of Error', () => {
@@ -57,6 +58,15 @@ describe('getErrorMessage', () => {
 
   it('falls back to cause when an Error has an empty message', () => {
     expect(getErrorMessage(new Error('', { cause: new Error('root cause') }))).toBe('root cause')
+  })
+
+  it('falls back to cause for cross-realm errors and error-like objects', () => {
+    expect(getErrorMessage(runInNewContext('new Error("", { cause: "root cause" })'))).toBe('root cause')
+    expect(getErrorMessage({ message: '', cause: { message: 'root cause' } })).toBe('root cause')
+  })
+
+  it('includes the error name for errors without a message', () => {
+    expect(getErrorMessage(new TypeError())).toBe('Unknown Error: TypeError')
   })
 })
 

@@ -93,6 +93,13 @@ describe('invariantResponse', () => {
     expect(response.statusText).toBe('')
     expect(await response.text()).toBe('HTTP 499')
   })
+
+  it.each([204, 205, 304])('throws a %i Response without a body (null body status)', (status) => {
+    const response = catchResponse(() => invariantResponse(false, 'ignored', { status }))
+
+    expect(response.status).toBe(status)
+    expect(response.body).toBeNull()
+  })
 })
 
 describe('invariantNotFoundResponse', () => {
