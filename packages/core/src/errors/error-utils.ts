@@ -1,5 +1,3 @@
-import { isRecord } from '../helpers/guards'
-
 export interface GetErrorMessageOptions {
   fallback?: string
 }
@@ -7,6 +5,15 @@ export interface GetErrorMessageOptions {
 export interface ToErrorOptions extends GetErrorMessageOptions {}
 
 const DEFAULT_FALLBACK_MESSAGE = 'Unknown Error'
+
+/**
+ * Intentionally relaxed object check local to this module: matches any non-null object including
+ * class instances and errors from other realms (which fail `instanceof Error`) so that their
+ * `message`, `error`, and `name` properties can be inspected.
+ */
+function isObjectLike(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null
+}
 
 function isNonEmptyString(value: unknown): value is string {
   return typeof value === 'string' && value.trim().length > 0
@@ -34,7 +41,7 @@ function extract(value: unknown, depth: number): string | undefined {
     return isNonEmptyString(value.message) ? value.message : extract(value.cause, depth + 1)
   }
 
-  if (isRecord(value)) {
+  if (isObjectLike(value)) {
     return extract(value.message, depth + 1) ?? extract(value.error, depth + 1)
   }
 
@@ -101,7 +108,7 @@ export function toError(maybeError: unknown, options?: ToErrorOptions): Error {
 
   const error = new Error(message, { cause: maybeError })
 
-  if (isRecord(maybeError) && isNonEmptyString(maybeError.name)) {
+  if (isObjectLike(maybeError) && isNonEmptyString(maybeError.name)) {
     error.name = maybeError.name
   }
 

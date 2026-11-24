@@ -1,36 +1,49 @@
-/*
- * The term _nullish_ is intended to be more clear than the built-in type `NonNullable` where the
- * name may imply it only handles `null` values to developers unfamiliar with JS/TS.
- *
- * The term _nullish_ comes from the `??` nullish coalescing operator and will lead novice devs
- * on a correct path to interpreting the specific purpose of this guard.
- */
-
 export type MaybePromise<T> = T | Promise<T>
 
 /**
- * Type guard to check if a value is a Promise-like object (has a `then()` method).
+ * Type guard for Promise-like values: any object or function with a callable `then()` method
+ * per the Promises/A+ definition of a "thenable".
  *
- * This is more reliable than wrapping in `Promise.resolve()` or checking `instanceof Promise` because
- * it works across different realms (e.g. iframes, web workers) and with custom non-standard promise-like
- * implementations such with jQuery.
+ * More reliable than `instanceof Promise` because it works across realms (e.g. iframes, web workers)
+ * and with non-native promise implementations. Narrows to `PromiseLike<T>` (not `Promise<T>`) because
+ * a thenable is not guaranteed to implement `catch()` or `finally()`.
  */
-export function isThenable<T>(value: unknown): value is Promise<T> {
+export function isThenable<T = unknown>(value: unknown): value is PromiseLike<T> {
+  if ((typeof value !== 'object' || value === null) && typeof value !== 'function') {
+    return false
+  }
+
+  return 'then' in value && typeof value.then === 'function'
+}
+
+/**
+ * Type guard for `Error` instances and error-like objects (any object with string `name` and `message`).
+ *
+ * Unlike `instanceof Error` this also matches errors created in other realms (e.g. iframes, workers,
+ * jsdom vs. native `DOMException`) and errors that were serialized and deserialized.
+ */
+export function isErrorLike(value: unknown): value is Error {
   return (
-    !!value && typeof value === 'object' && Array.isArray(value) && 'then' in value && typeof value.then === 'function'
+    value instanceof Error || (isRecord(value) && typeof value.name === 'string' && typeof value.message === 'string')
   )
 }
 
 /**
- * Type guard for instances of `Error` with name 'AbortError' that's handy for use
- * with async operations and the `AbortController` API.
+ * Type guard for errors with name `'AbortError'` such as those thrown by `fetch()` and other
+ * async APIs when an `AbortController` signal is aborted.
+ *
+ * Matches cross-realm errors (see `isErrorLike()`). Note that `AbortSignal.timeout()` produces an
+ * error named `'TimeoutError'` which this guard intentionally does not match.
  */
 export function isAbortError(error: unknown): error is Error & { name: 'AbortError' } {
-  return error instanceof Error && error.name === 'AbortError'
+  return isErrorLike(error) && error.name === 'AbortError'
 }
 
 /**
- * Generic type guard that confirms if the input value **is not** `null` and is not `undefined`.
+ * Generic type guard that confirms the input value **is not** `null` and is not `undefined`.
+ *
+ * The term _nullish_ (from the `??` nullish coalescing operator) is used because it is clearer than
+ * the built-in `NonNullable` whose name may imply that it only handles `null`.
  *
  * @see ensureValue
  */
@@ -39,31 +52,51 @@ export function isNonNullish<T>(input: T | null | undefined): input is NonNullab
 }
 
 /**
- * Generic type guard that confirms if the input value is either `null` or `undefined`.
+ * Generic type guard that confirms the input value is either `null` or `undefined`.
  *
- * @see ensureValue
+ * @see isNonNullish
  */
 export function isNullish<T>(input: T | null | undefined): input is null | undefined {
   return input === null || input === undefined
 }
 
 /**
- * Type guard that evaluates if the input is type `Record<string, unknown>` and strictly
- * guarantees the object has **no** property symbols.
+ * Type guard for non-null, non-array objects whose properties can be read by string key.
  *
- * @returns `true` for empty records; `false` for arrays, `null`, objects with symbols, and non-object types.
+ * This is a relaxed check that matches any object including class instances (e.g. `Date`, `Map`, `Error`).
+ * Use `isPlainObject()` to match only plain data objects.
+ *
+ * @returns `true` for objects including empty objects; `false` for arrays, `null`, functions, and primitives.
  */
 export function isRecord(input: unknown): input is Record<string, unknown> {
-  return (
-    !!input && typeof input === 'object' && !Array.isArray(input) && Object.getOwnPropertySymbols(input).length === 0
-  )
+  return typeof input === 'object' && input !== null && !Array.isArray(input)
 }
 
+/**
+ * Type guard for plain objects: objects created by an object literal, `new Object()`, or `Object.create(null)`.
+ *
+ * Class instances (e.g. `Date`, `Map`, `Error`) and arrays do not match. Plain objects from other realms
+ * (e.g. iframes) do match because the prototype check does not compare against this realm's `Object.prototype`.
+ */
+export function isPlainObject(input: unknown): input is Record<string, unknown> {
+  if (typeof input !== 'object' || input === null) {
+    return false
+  }
+
+  const prototype: unknown = Object.getPrototypeOf(input)
+  return prototype === null || Object.getPrototypeOf(prototype) === null
+}
+
+/**
+ * Type guard for records (see `isRecord()`) that have the given key as an **own** property.
+ *
+ * Inherited properties such as `toString` do not count.
+ */
 export function isRecordWithKey<K extends string>(
   input: unknown,
   key: K,
-): input is Record<K, unknown> & { K: unknown } {
-  return isRecord(input) && key in input
+): input is Record<string, unknown> & Record<K, unknown> {
+  return isRecord(input) && Object.hasOwn(input, key)
 }
 
 export function isString(input: unknown): input is string {
