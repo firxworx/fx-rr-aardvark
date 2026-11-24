@@ -38,7 +38,7 @@ import {
   type SessionIdStorageStrategy,
   type SessionStorage,
 } from 'react-router'
-import z from 'zod'
+import * as z from 'zod'
 
 import { env } from '@/env.server'
 
