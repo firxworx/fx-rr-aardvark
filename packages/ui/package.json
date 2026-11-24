@@ -13,7 +13,6 @@
     "./variants/*": "./src/variants/*.ts"
   },
   "scripts": {
-    "script:generate:extended-palette": "pnpm vite-node scripts/generate-extended-palette.ts",
     "test": "vitest",
     "typecheck": "tsc --project tsconfig.json --noEmit"
   },
@@ -22,7 +21,6 @@
     "@workspace/core": "workspace:*",
     "class-variance-authority": "catalog:",
     "clsx": "catalog:",
-    "date-fns": "catalog:",
     "lucide-react": "catalog:",
     "shadcn": "catalog:",
     "tailwind-merge": "catalog:",

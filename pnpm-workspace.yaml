@@ -79,6 +79,3 @@ catalog:
 
   # scripts / tooling
   "@clack/prompts": "^1.9.0"
-
-  # utilities
-  date-fns: "^4.4.0"

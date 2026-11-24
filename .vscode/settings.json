@@ -25,7 +25,7 @@
   // ensure these align with tailwind configuration for intellisense to compute correct values
   "tailwindCSS.rootFontSize": 16,
   "tailwindCSS.codeActions": true,
-  "tailwindCSS.classFunctions": ["clsx", "cva", "cn", "cx"],
+  "tailwindCSS.classFunctions": ["clsx", "cva", "cn"],
 
   // ensure tailwind intellisense works in packages (it can be flaky in a workspace/monorepo)
   // https://github.com/tailwindlabs/tailwindcss/issues/13136
