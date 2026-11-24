@@ -1,5 +1,5 @@
 import { Form } from 'react-router'
-import clsx from 'clsx'
+import { clsx } from 'cn'
 
 import { APP_ACTIONS_THEME_PATHNAME, THEME_INPUT_NAME, THEME_MODES, type ThemeMode } from '@workspace/core/theme'
 import { Button } from '@workspace/ui/components/button'

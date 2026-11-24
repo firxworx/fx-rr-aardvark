@@ -1,5 +1,5 @@
 import { cva } from 'class-variance-authority'
-import clsx from 'clsx'
+import { clsx } from 'cn'
 
 const primaryVariantClassName = clsx(
   'bg-primary text-primary-fg',

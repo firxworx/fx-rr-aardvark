@@ -141,6 +141,12 @@
         "noRestrictedImports": {
           "level": "error",
           "options": {
+            "paths": {
+              "cn": {
+                "importNames": ["cn", "twMerge"],
+                "message": "Import `cn` from '@workspace/ui/lib/style' because it is configured with custom theme tokens."
+              }
+            },
             "patterns": [
               {
                 "group": ["**/node_modules/**", "*/node_modules/*"],
@@ -250,6 +256,12 @@
             "noRestrictedImports": {
               "level": "error",
               "options": {
+                "paths": {
+                  "cn": {
+                    "importNames": ["cn", "twMerge"],
+                    "message": "Import `cn` from '@workspace/ui/lib/style' because it is configured with custom theme tokens."
+                  }
+                },
                 "patterns": [
                   {
                     "group": ["**/node_modules/**"],

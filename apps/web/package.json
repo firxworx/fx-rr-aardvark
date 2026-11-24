@@ -24,7 +24,7 @@
     "@workspace/core": "workspace:*",
     "@workspace/tsconfig": "workspace:*",
     "@workspace/ui": "workspace:*",
-    "clsx": "catalog:",
+    "cn": "catalog:",
     "isbot": "catalog:",
     "lucide-react": "catalog:",
     "nuqs": "catalog:",
