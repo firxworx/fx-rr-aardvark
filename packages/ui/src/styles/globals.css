@@ -94,14 +94,14 @@
     animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* reduced motion is CSS-only (React does not handle it): near-zero duration vs. `animation: none` keeps */
-  /* animation events firing. `!important` is required: `(*)` has zero specificity so `(root)`/`(.route)` win */
+  /* reduced motion is CSS-only (React does not handle it). `animation: none` also drops delays, and view transition */
+  /* promises still resolve. `!important` is required: `(*)` has zero specificity so `(root)`/`(.route)` would win */
   @media (prefers-reduced-motion: reduce) {
     ::view-transition-group(*),
     ::view-transition-old(*),
     ::view-transition-new(*) {
       /* biome-ignore lint/complexity/noImportantStyles: reduced motion must override all view transition styles */
-      animation-duration: 0.01ms !important;
+      animation: none !important;
     }
   }
 

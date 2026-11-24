@@ -86,7 +86,7 @@ See: [React Router view transitions](https://reactrouter.com/how-to/view-transit
 - a route change mounts a new boundary so the old page exits and the new page enters (`route` view transition class)
 - `update="none"`: re-renders within the same route (pending UI, revalidation, search params, fetchers such as the
   theme form) start no view transition
-- header, nav, and footer are outside the boundary (part of the `root` snapshot)
+- header, nav, and footer are outside the boundary and render live (not animated)
 - keying remounts the page on a `pathname` change including a param change on the same route (`/posts/1` → `/posts/2`);
   pass `transitionKey` (e.g. the route id) to keep page state, and param changes then do not animate
 
@@ -106,7 +106,8 @@ Rules:
 - Directional/typed animations: `addTransitionType()` inside `startTransition()` with the object form of the class props.
 - Reduced motion is CSS-only (React does not handle it): see `globals.css`. Its rules need `!important` because
   `::view-transition-*(*)` has zero specificity and loses to `(root)` and `(.class)` selectors.
-- Browser Back/Forward (`popstate`) does not animate.
+- Browser Back/Forward may not animate: React skips view transitions for synchronous `popstate` updates. It does animate
+  when the route commit is async (as it currently is in `apps/web`), so do not rely on it either way.
 - The root `ErrorBoundary` renders outside the boundary so leaving an error page does not animate.
 
 View transitions must be considered in any UI/UX work, e.g. a modal or sheet opening or closing while the route changes.
