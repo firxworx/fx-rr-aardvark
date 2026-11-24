@@ -44,7 +44,6 @@
     "jsdom": "catalog:",
     "syncpack": "catalog:",
     "typescript": "catalog:",
-    "vite-node": "catalog:",
     "vitest": "catalog:"
   }
 }
