@@ -14,6 +14,7 @@ import { DEFAULT_LOCALE, DEFAULT_META_DESCRIPTION, DEFAULT_META_TITLE } from '@/
 import { env } from '@/env.server'
 import { AppLayout } from '@/layout/app-layout'
 import { GeneralErrorBoundary } from '@/layout/error-boundary'
+import { RouteTransition } from '@/layout/route-transition'
 import { CSP_NONCE_META_PROPERTY, useNonceContext } from '@/lib/nonce.context'
 import { getTheme } from '@/lib/theme.server'
 import { getToast, toastMiddleware } from '@/middleware/toast.middleware.server'
@@ -139,7 +140,9 @@ export default function App({ loaderData }: Route.ComponentProps): React.JSX.Ele
       <CSPProvider disableStyleElements>
         <NuqsAdapter>
           <AppLayout>
-            <Outlet />
+            <RouteTransition>
+              <Outlet />
+            </RouteTransition>
           </AppLayout>
         </NuqsAdapter>
       </CSPProvider>

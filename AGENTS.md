@@ -40,6 +40,9 @@ Deploys via wrangler; app has `wrangler.jsonc`.
 - Always prefer Tailwind logical property utilities (`ms-`, `me-`, `ps-`,
   `pe-`, `start-`, `end-`) instead of physical ones (`ml-`, `mr-`, `pl-`,
   `pr-`, `left-`, `right-`).
+- Navigation is animated by React `<ViewTransition>` (`RouteTransition` in `apps/web` root). Never use the deprecated
+  react-router `viewTransition` prop/option or call `document.startViewTransition()`. Consider view transitions in any
+  UI/UX work. See `docs/styling.md`.
 
 ## TypeScript conventions
 

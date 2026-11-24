@@ -71,3 +71,42 @@ The `cn()` utility combines `clsx` and `tailwind-merge` to support informed merg
 The [packages/ui/src/lib/style.ts](../packages/ui/src/lib/style.ts) module builds on the shadcn boilerplate by scaffolding a custom `tailwind-merge` configuration via `extendTailwindMerge()`.
 
 One of the primary reasons tailwind is not used to its full advantage is because custom variants and utilities are not supported by `tailwind-merge` out-of-the-box. The `extendTailwindMerge()` function enables you to add custom variants and utilities to the merge configuration so that they are properly merged.
+
+## View Transitions
+
+React's `<ViewTransition>` (React 19.3+) animates navigation. React Router runs navigations (`Link`, `NavLink`, `Form`,
+`useNavigate()`, `useSubmit()`) in a React transition and React calls `document.startViewTransition()` for it.
+
+See: [React Router view transitions](https://reactrouter.com/how-to/view-transitions) and
+[React `<ViewTransition>`](https://react.dev/reference/react/ViewTransition)
+
+`RouteTransition` ([apps/web/app/layout/route-transition.tsx](../apps/web/app/layout/route-transition.tsx)) wraps
+`<Outlet />` in the root route. It is a `<ViewTransition>` keyed by `pathname`:
+
+- a route change mounts a new boundary so the old page exits and the new page enters (`route` view transition class)
+- `update="none"`: re-renders within the same route (pending UI, revalidation, search params, fetchers such as the
+  theme form) start no view transition
+- header, nav, and footer are outside the boundary (part of the `root` snapshot)
+- keying remounts the page on a `pathname` change including a param change on the same route (`/posts/1` → `/posts/2`);
+  pass `transitionKey` (e.g. the route id) to keep page state, and param changes then do not animate
+
+The react-router docs show a persistent (unkeyed) boundary instead. Avoid that and any `update`/`default` animation on a
+boundary that wraps router-driven content: React then starts a view transition for every transition commit inside it,
+including the navigation's pending-state commit (and after hydration and on theme changes), and the route commit waits
+for it to finish.
+
+Rules:
+
+- Do not use the deprecated react-router `viewTransition` prop/option, `useViewTransitionState()`, or `NavLink`
+  `isTransitioning`/`.transitioning`: mixing them with `<ViewTransition>` can interrupt animations.
+- Never call `document.startViewTransition()` by hand: React interrupts it.
+- Keep React transitions on: no `useTransitions={false}` on `<HydratedRouter>` and no `flushSync` in navigations.
+- Style with view transition classes (e.g. `::view-transition-old(.route)` in `globals.css`) rather than names.
+- Shared elements: `<ViewTransition name="...">` on both sides with only one mounted per name at a time.
+- Directional/typed animations: `addTransitionType()` inside `startTransition()` with the object form of the class props.
+- Reduced motion is CSS-only (React does not handle it): see `globals.css`. Its rules need `!important` because
+  `::view-transition-*(*)` has zero specificity and loses to `(root)` and `(.class)` selectors.
+- Browser Back/Forward (`popstate`) does not animate.
+- The root `ErrorBoundary` renders outside the boundary so leaving an error page does not animate.
+
+View transitions must be considered in any UI/UX work, e.g. a modal or sheet opening or closing while the route changes.

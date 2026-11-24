@@ -43,7 +43,7 @@ export function AppLayout({ className, children, ...restProps }: AppLayoutProps)
     <div id="root" className={cn('root isolate flex min-h-svh flex-col', className)} {...restProps}>
       <header className="border-b border-border outline-none">
         <LayoutContainer className="grid grid-cols-[1fr_auto_1fr] items-center gap-6 h-16 text-base">
-          <NavLink to={href('/')} viewTransition className="block col-start-1 justify-self-start font-bold">
+          <NavLink to={href('/')} className="block col-start-1 justify-self-start font-bold">
             {APP_NAME}
           </NavLink>
           {/* explicit `col-start` required because below `md` the nav is hidden and dropped from grid auto-placement */}
@@ -58,7 +58,6 @@ export function AppLayout({ className, children, ...restProps }: AppLayoutProps)
                     'aria-[current=page]:text-foreground',
                     'hover:text-foreground focus-visible:cx-focus-ring',
                   )}
-                  viewTransition
                 >
                   {link.label}
                 </NavLink>
