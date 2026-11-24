@@ -12,6 +12,7 @@
       "!**/build/**/*",
       "!**/.react-router/**/*",
       "!**/worker-configuration.d.ts",
+      "!**/pnpm-lock.yaml",
       "!**/apps/**/fonts.css",
       "!**/apps/**/public/**/*.svg",
       "!.vscode/**/*.code-snippets"
@@ -58,6 +59,31 @@
       "tailwindDirectives": true,
       "allowWrongLineComments": false,
       "cssModules": false
+    }
+  },
+  // https://biomejs.dev/reference/configuration/#markdown
+  "markdown": {
+    "parser": {
+      // required: when disabled the formatter treats `---` frontmatter as markdown and breaks it
+      "frontmatter": true,
+      "gfm": true
+    },
+    "formatter": {
+      "enabled": true,
+      "proseWrap": "preserve",
+      // fenced code blocks are formatted per the matching language config (e.g. javascript)
+      "formatEmbeds": true
+    },
+    "linter": {
+      "enabled": true
+    }
+  },
+  "yaml": {
+    "formatter": {
+      "enabled": true
+    },
+    "linter": {
+      "enabled": true
     }
   },
   "assist": {
@@ -133,6 +159,16 @@
     }
   },
   "overrides": [
+    // agent instructions and docs are lint-only (not formatted) because biome pads every row of a
+    // markdown table to its widest cell (no option to disable) which makes wide tables hard to read
+    {
+      "includes": ["**/AGENTS.md", "**/CLAUDE.md", "docs/**", ".claude/**"],
+      "markdown": {
+        "formatter": {
+          "enabled": false
+        }
+      }
+    },
     // support component and props/value patterns that prefer indexed keys
     {
       "includes": ["**/*.tsx"],
