@@ -2,28 +2,8 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "bundler",
+    // runtime types come from wrangler generated `worker-configuration.d.ts` (add it to `include`)
     "lib": ["ESNext"],
-    "types": ["node"],
-    "strict": true,
-    "noEmit": true,
-    "noUncheckedIndexedAccess": true,
-    "verbatimModuleSyntax": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
-    "checkJs": false,
-
-    // prepare for ts 7.0 go compiler
-    "stableTypeOrdering": true
-
-    // "declaration": true,
-    // "declarationMap": true,
-    // "sourceMap": true,
+    "types": ["node"]
   }
 }

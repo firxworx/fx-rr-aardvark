@@ -1,13 +1,12 @@
 {
   "extends": "@workspace/tsconfig/react-library",
   "compilerOptions": {
-    "outDir": "./dist",
     // used by the shadcn CLI to resolve components.json aliases to src/ (tsc resolves self-imports via exports)
     "paths": {
       "@workspace/ui/*": ["./src/*"]
     },
     "types": ["vite/client"]
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts", "test/**/*.ts", "test/**/*.tsx", "vitest.config.ts"],
-  "exclude": ["node_modules", "dist", "src/**/_wip/**/*"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "test/**/*.ts", "test/**/*.tsx", "vitest.config.ts"],
+  "exclude": ["node_modules", "src/**/_wip/**/*"]
 }

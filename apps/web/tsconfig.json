@@ -2,7 +2,6 @@
   "extends": "@workspace/tsconfig/react-router",
   "compilerOptions": {
     "rootDirs": [".", "./.react-router/types"],
-    "types": ["vite/client", "node"],
     "paths": {
       "@/workers/*": ["./workers/*"],
       "@/*": ["./app/*"]
