@@ -11,6 +11,7 @@ import {
   isRecordWithKey,
   isString,
   isThenable,
+  isTimeoutError,
 } from '../src/helpers/guards'
 
 // pnpm --filter @workspace/core test test/guards.test.ts
@@ -106,6 +107,34 @@ describe('isAbortError', () => {
     expect(isAbortError('AbortError')).toBe(false)
     expect(isAbortError({ name: 'AbortError' })).toBe(false)
     expect(isAbortError(null)).toBe(false)
+  })
+})
+
+describe('isTimeoutError', () => {
+  it('returns true for the reason of an expired AbortSignal.timeout()', async () => {
+    const signal = AbortSignal.timeout(1)
+    await new Promise((resolve) => signal.addEventListener('abort', resolve, { once: true }))
+
+    expect(isTimeoutError(signal.reason)).toBe(true)
+    expect(isAbortError(signal.reason)).toBe(false)
+  })
+
+  it('returns true for TimeoutError DOMException and cross-realm errors', () => {
+    expect(isTimeoutError(new DOMException('timed out', 'TimeoutError'))).toBe(true)
+    expect(isTimeoutError(runInNewContext('Object.assign(new Error("timed out"), { name: "TimeoutError" })'))).toBe(
+      true,
+    )
+  })
+
+  it('returns false for AbortError and other errors', () => {
+    expect(isTimeoutError(new DOMException('aborted', 'AbortError'))).toBe(false)
+    expect(isTimeoutError(new Error('TimeoutError'))).toBe(false)
+  })
+
+  it('returns false for non-error values', () => {
+    expect(isTimeoutError('TimeoutError')).toBe(false)
+    expect(isTimeoutError({ name: 'TimeoutError' })).toBe(false)
+    expect(isTimeoutError(null)).toBe(false)
   })
 })
 

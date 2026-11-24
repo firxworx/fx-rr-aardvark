@@ -30,13 +30,27 @@ export function isErrorLike(value: unknown): value is Error {
 
 /**
  * Type guard for errors with name `'AbortError'` such as those thrown by `fetch()` and other
- * async APIs when an `AbortController` signal is aborted.
+ * async APIs when an `AbortController` signal is aborted (typically user or app cancellation).
  *
- * Matches cross-realm errors (see `isErrorLike()`). Note that `AbortSignal.timeout()` produces an
- * error named `'TimeoutError'` which this guard intentionally does not match.
+ * Matches cross-realm errors (see `isErrorLike()`). Timeouts via `AbortSignal.timeout()` produce an
+ * error named `'TimeoutError'` that is intentionally not matched: use `isTimeoutError()` for those.
+ *
+ * If `controller.abort(reason)` is called with a custom reason, that reason is what gets thrown
+ * and this guard only matches if it is an error named `'AbortError'`.
  */
 export function isAbortError(error: unknown): error is Error & { name: 'AbortError' } {
   return isErrorLike(error) && error.name === 'AbortError'
+}
+
+/**
+ * Type guard for errors with name `'TimeoutError'` such as those thrown by `fetch()` and other
+ * async APIs when an `AbortSignal.timeout()` signal (or `AbortSignal.any()` including one) expires.
+ *
+ * Matches cross-realm errors (see `isErrorLike()`). Combine with `isAbortError()` to handle
+ * any cancellation: `isAbortError(error) || isTimeoutError(error)`.
+ */
+export function isTimeoutError(error: unknown): error is Error & { name: 'TimeoutError' } {
+  return isErrorLike(error) && error.name === 'TimeoutError'
 }
 
 /**
