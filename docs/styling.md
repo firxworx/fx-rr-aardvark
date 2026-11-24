@@ -66,11 +66,27 @@ The popular `cn()` utility for merging tailwind classes may be imported from `@w
 import { cn } from '@workspace/ui/lib/style'
 ```
 
-The `cn()` utility combines `clsx` and `tailwind-merge` to support informed merging of tailwind classes.
+It is powered by the [cn](https://github.com/shadcn-ui/cn) package, which replaces both `clsx` and `tailwind-merge`: it
+joins conditional class names and resolves conflicts between tailwind classes.
 
-The [packages/ui/src/lib/style.ts](../packages/ui/src/lib/style.ts) module builds on the shadcn boilerplate by scaffolding a custom `tailwind-merge` configuration via `extendTailwindMerge()`.
+The [packages/ui/src/lib/style.ts](../packages/ui/src/lib/style.ts) module builds on the shadcn boilerplate by creating
+`cn()` with `createCn()` from `cn/config`. Custom theme tokens such as `rounded-control` and `max-w-layout` are not
+recognized out-of-the-box: they must be registered or else they will not merge with built-in classes.
 
-One of the primary reasons tailwind is not used to its full advantage is because custom variants and utilities are not supported by `tailwind-merge` out-of-the-box. The `extendTailwindMerge()` function enables you to add custom variants and utilities to the merge configuration so that they are properly merged.
+- When adding a custom `@theme` token (e.g. radius, container, text, or shadow) to
+  [globals.css](../packages/ui/src/styles/globals.css), also register it in `style.ts`. Colors and font families do not
+  need to be registered.
+- Custom classes and utilities may be registered as class groups via `extend.classGroups`.
+
+Always import `cn` from `@workspace/ui/lib/style`. Components added by the shadcn CLI contain `import { cn } from "cn"`,
+which bypasses the custom configuration and must be rewritten. Biome reports this as an error (`noRestrictedImports`).
+
+To join class names without merging (e.g. for constants and `cva` variants) use `clsx`, which also enables tailwind
+intellisense in editors:
+
+```ts
+import { clsx } from 'cn'
+```
 
 ## View Transitions
 

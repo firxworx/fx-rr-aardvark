@@ -1,5 +1,5 @@
 import { href, NavLink } from 'react-router'
-import clsx from 'clsx'
+import { clsx } from 'cn'
 
 import { cn } from '@workspace/ui/lib/style'
 import { APP_NAME, MAIN_ELEMENT_ID, NAV_LINKS } from '@/constants'

@@ -2,6 +2,8 @@ import type { RouteConfig } from '@react-router/dev/routes'
 import { flatRoutes } from '@react-router/fs-routes'
 
 /**
- * Routes configuration as hybrid declarative and file routing.
+ * Routes configuration using file route conventions (see `./routes` directory).
+ *
+ * @see https://reactrouter.com/how-to/file-route-conventions
  */
 export default flatRoutes() satisfies RouteConfig

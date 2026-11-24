@@ -16,7 +16,7 @@ Reference: https://github.com/shadcn-ui/ui/blob/main/packages/shadcn/src/tailwin
 
 ## Utilities
 
-Package `@workspace/ui/lib/style` exports `cn()` classNames merge utility powered by `tailwind-merge` and `clsx`.
+Package `@workspace/ui/lib/style` exports `cn()` classNames merge utility powered by the [cn](https://github.com/shadcn-ui/cn) package and configured with custom theme tokens.
 
 ## References
 
