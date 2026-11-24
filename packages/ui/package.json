@@ -4,9 +4,6 @@
   "type": "module",
   "private": true,
   "sideEffects": false,
-  "imports": {
-    "#/*": "./src/*"
-  },
   "exports": {
     "./globals.css": "./src/styles/globals.css",
     "./constants": "./src/constants.ts",

@@ -1,11 +1,5 @@
 {
   "extends": "@workspace/tsconfig/base",
-  "compilerOptions": {
-    "paths": {
-      "@workspace/core/*": ["./src/*"],
-      "@/*": ["./src/*"]
-    }
-  },
   "include": ["src/**/*.ts", "src/**/*.tsx", "test/**/*.ts", "vitest.config.ts"],
   "exclude": ["node_modules", "src/**/_*"]
 }
