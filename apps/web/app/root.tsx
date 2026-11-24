@@ -10,7 +10,7 @@ import type { Route } from './+types/root'
 
 import { DEFAULT_THEME_MODE } from '@workspace/core/theme'
 import { AnchoredToastProvider, ToastProvider, toastManager } from '@workspace/ui/components/toast'
-import { DEFAULT_LOCALE, DEFAULT_META_DESCRIPTION, DEFAULT_META_TITLE } from '@/constants'
+import { DEFAULT_LOCALE, DEFAULT_META_DESCRIPTION, DEFAULT_META_TITLE, IS_DEV_BUILD } from '@/constants'
 import { env } from '@/env.server'
 import { AppLayout } from '@/layout/app-layout'
 import { GeneralErrorBoundary } from '@/layout/error-boundary'
@@ -151,5 +151,5 @@ export default function App({ loaderData }: Route.ComponentProps): React.JSX.Ele
 }
 
 export function ErrorBoundary(): React.JSX.Element {
-  return <GeneralErrorBoundary isDevelopment={import.meta.env.DEV} />
+  return <GeneralErrorBoundary isDevelopment={IS_DEV_BUILD} />
 }

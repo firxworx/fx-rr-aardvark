@@ -8,6 +8,8 @@ import { extendTailwindMerge } from 'tailwind-merge'
 
 /**
  * Lightweight utility to concatenate multiple css classnames separated by spaces; omits falsey values.
+ *
+ * @public
  */
 export function cx(...classes: (string | undefined | null | false)[]): string {
   return classes.filter(Boolean).join(' ')

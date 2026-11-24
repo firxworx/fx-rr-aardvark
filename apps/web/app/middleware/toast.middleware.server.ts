@@ -42,17 +42,18 @@ import * as z from 'zod'
 
 import { env } from '@/env.server'
 
+/** @public */
 export type AppToastMessage = z.infer<typeof zAppToastMessage>
-export type AppToastCookieOptions = Partial<SessionIdStorageStrategy['cookie']>
-export type FlashSessionValues = z.infer<typeof zFlashSessionValues>
 
-export const TOAST_COOKIE_NAME = 'app_toast_session'
-export const FLASH_SESSION = 'flash'
+type AppToastCookieOptions = Partial<SessionIdStorageStrategy['cookie']>
+
+const TOAST_COOKIE_NAME = 'app_toast_session'
+const FLASH_SESSION = 'flash'
 
 const TOAST_COOKIE_SECRET = env.TOAST_COOKIE_SECRET
 
-const toastContext = createContext<z.infer<typeof zAppToastMessage> | null>(null)
-const sessionToastContext = createContext<z.infer<typeof zAppToastMessage> | null>(null)
+const toastContext = createContext<AppToastMessage | null>(null)
+const sessionToastContext = createContext<AppToastMessage | null>(null)
 
 /**
  * Zod schema for toast message that aligns with `@workspace/ui/components/toast`.
@@ -152,6 +153,12 @@ export function toastMiddleware(options?: { customSession?: SessionStorage }): M
   }
 }
 
+/**
+ * Set a server-initiated toast from a loader, action, or middleware. It displays when the root loader next runs
+ * (e.g. the revalidation after an action).
+ *
+ * @public
+ */
 export const setToast = (
   context: RouterContextProvider | Readonly<RouterContextProvider>,
   toast: AppToastMessage | null,

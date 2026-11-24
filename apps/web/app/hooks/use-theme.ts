@@ -27,6 +27,7 @@ export function useTheme(): ThemeMode {
  * with key `theme` via `useTheme()` dependency.
  *
  * @see {@link useTheme}
+ * @public
  */
 export function useResolvedTheme(): Extract<ThemeMode, 'light' | 'dark'> {
   const userThemePreference = useTheme()
@@ -44,6 +45,7 @@ export function useResolvedTheme(): Extract<ThemeMode, 'light' | 'dark'> {
  * Defaults to 'light'.
  *
  * @see {@link useResolvedTheme}
+ * @public
  */
 export function useSystemTheme(): Extract<ThemeMode, 'light' | 'dark'> {
   const [systemTheme, setSystemTheme] = useState<'light' | 'dark'>(() => {
