@@ -17,6 +17,7 @@
 import { mkdir } from 'node:fs/promises'
 import { isAbsolute, join, resolve } from 'node:path'
 import { parseArgs } from 'node:util'
+import { createCookie } from 'react-router'
 import { type BrowserContext, type ConsoleMessage, chromium, type Page } from '@playwright/test'
 import * as z from 'zod'
 
@@ -378,6 +379,18 @@ async function captureRoute(context: BrowserContext, route: string, filePath: st
   return diagnostics
 }
 
+/**
+ * Return the theme cookie's value encoded as the app expects.
+ *
+ * The app reads the cookie with react-router's `createCookie()`, which does not recognize plain string values.
+ */
+async function getThemeCookieValue(theme: ThemeMode): Promise<string> {
+  const header = await createCookie(THEME_COOKIE_NAME).serialize(theme)
+  const [pair = ''] = header.split(';')
+
+  return pair.slice(pair.indexOf('=') + 1)
+}
+
 async function main(): Promise<void> {
   const options = parseOptions()
   await preflight(options.baseUrl)
@@ -402,7 +415,9 @@ async function main(): Promise<void> {
         })
 
         // the root loader reads this cookie, so the server-rendered markup already carries the theme
-        await context.addCookies([{ name: THEME_COOKIE_NAME, value: theme, url: options.baseUrl }])
+        await context.addCookies([
+          { name: THEME_COOKIE_NAME, value: await getThemeCookieValue(theme), url: options.baseUrl },
+        ])
 
         try {
           for (const route of options.routes) {
