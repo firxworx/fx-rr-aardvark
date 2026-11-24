@@ -23,7 +23,6 @@
   "dependencies": {
     "@base-ui/react": "catalog:",
     "@workspace/core": "workspace:*",
-    "change-case": "catalog:",
     "class-variance-authority": "catalog:",
     "clsx": "catalog:",
     "date-fns": "catalog:",

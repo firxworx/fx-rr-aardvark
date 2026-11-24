@@ -81,5 +81,4 @@ catalog:
   "@clack/prompts": "^1.9.0"
 
   # utilities
-  change-case: "^5.4.4"
   date-fns: "^4.4.0"
