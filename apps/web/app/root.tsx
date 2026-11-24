@@ -17,6 +17,7 @@ import { GeneralErrorBoundary } from '@/layout/error-boundary'
 import { RouteTransition } from '@/layout/route-transition'
 import { CSP_NONCE_META_PROPERTY, useNonceContext } from '@/lib/nonce.context'
 import { getTheme } from '@/lib/theme.server'
+import { crossOriginMiddleware } from '@/middleware/cross-origin.middleware.server'
 import { getToast, toastMiddleware } from '@/middleware/toast.middleware.server'
 
 // inter @font-face css is bundled into the root route css (rendered by <Links />); see preload in links()
@@ -24,11 +25,11 @@ import '@fontsource-variable/inter'
 import stylesheet from '@/styles/app.css?url'
 
 /**
- * Global middleware applied to all routes.
+ * Global middleware applied to all routes; `crossOriginMiddleware` (CSRF protection) must be first.
  *
  * @see https://github.com/code-forge-io/remix-toast (README for middleware mode; the basis for this implementation)
  */
-export const middleware = [toastMiddleware()]
+export const middleware = [crossOriginMiddleware(), toastMiddleware()]
 
 /**
  * Refer to `entry.server.tsx` and `workers/app.ts` for security headers; the CSP is defined in `@workspace/core/csp`.

@@ -8,6 +8,7 @@
     "./csp": "./src/csp.ts",
     "./errors": "./src/errors/index.ts",
     "./helpers": "./src/helpers/index.ts",
+    "./request-origin": "./src/request-origin.ts",
     "./security-headers": "./src/security-headers.ts",
     "./theme": "./src/theme.ts"
   },
