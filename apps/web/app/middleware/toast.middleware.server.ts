@@ -58,6 +58,8 @@ const sessionToastContext = createContext<AppToastMessage | null>(null)
 /**
  * Zod schema for toast message that aligns with `@workspace/ui/components/toast`.
  *
+ * Omit `type` for a default toast (no icon); `loading` is excluded because only client code can resolve it.
+ *
  * Refer to the types exported by `@base-ui/react/toast` for typing of the arguments
  * accepted by the toast manager's `add()` method.
  *
@@ -72,8 +74,8 @@ const zAppToastMessage = z.looseObject({
   title: z.string(),
   description: z.string().optional(),
   duration: z.number().int().nonnegative().optional(),
-  type: z.custom<'info' | 'success' | 'error' | 'warning'>(),
-  priority: z.custom<'low' | 'high'>().optional(),
+  type: z.enum(['info', 'success', 'warning', 'error']).optional(),
+  priority: z.enum(['low', 'high']).optional(),
 })
 
 const zFlashSessionValues = z.object({

@@ -118,11 +118,10 @@ export default function App({ loaderData }: Route.ComponentProps): React.JSX.Ele
     }
 
     const defaultTimeoutMs = 5000
-    const isServerToastType = ['info', 'success', 'warning', 'error'].includes(toast.type ?? '')
 
     toastManager.add({
-      ...(isServerToastType && { type: toast.type }),
-      title: toast.title ?? toast.message,
+      type: toast.type,
+      title: toast.title,
       description: toast.description,
       timeout: toast.duration ?? defaultTimeoutMs,
       priority: toast.priority,
