@@ -45,7 +45,7 @@ See `pnpm-workspace.yaml` for workspace configuration and pnpm catalog.
 - `apps`
   - `web/`
     - `app/` - react-router app directory (routes, etc).
-    - `worker/` - cloudflare worker entrypoint
+    - `workers/` - cloudflare worker entrypoint
 - `packages/`
   - `core/` - shared utilities
   - `ui/` - shared UI components and global styles

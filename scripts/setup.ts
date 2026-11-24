@@ -9,8 +9,8 @@
  * first), so the script is safe to re-run.
  *
  * Usage:
- *   pnpm run setup
- *   pnpm run setup -- --yes --name=my-app
+ *   pnpm setup:workspace
+ *   pnpm setup:workspace --yes --name=my-app
  *   node scripts/setup.ts --yes --name=my-app --worker=my-app-web --site-url=https://my-app.example.com
  *
  * Flags:
@@ -62,7 +62,7 @@ const WORKER_NAME_REGEX = /^[a-z0-9][a-z0-9-]{0,62}$/
 const MAX_PACKAGE_NAME_LENGTH = 214
 
 const USAGE = `
-Usage: pnpm run setup [flags]
+Usage: pnpm setup:workspace [flags]
 
   --name=<name>          workspace name for package.json (default: directory name)
   --description=<text>   package.json description (default: empty)
