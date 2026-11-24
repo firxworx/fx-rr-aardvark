@@ -14,7 +14,7 @@ import { DEFAULT_LOCALE, DEFAULT_META_DESCRIPTION, DEFAULT_META_TITLE } from '@/
 import { env } from '@/env.server'
 import { AppLayout } from '@/layout/app-layout'
 import { GeneralErrorBoundary } from '@/layout/error-boundary'
-import { useNonceContext } from '@/lib/nonce.context'
+import { CSP_NONCE_META_PROPERTY, useNonceContext } from '@/lib/nonce.context'
 import { getTheme } from '@/lib/theme.server'
 import { getToast, toastMiddleware } from '@/middleware/toast.middleware.server'
 
@@ -73,6 +73,7 @@ export function Layout({ children }: { children: React.ReactNode }): React.JSX.E
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta property={CSP_NONCE_META_PROPERTY} nonce={nonce} />
         <Meta />
         <Links nonce={nonce} />
       </head>
