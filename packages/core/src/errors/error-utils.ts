@@ -1,4 +1,4 @@
-import { isRecord } from '@workspace/core/helpers'
+import { isRecord } from '../helpers/guards'
 
 export interface GetErrorMessageOptions {
   fallback?: string

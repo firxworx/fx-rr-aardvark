@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { getErrorMessage, toError } from '../src/helpers/errors'
+import { getErrorMessage, toError } from '../src/errors/error-utils'
 
 // pnpm --filter @workspace/core test test/errors.test.ts
 

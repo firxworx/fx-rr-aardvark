@@ -1,4 +1,4 @@
-import { DataIntegrityError, DataNotFoundError } from '../errors'
+import { DataIntegrityError, DataNotFoundError } from '../errors/custom-errors'
 import { isNullish } from './guards'
 
 /**

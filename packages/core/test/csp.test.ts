@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { createContentSecurityPolicy, createCspNonce, serializeContentSecurityPolicy } from '../src/csp'
-import { InvariantAssertionError } from '../src/errors'
+import { InvariantAssertionError } from '../src/errors/custom-errors'
 
 // pnpm --filter @workspace/core test test/csp.test.ts
 

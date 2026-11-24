@@ -1,4 +1,4 @@
-import { InvariantAssertionError } from '../errors'
+import { InvariantAssertionError } from '../errors/custom-errors'
 import { getHttpReasonPhrase } from './http-status'
 
 const DEFAULT_ERROR_MESSAGE: string = 'Invariant assertion failed'
