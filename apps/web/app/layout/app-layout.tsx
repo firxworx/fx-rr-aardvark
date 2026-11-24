@@ -1,5 +1,4 @@
-import { href } from 'react-router'
-import { NavLink } from 'react-router/internal/react-server-client'
+import { href, NavLink } from 'react-router'
 import clsx from 'clsx'
 
 import { cn } from '@workspace/ui/lib/style'
