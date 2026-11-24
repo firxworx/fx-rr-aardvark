@@ -1,127 +1,104 @@
 import { DataIntegrityError, DataNotFoundError } from '../errors/custom-errors'
-import { isNullish } from './guards'
+
+const NULLISH_VALUE_MESSAGE = 'Expected value to not be null or undefined'
+const MULTIPLE_RESULTS_MESSAGE = 'Expected single result: multiple found'
+const NO_RESULT_MESSAGE = 'Expected single result: none found'
 
 /**
  * Type narrowing helper that asserts the input value is not `null` and not `undefined`
- * and returns it as `NonNullable<T>`. Throws a `TypeError` if the assertion fails.
+ * and returns it as `NonNullable<T>`.
  *
- * @throws {TypeError} if input is `null` or `undefined`.
+ * The optional `error` customizes what is thrown:
+ *
+ * - string: thrown as the message of a `TypeError`
+ * - `Error` instance: thrown as-is
+ * - `Error` class: instantiated with a default message and thrown
+ *
+ * @throws {TypeError} if input is `null` or `undefined` (unless a custom error is given)
  */
 export function ensureValue<T>(
-  input: T | undefined | null,
-  error?: string | Error | (new (...args: unknown[]) => Error),
+  input: T | null | undefined,
+  error?: string | Error | (new (message?: string) => Error),
 ): NonNullable<T> {
-  if (input === null || input === undefined) {
-    if (error) {
-      if (typeof error === 'string') {
-        throw new Error(error)
-      }
-
-      throw typeof error === 'function' ? new error('Expected value to be truthy') : error
-    }
-
-    throw new TypeError('Input value cannot be null or undefined')
+  if (input !== null && input !== undefined) {
+    return input
   }
 
-  return input
+  if (error instanceof Error) {
+    throw error
+  }
+
+  if (typeof error === 'function') {
+    throw new error(NULLISH_VALUE_MESSAGE)
+  }
+
+  throw new TypeError(error?.trim() || NULLISH_VALUE_MESSAGE)
 }
 
 /**
- * Enforce a single non-nullish query result row and return it otherwise throw an error.
+ * Extracts the single item from an array: returns `undefined` if the array is empty or the item is
+ * `null` (normalized to `undefined`).
  *
- * Accepts arrays, promises that resolve to arrays, single objects, or promises that resolve to
- * single objects.
+ * Synchronous counterpart of `ensureOptionalResult()` for arrays.
  *
- * Extracts and returns the single result and throws if there are zero rows, multiple rows,
- * or the extracted result is `null` or `undefined`.
+ * @throws {DataIntegrityError} if the array has multiple items
+ */
+export function pickResult<T>(result: T[]): NonNullable<T> | undefined {
+  if (result.length > 1) {
+    throw new DataIntegrityError(MULTIPLE_RESULTS_MESSAGE)
+  }
+
+  return result[0] ?? undefined
+}
+
+/**
+ * Normalizes a query result that may be an array of rows or a single row into a single
+ * non-nullish row or `undefined`.
+ */
+function pickSingleResult<T>(result: T[] | T): NonNullable<T> | undefined {
+  return Array.isArray(result) ? pickResult<T>(result) : (result ?? undefined)
+}
+
+/**
+ * Enforce a single non-nullish query result and return it, otherwise throw an error.
  *
- * For use with database libraries such as drizzle where different API's and query methods may return
- * a result in a variety of different formats.
+ * Accepts arrays, promises that resolve to arrays, single values, or promises that resolve to
+ * single values to support database libraries such as drizzle where different query methods
+ * return results in different shapes.
  *
  * This function uses `await` internally; it does not handle cross-boundary edge cases
  * such as between web-workers (i.e. it does not check "if thenable" cases).
  *
- * @throws {DataIntegrityError} if result is an array with multiple items
- * @throws {DataNotFoundError} if the result is nullish or an empty array
+ * @throws {DataIntegrityError} if the result is an array with multiple items
+ * @throws {DataNotFoundError} if the result is nullish, an empty array, or an array with a nullish item
  */
-export async function ensureResult<T>(queryResult: T[] | Promise<T[]> | T | Promise<T>): Promise<NonNullable<T>> {
-  const result = await queryResult
+export async function ensureResult<T>(queryResult: T[] | Promise<T[]>): Promise<NonNullable<T>>
+export async function ensureResult<T>(queryResult: T | Promise<T>): Promise<NonNullable<T>>
+export async function ensureResult<T>(queryResult: T[] | T | Promise<T[] | T>): Promise<NonNullable<T>> {
+  const result = pickSingleResult<T>(await queryResult)
 
-  if (Array.isArray(result)) {
-    if (result.length > 1) {
-      throw new DataIntegrityError('Found multiple results: expected single result')
-    }
-
-    if (isNullish(result[0])) {
-      console.warn(`Expected non-nullish result (ensureResult): found ${result === null ? 'null' : 'undefined'}`)
-      throw new DataNotFoundError()
-    }
-
-    return result[0] as NonNullable<T>
-  }
-
-  if (isNullish(result)) {
-    console.warn(`Expected non-nullish result (ensureResult): found ${result === null ? 'null' : 'undefined'}`)
-    throw new DataNotFoundError()
-  }
-
-  return result as NonNullable<T>
-}
-
-/**
- * Enforce a _single_ query result row or `undefined` if the result is empty, otherwise throw an error
- * if multiple rows are found.
- *
- * If the result is `null` it is normalized to `undefined` and returned.
- *
- * For use with database libraries such as drizzle where different API's and query methods may return
- * a result in a variety of different formats.
- *
- * This function uses `await` internally; it does not handle cross-boundary edge cases
- * such as between web-workers (i.e. it does not check "if thenable" cases).
- *
- * @throws {DataIntegrityError} if result is an array with multiple items
- * @returns {Promise<T | undefined>} the single result or `undefined` if the result is empty
- *
- * @see https://github.com/drizzle-team/drizzle-orm/issues/2745 controversy around drizzle `null` vs. `undefined` results
- */
-export async function ensureOptionalResult<T>(queryResult: T[] | Promise<T[]>): Promise<T | undefined> {
-  const result = await queryResult
-
-  if (Array.isArray(result)) {
-    if (result.length === 0) {
-      return undefined
-    }
-
-    if (result.length > 1) {
-      throw new DataIntegrityError('Expected single result: multiple found')
-    }
-
-    return result[0] ?? undefined
-  }
-
-  return result ?? undefined
-}
-
-/**
- * Non-async version of `ensureOptionalResult()` that extracts and returns a single item from an array.
- *
- * Returns `undefined` if the array is empty or throws `DataIntegrityError` if there are multiple items.
- *
- * @see {@link ensureOptionalResult} for async version that accepts promises
- */
-export function pickResult<T>(result: T[]): T | undefined {
-  if (Array.isArray(result)) {
-    if (result.length === 0) {
-      return undefined
-    }
-
-    if (result.length > 1) {
-      throw new DataIntegrityError('Expected single result: multiple found')
-    }
-
-    return result[0]
+  if (result === undefined) {
+    throw new DataNotFoundError(NO_RESULT_MESSAGE)
   }
 
   return result
+}
+
+/**
+ * Enforce a single query result or `undefined` if there is none, otherwise throw an error
+ * if multiple rows are found.
+ *
+ * Accepts the same inputs as `ensureResult()`. A `null` result (or `null` array item) is
+ * normalized to `undefined`.
+ *
+ * @throws {DataIntegrityError} if the result is an array with multiple items
+ *
+ * @see https://github.com/drizzle-team/drizzle-orm/issues/2745 controversy around drizzle `null` vs. `undefined` results
+ */
+export async function ensureOptionalResult<T>(queryResult: T[] | Promise<T[]>): Promise<NonNullable<T> | undefined>
+export async function ensureOptionalResult<T>(queryResult: T | Promise<T>): Promise<NonNullable<T> | undefined>
+export async function ensureOptionalResult<T>(
+  queryResult: T[] | T | Promise<T[] | T>,
+): Promise<NonNullable<T> | undefined> {
+  return pickSingleResult<T>(await queryResult)
 }
