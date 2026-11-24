@@ -1,6 +1,6 @@
 import { createCookie } from 'react-router'
 
-import { DEFAULT_THEME_MODE, THEME_COOKIE_NAME, type ThemeMode, zThemeMode } from '@workspace/core/conventions'
+import { DEFAULT_THEME_MODE, THEME_COOKIE_NAME, type ThemeMode, zThemeMode } from '@workspace/core/theme'
 import { IS_PROD_BUILD } from '@/constants'
 
 /**

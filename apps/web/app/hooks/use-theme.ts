@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRouteLoaderData } from 'react-router'
 
-import { DEFAULT_THEME_MODE, type ThemeMode } from '@workspace/core/conventions'
+import { DEFAULT_THEME_MODE, type ThemeMode } from '@workspace/core/theme'
 
 /**
  * React hook for `react-router` apps that returns the current theme mode: `light`, `dark`, or `system`.

@@ -1,12 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useFetcher } from 'react-router'
 
-import {
-  APP_ACTIONS_THEME_PATHNAME,
-  THEME_FETCHER_KEY,
-  THEME_INPUT_NAME,
-  type ThemeMode,
-} from '@workspace/core/conventions'
+import { APP_ACTIONS_THEME_PATHNAME, THEME_FETCHER_KEY, THEME_INPUT_NAME, type ThemeMode } from '@workspace/core/theme'
 import { useTheme } from './use-theme'
 
 /**

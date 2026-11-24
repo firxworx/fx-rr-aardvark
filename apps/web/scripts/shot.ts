@@ -20,9 +20,9 @@ import { parseArgs } from 'node:util'
 import { type BrowserContext, type ConsoleMessage, chromium, type Page } from '@playwright/test'
 import z from 'zod'
 
-import { THEME_COOKIE_NAME, type ThemeMode } from '@workspace/core/conventions'
+import { THEME_COOKIE_NAME, type ThemeMode } from '@workspace/core/theme'
 
-// theme variables should match @workspace/core/conventions/theme.ts
+// theme variables should match @workspace/core/theme
 // type ThemeMode = 'light' | 'dark' | 'system'
 // const THEME_COOKIE_NAME = 'app_theme' as const
 

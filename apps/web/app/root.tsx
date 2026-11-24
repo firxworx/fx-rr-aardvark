@@ -8,7 +8,7 @@ import type { $ZodConfig } from 'zod/v4/core'
 
 import type { Route } from './+types/root'
 
-import { DEFAULT_THEME_MODE } from '@workspace/core/conventions'
+import { DEFAULT_THEME_MODE } from '@workspace/core/theme'
 import { AnchoredToastProvider, ToastProvider, toastManager } from '@workspace/ui/components/toast'
 import { DEFAULT_LOCALE, DEFAULT_META_DESCRIPTION, DEFAULT_META_TITLE } from '@/constants'
 import { env } from '@/env.server'
