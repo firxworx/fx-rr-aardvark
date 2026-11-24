@@ -112,6 +112,8 @@ export default function App({ loaderData }: Route.ComponentProps): React.JSX.Ele
   }
 
   // render server-initiated toasts obtained from root loader data
+  // deferred because on a full page load this effect runs before the parent `ToastProvider` subscribes to `toastManager`
+  // (react runs child effects first) and the manager drops toasts added without a subscriber
   useEffect(() => {
     if (!toast) {
       return
@@ -119,13 +121,17 @@ export default function App({ loaderData }: Route.ComponentProps): React.JSX.Ele
 
     const defaultTimeoutMs = 5000
 
-    toastManager.add({
-      type: toast.type,
-      title: toast.title,
-      description: toast.description,
-      timeout: toast.duration ?? defaultTimeoutMs,
-      priority: toast.priority,
-    })
+    const timer = setTimeout(() => {
+      toastManager.add({
+        type: toast.type,
+        title: toast.title,
+        description: toast.description,
+        timeout: toast.duration ?? defaultTimeoutMs,
+        priority: toast.priority,
+      })
+    }, 0)
+
+    return () => clearTimeout(timer)
   }, [toast])
 
   return (
