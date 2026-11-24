@@ -1,3 +1,8 @@
+/**
+ * Type representing a value of type `T` or a `Promise` that resolves to `T`.
+ *
+ * @public
+ */
 export type MaybePromise<T> = T | Promise<T>
 
 /**
@@ -113,6 +118,10 @@ export function isRecordWithKey<K extends string>(
   return isRecord(input) && Object.hasOwn(input, key)
 }
 
+/**
+ * Type guard for strings: equivalent to `typeof input === 'string'` and useful as a callback
+ * e.g. `values.filter(isString)` to narrow to `string[]`.
+ */
 export function isString(input: unknown): input is string {
   return typeof input === 'string'
 }

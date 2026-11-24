@@ -15,6 +15,8 @@
  * export class PaymentDeclinedError extends CustomError {
  *   static override readonly name = 'PaymentDeclinedError'
  * }
+ *
+ * @public
  */
 export abstract class CustomError extends Error {
   constructor(message?: string, options?: ErrorOptions) {
