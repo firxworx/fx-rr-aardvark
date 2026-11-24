@@ -64,6 +64,20 @@ export default async function handleRequest(
   }
 
   responseHeaders.set('Content-Type', 'text/html')
+
+  /*
+   * Each document (html response) embeds a per-request CSP nonce in `<Scripts>`, `<Links>`, and the
+   * `csp-nonce` meta tag (see `root.tsx`).
+   *
+   * A shared cache (CDN, proxy) would serve the same nonce to every visitor and enable an attacker
+   * to learn it and run injected scripts.
+   *
+   * - `private` forbids shared caches from storing the response; the visitor's own browser may still
+   *   cache it, which exposes the nonce to no other user.
+   * - `set()` runs after route `headers()` exports so a route cannot turn shared caching on by mistake.
+   */
+  responseHeaders.set('Cache-Control', 'private')
+
   return new Response(body, {
     headers: responseHeaders,
     status: responseStatusCode,

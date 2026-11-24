@@ -28,7 +28,7 @@
     "clsx": "catalog:",
     "date-fns": "catalog:",
     "lucide-react": "catalog:",
-    "shadcn": "^4.19.0",
+    "shadcn": "catalog:",
     "tailwind-merge": "catalog:",
     "tailwindcss": "catalog:",
     "tw-animate-css": "catalog:",
