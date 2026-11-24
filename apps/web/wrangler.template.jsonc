@@ -13,7 +13,11 @@
     "ENVIRONMENT": "production",
     "SITE_URL": "__SITE_URL__" // environment domain (e.g., preview, staging, production)
   },
-  // `vars` and bindings are not inherited from the top level: repeat them for every environment
+  // names of required secrets: deploy fails if any are not set (refer to docs/setup.md)
+  "secrets": {
+    "required": ["TOAST_COOKIE_SECRET"]
+  },
+  // `vars`, `secrets`, and bindings are not inherited from the top level: repeat them for every environment
   // the environment is selected at build time with CLOUDFLARE_ENV (see scripts in package.json)
   "env": {
     // deploys as a separate worker named `<name>-preview`
@@ -21,6 +25,9 @@
       "vars": {
         "ENVIRONMENT": "preview",
         "SITE_URL": "__PREVIEW_SITE_URL__"
+      },
+      "secrets": {
+        "required": ["TOAST_COOKIE_SECRET"]
       }
     }
   }

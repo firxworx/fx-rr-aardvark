@@ -40,6 +40,7 @@ import {
 } from 'react-router'
 import * as z from 'zod'
 
+import { IS_PROD_BUILD } from '@/constants'
 import { env } from '@/env.server'
 
 /** @public */
@@ -49,8 +50,6 @@ type AppToastCookieOptions = Partial<SessionIdStorageStrategy['cookie']>
 
 const TOAST_COOKIE_NAME = 'app_toast_session'
 const FLASH_SESSION = 'flash'
-
-const TOAST_COOKIE_SECRET = env.TOAST_COOKIE_SECRET
 
 const toastContext = createContext<AppToastMessage | null>(null)
 const sessionToastContext = createContext<AppToastMessage | null>(null)
@@ -87,9 +86,10 @@ const toastCookieOptions = {
   sameSite: 'lax',
   path: '/',
   httpOnly: true,
+  secure: IS_PROD_BUILD,
 
   // secrets are not highly sensitive (tampering with the cookie is not a significant security risk)
-  secrets: TOAST_COOKIE_SECRET ? [TOAST_COOKIE_SECRET] : undefined,
+  secrets: [env.TOAST_COOKIE_SECRET],
 } satisfies AppToastCookieOptions
 
 const defaultSessionStorage = createCookieSessionStorage({

@@ -9,7 +9,7 @@ const zEnv = z.object({
   SITE_URL: z.url().refine((value) => !value.endsWith('/'), {
     error: 'SITE_URL must not have a trailing slash to support CORS, cookies, and canonical URLs.',
   }),
-  TOAST_COOKIE_SECRET: z.string().min(32, 'TOAST_COOKIE_SECRET must be at least 32 characters long').optional(),
+  TOAST_COOKIE_SECRET: z.string().min(32, 'TOAST_COOKIE_SECRET must be at least 32 characters long'),
 })
 
 /**
