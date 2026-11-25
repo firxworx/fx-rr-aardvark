@@ -3,7 +3,7 @@
   "name": "__WORKER_NAME__",
   "main": "./workers/app.ts",
   // must not be later than the installed wrangler (workerd) supports: update with dependencies
-  "compatibility_date": "2026-08-27",
+  "compatibility_date": "2026-11-17",
   "compatibility_flags": ["nodejs_compat"],
   "observability": {
     "enabled": true
