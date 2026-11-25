@@ -50,6 +50,21 @@ test('navigates on the client', async ({ page }) => {
   expect(errors).toEqual([])
 })
 
+test('reports a failed navigation once and displays the error boundary', async ({ page }) => {
+  const errors = collectErrors(page)
+
+  await page.route('**/example.data*', (route) => route.fulfill({ status: 500, body: 'Internal Server Error' }))
+  await page.goto('/', { waitUntil: 'networkidle' })
+  await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Example' }).click()
+
+  await expect(page.getByRole('heading', { level: 1, name: '500 Internal Server Error' })).toBeVisible()
+
+  const reports = errors.filter((error) => error.startsWith('Client error:'))
+
+  expect(reports).toHaveLength(1)
+  expect(reports[0]).toContain('router')
+})
+
 test('unknown paths respond with 404', async ({ page }) => {
   const response = await page.goto('/does-not-exist')
 
