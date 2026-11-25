@@ -62,8 +62,9 @@ Paths are logged. Do not put personal data or secrets in paths.
 `packages/logger` (`@workspace/logger`):
 
 - `src/index.server.ts`: `createLogger()` and `withContext()`
-- `src/configure.server.ts`: `configureLogging()`, called at startup in `apps/web/workers/app.ts`. A new worker (e.g.
-  cron or queue consumer) calls it in its own entry point.
+- `src/configure.server.ts`: `configureLogging()`
+  - the app worker calls it at startup in `apps/web/workers/app.ts`
+  - new workers (e.g. cron or queue consumer) call it in their own entry point
 - `src/formatters.ts`: JSON and development formatters
 
 The production formatter writes one object for each log. Workers Logs indexes its fields and reads `level`, `message`, and
