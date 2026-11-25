@@ -1,7 +1,7 @@
-# Security headers for static assets served by Cloudflare Workers Static Assets.
+# Security and cache headers for static assets served by Cloudflare Workers Static Assets.
 #
 # Static assets bypass the worker so headers applied in `workers/app.ts` do not apply to them.
-# Keep in sync with `SECURITY_HEADERS` in `packages/core/src/security-headers.ts`.
+# Keep security headers in sync with `SECURITY_HEADERS` in `packages/core/src/security-headers.ts`.
 #
 # https://developers.cloudflare.com/workers/static-assets/headers/
 
@@ -15,3 +15,11 @@
   Origin-Agent-Cluster: ?1
   X-XSS-Protection: 0
   Permissions-Policy: fullscreen=(self), payment=(), sync-xhr=(), camera=(), microphone=(), geolocation=(), usb=(), accelerometer=(), gyroscope=(), magnetometer=(), bluetooth=()
+
+# Build output: file names include a content hash so a file never changes. Other assets are revalidated on each request.
+#
+# `/assets/` is reserved for build output: never create `public/assets/` because its files are not hashed and browsers
+# would keep them for a year even if they change.
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
