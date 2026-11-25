@@ -5,8 +5,14 @@
   // must not be later than the installed wrangler (workerd) supports: update with dependencies
   "compatibility_date": "2026-11-17",
   "compatibility_flags": ["nodejs_compat"],
+  // inherited by all environments (refer to docs/logging.md for features that incur costs)
   "observability": {
-    "enabled": true
+    "enabled": true,
+    "head_sampling_rate": 1, // log every request (default); a lower rate drops all logs of a request including errors
+    "redact_query_string": true, // remove query strings from urls: they may contain tokens or personal data
+    "issues": {
+      "enabled": true // group errors and 5xx responses
+    }
   },
   // public workers.dev URLs (default): disable both in production when using a custom domain
   "workers_dev": true, // <name>.<subdomain>.workers.dev
