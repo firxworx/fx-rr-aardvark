@@ -69,3 +69,13 @@ test('serves robots.txt and sitemap.xml', async ({ request }) => {
   expect(sitemap.headers()['content-type']).toContain('application/xml')
   expect(await sitemap.text()).toContain('<urlset')
 })
+
+// tests run with ENVIRONMENT=production: the worker sends `X-Robots-Tag: noindex` in other environments
+for (const path of ['/', '/sitemap.xml']) {
+  test(`${path} may be indexed in production`, async ({ request }) => {
+    const response = await request.get(path)
+
+    expect(response.status()).toBe(200)
+    expect(response.headers()['x-robots-tag']).toBeUndefined()
+  })
+}

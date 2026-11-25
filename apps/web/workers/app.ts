@@ -21,6 +21,11 @@ export default {
     const securedResponse = new Response(response.body, response)
     applySecurityHeaders(securedResponse.headers)
 
+    // keep other environments out of search indexes (crawlers that obey `robots.txt` do not crawl them at all)
+    if (env.ENVIRONMENT !== 'production') {
+      securedResponse.headers.set('X-Robots-Tag', 'noindex')
+    }
+
     return securedResponse
   },
 } satisfies ExportedHandler<Env>
