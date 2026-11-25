@@ -70,9 +70,10 @@ pnpm dev              # dev server
 pnpm typegen          # generate types (wrangler types)
 pnpm typecheck        # typecheck (tsc)
 pnpm test             # run tests (vitest)
+pnpm test:e2e         # run smoke tests against a production build (playwright)
 pnpm check            # biome lint/format
 pnpm check:fix        # biome lint/format (fix/write mode)
-pnpm preflight        # biome check:fix + typecheck + build
+pnpm preflight        # biome check:fix + typecheck + test + build
 pnpm dlx knip         # audit dependencies and exports with knip
 pnpm syncpack list    # analyze dependency versions
 pnpm syncpack fix     # analyze dependency versions (fix/write mode)
@@ -87,6 +88,10 @@ This is handy if the dev server is not responding or if it was left running in t
 ## Deployment
 
 Refer to `build` and `deploy` script targets in `apps/web/package.json`.
+
+Review [docs/checklist.md](./docs/checklist.md) before deploying a project to production.
+
+CI (`.github/workflows/ci.yml`) verifies pull requests and the main branch; it does not deploy.
 
 ## Tips
 
