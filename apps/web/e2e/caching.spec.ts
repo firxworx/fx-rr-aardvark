@@ -11,7 +11,7 @@ test('public/assets does not exist', () => {
 test('hashed build output is cached as immutable', async ({ request }) => {
   const document = await request.get('/')
   const html = await document.text()
-  const paths = new Set(html.match(/\/assets\/[\w./-]+\.(?:js|css|woff2)/g))
+  const paths = new Set(html.match(/\/assets\/[\w./-]+\.(?:js|css|woff2)/g) ?? [])
 
   // confirm that the document references each type
   for (const extension of ['.js', '.css', '.woff2']) {
