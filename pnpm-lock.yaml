@@ -454,9 +454,6 @@ importers:
       lucide-react:
         specifier: 'catalog:'
         version: 1.77.0(@types/react@19.3.0)(react@19.3.1)
-      shadcn:
-        specifier: 'catalog:'
-        version: 4.23.0(supports-color@10.2.2)
       tailwindcss:
         specifier: 'catalog:'
         version: 4.3.5
@@ -488,6 +485,9 @@ importers:
       react-router:
         specifier: 'catalog:'
         version: 8.5.2(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      shadcn:
+        specifier: 'catalog:'
+        version: 4.23.0(supports-color@10.2.2)
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
