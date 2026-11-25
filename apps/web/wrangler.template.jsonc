@@ -7,6 +7,9 @@
   "observability": {
     "enabled": true
   },
+  // public workers.dev URLs (default): disable both in production when using a custom domain
+  "workers_dev": true, // <name>.<subdomain>.workers.dev
+  "preview_urls": true, // a URL for each uploaded version (see deploy:version script)
   // top level is the production environment; other environments are defined in `env` below
   // environment variables (set per environment; see .dev.vars for local development overrides)
   "vars": {
