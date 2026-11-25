@@ -2,7 +2,8 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "__WORKER_NAME__",
   "main": "./workers/app.ts",
-  "compatibility_date": "__COMPATIBILITY_DATE__",
+  // must not be later than the installed wrangler (workerd) supports: update with dependencies
+  "compatibility_date": "2026-08-27",
   "compatibility_flags": ["nodejs_compat"],
   "observability": {
     "enabled": true

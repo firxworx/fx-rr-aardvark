@@ -12,6 +12,7 @@ Delete what does not apply. Items marked **[included]** are provided by the star
 - [ ] Replace favicons, touch icon, and `public/images/og-default.png`
 - [ ] Remove demo content: home page, example route, GitHub link
 - [ ] Review locale (`DEFAULT_LOCALE`)
+- [ ] Review `compatibility_date` in `wrangler.jsonc`; it cannot be later than the installed `wrangler` supports
 - [ ] Choose a license: add a `LICENSE` file or set `UNLICENSED` (`package.json` has `MIT` by default)
 - [ ] Rewrite the README; add `SECURITY.md` and `CODEOWNERS` as appropriate
 
