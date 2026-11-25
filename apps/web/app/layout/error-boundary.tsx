@@ -94,7 +94,6 @@ export function GeneralErrorBoundary({ isDevelopment }: { isDevelopment: boolean
   const error = useRouteError()
 
   if (isDevelopment && error instanceof Error) {
-    console.log('🔴 error on dev', error)
     return <DevErrorDisplay message="Application Error" detail={error.message} stack={error.stack} />
   }
 

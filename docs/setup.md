@@ -86,6 +86,7 @@ To add an environment:
 
 - add it under `env` in `wrangler.jsonc` with its own `vars`, `secrets`, and bindings (these are not inherited)
 - add its name to `ENVIRONMENT` in `apps/web/app/env.server.ts`
+- set its `LOG_LEVEL` (refer to [logging.md](./logging.md))
 - add a deploy script to `apps/web/package.json`
 
 ## Secrets

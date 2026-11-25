@@ -3,10 +3,16 @@
   "name": "__WORKER_NAME__",
   "main": "./workers/app.ts",
   // must not be later than the installed wrangler (workerd) supports: update with dependencies
-  "compatibility_date": "2026-08-27",
+  "compatibility_date": "2026-11-17",
   "compatibility_flags": ["nodejs_compat"],
+  // inherited by all environments (refer to docs/logging.md for features that incur costs)
   "observability": {
-    "enabled": true
+    "enabled": true,
+    "head_sampling_rate": 1, // log every request (default); a lower rate drops all logs of a request including errors
+    "redact_query_string": true, // remove query strings from urls: they may contain tokens or personal data
+    "issues": {
+      "enabled": true // group errors and 5xx responses
+    }
   },
   // public workers.dev URLs (default): disable both in production when using a custom domain
   "workers_dev": true, // <name>.<subdomain>.workers.dev
@@ -15,6 +21,7 @@
   // environment variables (set per environment; see .dev.vars for local development overrides)
   "vars": {
     "ENVIRONMENT": "production",
+    "LOG_LEVEL": "info", // trace | debug | info | warning | error | fatal
     "SITE_URL": "__SITE_URL__" // environment domain (e.g., preview, staging, production)
   },
   // names of required secrets: deploy fails if any are not set (refer to docs/setup.md)
@@ -28,6 +35,7 @@
     "preview": {
       "vars": {
         "ENVIRONMENT": "preview",
+        "LOG_LEVEL": "info",
         "SITE_URL": "__PREVIEW_SITE_URL__"
       },
       "secrets": {

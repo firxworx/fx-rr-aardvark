@@ -18,6 +18,7 @@ Packages are source-shipped (no build step); no turborepo.
 All packages are under `@workspace/` namespace e.g. `@workspace/ui` for the shared component library.
 
 - `packages/core` - shared utilities
+- `packages/logger` - structured logging for server code (LogTape; refer to `docs/logging.md`)
 - `packages/ui` - reusable UI components and global styles (tailwindcss v4)
 - `packages/ui/src/styles/globals.css` — entrypoint for global styles
 - `tooling/tsconfig` - shared TypeScript config presets
@@ -34,9 +35,10 @@ Deploys via wrangler; app has `wrangler.jsonc`.
 ## Styling
 
 - Tokens are designed for compatibility with coss-ui and shadcn/ui
-- Tokens use `light-dark()` CSS. One class covers both modes: **never**
-  write `dark:` color variants unless absolutely necessary. Non-color `dark:` variants (rare) are
-  allowed. Any use of `dark:` should be flagged in your summary.
+- Tokens use `light-dark()` CSS. One class covers both modes:
+  - **Never** write `dark:` color variants unless absolutely necessary.
+  - Non-color `dark:` variants (rare) are allowed.
+  - Any use of `dark:` should be flagged in your summary.
 - Always prefer Tailwind logical property utilities (`ms-`, `me-`, `ps-`,
   `pe-`, `start-`, `end-`) instead of physical ones (`ml-`, `mr-`, `pl-`,
   `pr-`, `left-`, `right-`).
@@ -52,7 +54,7 @@ Deploys via wrangler; app has `wrangler.jsonc`.
 - 2-space indentation
 - zod v4 schema names prefixed with `z` (e.g. `zUserProfile`)
 - zod v4 namespace import: `import * as z from 'zod'` (not `import { z }` or a default import) per zod docs;
-  bundlers can tree-shake a namespace import but not the `z` object
+  - bundlers can tree-shake a namespace import but not the `z` object
 - Formatting/linting is Biome (incl. Markdown and YAML) — do not add ESLint/Prettier config
 
 ## `apps/web`
@@ -64,6 +66,13 @@ Deploys via wrangler; app has `wrangler.jsonc`.
 - Import shared components from `@workspace/ui`; do not duplicate components into the app.
 - Consider if coss-ui then shadcn/ui has a component before creating a new one.
 - Validate all input at the boundary with Zod schemas.
+- Logging: server code uses `createLogger('<name>')` from `@workspace/logger`, never `console`.
+  - Use a constant message with values as properties.
+  - Pass errors as `error`: `logger.error('Failed to save', { error, id })`.
+  - Never log personal data, secrets, cookies, or query strings.
+  - Use `error` level only for failures that need attention.
+  - Read `docs/logging.md` before changing logging or observability settings.
+- Only names listed under `vars` or `secrets.required` in `wrangler.jsonc` are loaded from `.dev.vars`.
 - Never create `apps/web/public/assets`: `/assets/` is reserved for hashed build output and cached as immutable. Use
   another directory such as `public/images`.
 
@@ -74,7 +83,8 @@ Deploys via wrangler; app has `wrangler.jsonc`.
 
 ## Markdown
 
-- Biome formats and lints Markdown and YAML too; `AGENTS.md`/`CLAUDE.md`, `docs/**`, and `.claude/**` are lint-only
-  (not formatted) because Biome pads every table column to its widest cell.
+- Biome formats and lints Markdown and YAML.
+  - `AGENTS.md`/`CLAUDE.md`, `docs/**`, and `.claude/**` are lint-only (not formatted) because Biome pads every table
+    column to its widest cell.
 - In docs meant for people, prefer lists over very wide tables.
 - Use a trailing `\` for hard line breaks, not trailing spaces (trailing whitespace is trimmed).

@@ -4,8 +4,15 @@ import { isRouteErrorResponse, type RouterContextProvider, ServerRouter } from '
 import { isbot } from 'isbot'
 
 import { createContentSecurityPolicy, serializeContentSecurityPolicy } from '@workspace/core/csp'
+import { isCrossOriginWrite } from '@workspace/core/request-origin'
+import { createLogger } from '@workspace/logger'
 import { nonceContext } from '@/context.server'
 import { NonceContextProvider } from '@/lib/nonce.context'
+import { requestLogging } from '@/lib/request-logging.server'
+
+const logger = createLogger('server')
+
+export const instrumentations = [requestLogging]
 
 /**
  * React Router server request handler for streaming SSR.
@@ -48,8 +55,8 @@ export default async function handleRequest(
         // Log streaming rendering errors from inside the shell.  Don't log
         // errors encountered during initial shell rendering since they'll
         // reject and get logged in handleDocumentRequest.
-        if (shellRendered) {
-          console.error(error)
+        if (shellRendered && !request.signal.aborted) {
+          logger.error('Failed to render streamed content', { error })
         }
       },
       nonce,
@@ -93,10 +100,15 @@ export const handleError: HandleErrorFunction = (error, { request }) => {
     return
   }
 
-  // skip logging 404 errors (excessive bot and crawler noise)
-  if (isRouteErrorResponse(error) && error.status === 404) {
+  // skip 4xx errors of react-router (no matching route, no action, etc.): often caused by bots and crawlers
+  if (isRouteErrorResponse(error) && error.status < 500) {
     return
   }
 
-  console.error(error instanceof Error ? error.stack : error)
+  // skip cross-origin requests rejected by react-router (its error cannot be distinguished from others)
+  if (isCrossOriginWrite(request)) {
+    return
+  }
+
+  logger.error('Failed to handle request', { error })
 }

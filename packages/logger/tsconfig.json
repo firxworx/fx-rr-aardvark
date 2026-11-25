@@ -1,0 +1,5 @@
+{
+  "extends": "@workspace/tsconfig/base",
+  "include": ["src/**/*.ts", "src/**/*.tsx", "test/**/*.ts", "vitest.config.ts"],
+  "exclude": ["node_modules", "src/**/_*"]
+}

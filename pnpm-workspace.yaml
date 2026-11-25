@@ -35,11 +35,14 @@ catalog:
   isbot: "^5.2.3"
   nuqs: "^2.10.3"
 
+  # logging
+  "@logtape/logtape": "^2.4.2"
+
   # schema
   zod: "^4.6.7"
 
   # cloudflare
-  wrangler: "^4.166.0"
+  wrangler: "^4.168.0"
   "@cloudflare/vite-plugin": "1.70.1"
 
   # images (og script)
