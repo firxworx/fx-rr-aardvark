@@ -2,9 +2,9 @@ import { cva } from 'class-variance-authority'
 import { clsx } from 'cn'
 
 const primaryVariantClassName = clsx(
-  'bg-primary text-primary-fg',
-  'hover:bg-primary-hover active:bg-primary-hover data-pressed:bg-primary-hover',
-  '*:data-[slot=button-loading-indicator]:text-primary-fg',
+  'bg-primary text-primary-foreground',
+  'hover:bg-primary/90 active:bg-primary/90 data-pressed:bg-primary/90',
+  '*:data-[slot=button-loading-indicator]:text-primary-foreground',
 )
 
 const defaultSize = clsx('h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2')
@@ -27,15 +27,13 @@ const defaultIconSize = clsx('size-8')
  *
  * Destructive is split by use case:
  *
- * - `destructive`: hard — solid destructive bg with light fg (coss-ui / current shadcn style);
+ * - `destructive`: hard — solid destructive bg with white text (coss-ui / current shadcn style);
  *   this is what vendored components expect when they pass `variant="destructive"`
- * - `destructive-soft`: box surface + legible destructive text (uses -destructive-box/-text)
  * - `destructive-outline`: coss-ui's outline treatment with destructive hover affordance
  *
- * All light/dark asymmetries formerly expressed as `dark:` overrides are resolved into
- * light-dark() palette tokens — see palette.css: --input (outline border), --popover
- * (outline surface), --accent (outline/ghost hover), --destructive / -hover / -foreground / -text,
- * --destructive-box (includes a dark side) / -box-hover.
+ * Colors are coss-ui/shadcn tokens (see shadcn.css) except for links (see palette.css). The tokens are defined with
+ * light-dark() so there are no `dark:` overrides. Hover states use the opacity modifier as coss-ui does, except for
+ * `secondary`: its token is nearly transparent so a lower opacity is not visible.
  *
  * Note `clsx()` is employed for developer ergonomics including intellisense and autocomplete.
  */
@@ -56,7 +54,7 @@ export const buttonVariants = cva(
     // focus styles
     'focus-visible:cx-focus-ring',
     'aria-invalid:focus-visible:cx-focus-ring-invalid',
-    'aria-invalid:border-destructive', // matches the invalid border in forms.css border-destructive-text
+    'aria-invalid:border-destructive',
 
     // child svg icon styles
     "[&_svg:not([class*='size-'])]:size-4",
@@ -72,41 +70,39 @@ export const buttonVariants = cva(
         default: primaryVariantClassName,
         primary: primaryVariantClassName,
         outline: clsx(
-          'border-input bg-popover text-fg',
+          'border-input bg-popover text-foreground',
           'hover:bg-accent/50 hover:text-foreground active:bg-accent/50 data-pressed:bg-accent/50',
           'aria-expanded:bg-accent/50 aria-expanded:text-foreground',
-          '*:data-[slot=button-loading-indicator]:text-fg',
+          '*:data-[slot=button-loading-indicator]:text-foreground',
         ),
         secondary: clsx(
-          'bg-secondary text-secondary-fg',
-          'hover:bg-secondary-hover active:bg-secondary-hover data-pressed:bg-secondary-hover',
-          'aria-expanded:bg-secondary aria-expanded:text-secondary-fg',
-          '*:data-[slot=button-loading-indicator]:text-secondary-fg',
+          'bg-secondary text-secondary-foreground',
+          'hover:bg-secondary-foreground/8 active:bg-secondary-foreground/8 data-pressed:bg-secondary-foreground/8',
+          'aria-expanded:bg-secondary aria-expanded:text-secondary-foreground',
+          '*:data-[slot=button-loading-indicator]:text-secondary-foreground',
         ),
         ghost: clsx(
           'hover:bg-accent hover:text-foreground active:bg-accent data-pressed:bg-accent',
           'aria-expanded:bg-accent aria-expanded:text-foreground',
-          '*:data-[slot=button-loading-indicator]:text-fg',
+          '*:data-[slot=button-loading-indicator]:text-foreground',
         ),
         destructive: clsx(
-          'bg-destructive text-destructive-fg',
-          'hover:bg-destructive-hover active:bg-destructive-hover data-pressed:bg-destructive-hover',
+          'bg-destructive text-white',
+          'hover:bg-destructive/90 active:bg-destructive/90 data-pressed:bg-destructive/90',
           'focus-visible:cx-focus-ring-invalid',
-          '*:data-[slot=button-loading-indicator]:text-destructive-fg',
+          '*:data-[slot=button-loading-indicator]:text-white',
         ),
         // coss-ui
         'destructive-outline': clsx(
-          'border-input bg-popover text-destructive-text',
-          'hover:border-destructive', // hover:bg-destructive-box
-          'active:border-destructive', // active:bg-destructive-box
-          'data-pressed:border-destructive', // data-pressed:bg-destructive-box
+          'border-input bg-popover text-destructive-foreground',
+          'hover:border-destructive active:border-destructive data-pressed:border-destructive',
           'focus-visible:cx-focus-ring-invalid',
-          '*:data-[slot=button-loading-indicator]:text-destructive', // text-destructive-text
+          '*:data-[slot=button-loading-indicator]:text-destructive-foreground',
         ),
         link: clsx(
-          'text-link underline-offset-4',
-          'hover:text-link-hover hover:underline data-pressed:underline',
-          '*:data-[slot=button-loading-indicator]:text-link',
+          'text-P-link underline-offset-4',
+          'hover:text-P-link-hover hover:underline data-pressed:underline',
+          '*:data-[slot=button-loading-indicator]:text-P-link',
         ),
       },
       size: {

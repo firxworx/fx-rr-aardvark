@@ -1,7 +1,10 @@
 /*
  * Palette / design tokens — Tailwind v4 + CSS `light-dark()`
  *
- * Naming conventions:
+ * Custom tokens have a `P-` prefix. coss-ui and shadcn/ui tokens are in shadcn.css and keep their own names: use
+ * `text-primary-foreground` instead of `text-primary-fg` because tailwind ignores names that are not defined.
+ *
+ * Naming conventions for `P-` tokens:
  * - `x` + `x-fg`    — shadcn-style pair: `x` is a surface/control color, `-fg` is text/icons on that color
  * - `fg` + `bg`     — foreground/background always abbreviated as `fg`/`bg`
  * - `*-light-theme` / `*-dark-theme` — raw per-theme values for cases where `light-dark()` must be bypassed
