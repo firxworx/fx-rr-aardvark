@@ -132,7 +132,7 @@
   body {
     /* relative enables backdrop-filter to work in iOS26+ safari per base-ui docs */
     @apply relative bg-background text-foreground font-sans antialiased;
-    @apply selection:bg-P-selection selection:text-P-selection-fg;
+    @apply selection:bg-P-selection selection:text-P-selection-foreground;
   }
 
   b,

@@ -1,19 +1,12 @@
 /*
- * Palette / design tokens — Tailwind v4 + CSS `light-dark()`
+ * Custom palette tokens with no coss-ui or shadcn/ui equivalent — Tailwind v4 + CSS `light-dark()`
  *
- * Custom tokens have a `P-` prefix. coss-ui and shadcn/ui tokens are in shadcn.css and keep their own names: use
- * `text-primary-foreground` instead of `text-primary-fg` because tailwind ignores names that are not defined.
+ * Names have a `P-` (palette) prefix and follow the shadcn convention: `x` is a surface color and `x-foreground` is the
+ * color of text and icons on it. coss-ui and shadcn/ui tokens are in shadcn.css and keep their own names.
  *
- * Naming conventions for `P-` tokens:
- * - `x` + `x-fg`    — shadcn-style pair: `x` is a surface/control color, `-fg` is text/icons on that color
- * - `fg` + `bg`     — foreground/background always abbreviated as `fg`/`bg`
- * - `*-light-theme` / `*-dark-theme` — raw per-theme values for cases where `light-dark()` must be bypassed
- *   (e.g. inset badge inside a button that keeps its theme regardless of mode)
+ * Tailwind ignores names that are not defined and does not report them (refer to test/tokens.test.ts).
  *
  * Colors are defined using oklch color space and oklab is used for color-mix().
- *
- * shadcn palette equivalencies unused in this project are commented out on a line-by-line basis
- * so they can be easily added as required during dev as new components are added.
  */
 
 @theme inline {
@@ -21,7 +14,7 @@
    * global look and feel
    */
   --color-P-selection: var(--P-selection);
-  --color-P-selection-fg: var(--P-selection-fg);
+  --color-P-selection-foreground: var(--P-selection-foreground);
   --color-P-scrollbar-track: var(--P-scrollbar-track);
   --color-P-scrollbar-thumb: var(--P-scrollbar-thumb);
 
@@ -34,16 +27,10 @@
 
 :root {
   /*
-   * custom white/black in oklch vs. rgb (intentionally no corresponding --color-P-*)
-   */
-  --P-white: oklch(1 0 0);
-  --P-black: oklch(0 0 0);
-
-  /*
    * global look and feel
    */
   --P-selection: light-dark(var(--color-sky-200), var(--color-sky-800));
-  --P-selection-fg: light-dark(var(--color-sky-800), var(--color-sky-50));
+  --P-selection-foreground: light-dark(var(--color-sky-800), var(--color-sky-50));
   --P-scrollbar-track: transparent;
   --P-scrollbar-thumb: light-dark(var(--color-neutral-300), var(--color-neutral-700));
 
