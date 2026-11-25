@@ -18,6 +18,7 @@ Packages are source-shipped (no build step); no turborepo.
 All packages are under `@workspace/` namespace e.g. `@workspace/ui` for the shared component library.
 
 - `packages/core` - shared utilities
+- `packages/logger` - structured logging for server code (LogTape; refer to `docs/logging.md`)
 - `packages/ui` - reusable UI components and global styles (tailwindcss v4)
 - `packages/ui/src/styles/globals.css` — entrypoint for global styles
 - `tooling/tsconfig` - shared TypeScript config presets
@@ -64,6 +65,11 @@ Deploys via wrangler; app has `wrangler.jsonc`.
 - Import shared components from `@workspace/ui`; do not duplicate components into the app.
 - Consider if coss-ui then shadcn/ui has a component before creating a new one.
 - Validate all input at the boundary with Zod schemas.
+- Logging: server code uses `createLogger('<name>')` from `@workspace/logger`, never `console`. Use a constant message
+  with values as properties and pass errors as `error`: `logger.error('Failed to save', { error, id })`. Never log
+  personal data, secrets, cookies, or query strings. Use `error` level only for failures that need attention. Read
+  `docs/logging.md` before changing logging or observability settings.
+- Only names listed under `vars` or `secrets.required` in `wrangler.jsonc` are loaded from `.dev.vars`.
 - Never create `apps/web/public/assets`: `/assets/` is reserved for hashed build output and cached as immutable. Use
   another directory such as `public/images`.
 

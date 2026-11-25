@@ -82,9 +82,16 @@ If the project stores data:
 
 ## Observability
 
-- [ ] **[included]** Workers Logs are enabled
-- [ ] Set log sampling and retention; emit structured (JSON) logs
-- [ ] Do not log personal data, tokens, or cookies
+Refer to [logging.md](./logging.md).
+
+- [ ] **[included]** Workers Logs is enabled and every request is logged (`head_sampling_rate`)
+- [ ] **[included]** Structured (JSON) logs with the request ID, method, and path
+- [ ] **[included]** Query strings are removed from logged URLs (`redact_query_string`)
+- [ ] **[included]** Workers Issues is enabled: errors and 5xx responses are grouped. It may incur costs.
+- [ ] Set up notifications for Issues (automations)
+- [ ] Estimate the cost of logs at expected traffic; review `LOG_LEVEL` and `head_sampling_rate`
+- [ ] Do not log personal data, tokens, or cookies; check that paths do not contain any
+- [ ] Workers Logs are kept for up to seven days: export logs if they must be kept longer (OpenTelemetry or Logpush)
 - [ ] **[included]** Client errors caught by react-router and react are logged by `reportClientError()`
 - [ ] Report errors to an error tracker:
   - `handleError` and the render `onError` in `entry.server.tsx`
