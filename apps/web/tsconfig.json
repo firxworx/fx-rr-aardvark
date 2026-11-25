@@ -14,6 +14,8 @@
     "app/**/.client/**/*",
     "workers/**/*",
     "scripts/**/*",
+    "e2e/**/*",
+    "playwright.config.ts",
     "worker-configuration.d.ts"
   ],
   "exclude": ["node_modules"]

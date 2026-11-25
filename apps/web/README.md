@@ -18,6 +18,18 @@ Key configuration files:
 - `apps/web/react-router.config.ts`
 - `apps/web/vite.config.ts`
 
+## Smoke Tests
+
+Playwright tests in `e2e/` run against a production build in the Workers runtime and cover page loads (including CSP
+violations and hydration errors), security headers, cross-origin protection, and theme switching.
+
+```sh
+pnpm exec playwright install chromium # once
+pnpm test:e2e
+```
+
+Update the tests when you replace the demo routes.
+
 ## Routing
 
 Ensure the resource routes for `sitemap.xml` and `robots.txt` are maintained and kept in sync for any special or reserved routes that may be added to the project and should be excluded from search indexes (e.g. `actions`, `api`, etc.).
