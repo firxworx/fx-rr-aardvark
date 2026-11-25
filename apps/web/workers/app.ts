@@ -2,7 +2,13 @@ import { createRequestHandler, RouterContextProvider } from 'react-router'
 
 import { createCspNonce } from '@workspace/core/csp'
 import { applySecurityHeaders } from '@workspace/core/security-headers'
+import { configureLogging } from '@workspace/logger/configure'
+import { IS_DEV_BUILD } from '@/constants'
 import { cloudflareContext, nonceContext } from '@/context.server'
+// validates environment variables at startup so that a deploy with invalid values fails
+import { env } from '@/env.server'
+
+configureLogging({ level: env.LOG_LEVEL, format: IS_DEV_BUILD ? 'dev' : 'json' })
 
 const requestHandler = createRequestHandler(() => import('virtual:react-router/server-build'), import.meta.env.MODE)
 

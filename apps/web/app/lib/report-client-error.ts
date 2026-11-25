@@ -26,5 +26,6 @@ export function reportClientError(error: unknown, context: ClientErrorContext): 
     return
   }
 
+  // biome-ignore lint/suspicious/noConsole: client code (the logger is for server code)
   console.error('Client error:', error, context)
 }

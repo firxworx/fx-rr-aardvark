@@ -1,4 +1,7 @@
+# only names listed under `vars` or `secrets.required` in wrangler.jsonc are loaded (others are ignored)
+
 ENVIRONMENT = "development"  # development | preview | production
+LOG_LEVEL = "debug"  # trace | debug | info | warning | error | fatal
 SITE_URL="http://localhost:5173"
 
 # values set to __GENERATE_SECRET__ are replaced with a generated secret by `pnpm setup:workspace`

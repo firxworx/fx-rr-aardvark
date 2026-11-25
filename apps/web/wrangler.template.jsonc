@@ -15,6 +15,7 @@
   // environment variables (set per environment; see .dev.vars for local development overrides)
   "vars": {
     "ENVIRONMENT": "production",
+    "LOG_LEVEL": "info", // trace | debug | info | warning | error | fatal
     "SITE_URL": "__SITE_URL__" // environment domain (e.g., preview, staging, production)
   },
   // names of required secrets: deploy fails if any are not set (refer to docs/setup.md)
@@ -28,6 +29,7 @@
     "preview": {
       "vars": {
         "ENVIRONMENT": "preview",
+        "LOG_LEVEL": "info",
         "SITE_URL": "__PREVIEW_SITE_URL__"
       },
       "secrets": {

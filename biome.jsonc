@@ -224,6 +224,17 @@
         }
       }
     },
+    // server code must use the logger (refer to docs/logging.md)
+    {
+      "includes": ["apps/*/app/**", "apps/*/workers/**", "packages/*/src/**"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsole": "error"
+          }
+        }
+      }
+    },
     // config files
     {
       "includes": ["**/drizzle.config.ts"],
