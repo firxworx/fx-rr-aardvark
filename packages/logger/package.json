@@ -1,0 +1,24 @@
+{
+  "name": "@workspace/logger",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.server.ts",
+    "./configure": "./src/configure.server.ts"
+  },
+  "scripts": {
+    "test": "vitest",
+    "typecheck": "tsc --project tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@logtape/logtape": "catalog:",
+    "@workspace/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@workspace/tsconfig": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

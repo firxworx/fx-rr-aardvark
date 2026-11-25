@@ -16,6 +16,9 @@
     "packages/core": {
       "includeEntryExports": true
     },
+    "packages/logger": {
+      "includeEntryExports": true
+    },
     "packages/ui": {
       "includeEntryExports": true,
       "project": ["**/*.{ts,tsx,css}"],
