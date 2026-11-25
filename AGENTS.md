@@ -64,6 +64,8 @@ Deploys via wrangler; app has `wrangler.jsonc`.
 - Import shared components from `@workspace/ui`; do not duplicate components into the app.
 - Consider if coss-ui then shadcn/ui has a component before creating a new one.
 - Validate all input at the boundary with Zod schemas.
+- Never create `apps/web/public/assets`: `/assets/` is reserved for hashed build output and cached as immutable. Use
+  another directory such as `public/images`.
 
 ## General
 
