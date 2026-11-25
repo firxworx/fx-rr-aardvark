@@ -11,7 +11,7 @@
  * @module
  */
 
-/** Methods that must not change state (safe per RFC 9110). */
+/** Safe methods per RFC 9110 except `TRACE` which the Fetch standard forbids (and react-router does not support). */
 const SAFE_METHODS: readonly string[] = ['GET', 'HEAD', 'OPTIONS']
 
 const HTTP_PROTOCOLS: readonly string[] = ['http:', 'https:']

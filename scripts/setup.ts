@@ -44,9 +44,6 @@ const TOKEN_SITE_URL = '__SITE_URL__'
 /** Token in `wrangler.template.jsonc` replaced with the preview site URL. */
 const TOKEN_PREVIEW_SITE_URL = '__PREVIEW_SITE_URL__'
 
-/** Token in `wrangler.template.jsonc` replaced with today's date (`YYYY-MM-DD`). */
-const TOKEN_COMPATIBILITY_DATE = '__COMPATIBILITY_DATE__'
-
 /** Matches a `.dev.vars.example` assignment whose value is the generated-secret token. */
 const GENERATE_SECRET_REGEX = /^(\s*)([A-Z0-9_]+)(\s*=\s*)["']?__GENERATE_SECRET__["']?\s*$/
 
@@ -250,14 +247,10 @@ function applyWranglerConfig(
     return { label, detail: 'skipped: already exists (use --force to overwrite)', isApplied: false }
   }
 
-  // local date (`en-CA` formats as YYYY-MM-DD) so the date is never ahead of the installed wrangler
-  const compatibilityDate = new Date().toLocaleDateString('en-CA')
-
   const contents = readFileSync(templatePath, 'utf8')
     .replaceAll(TOKEN_WORKER_NAME, answers.workerName)
     .replaceAll(TOKEN_SITE_URL, answers.siteUrl)
     .replaceAll(TOKEN_PREVIEW_SITE_URL, answers.previewSiteUrl)
-    .replaceAll(TOKEN_COMPATIBILITY_DATE, compatibilityDate)
 
   const unresolved = contents.match(/__[A-Z0-9_]+__/g)
 
@@ -276,7 +269,7 @@ function applyWranglerConfig(
 
   return {
     label,
-    detail: `${isOverwrite ? 'overwritten' : 'created'}: ${answers.workerName} (compatibility_date ${compatibilityDate})`,
+    detail: `${isOverwrite ? 'overwritten' : 'created'}: ${answers.workerName}`,
     isApplied: true,
   }
 }
