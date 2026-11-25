@@ -10,6 +10,7 @@ browsers and Cloudflare Workers (with `nodejs_compat`).
   (`getErrorMessage()`, `toError()`)
 - `@workspace/core/helpers`: type guards, invariant assertions, `ensure*` helpers for values and query results, and
   HTTP status helpers
+- `@workspace/core/request-origin`: request origin checks to protect against CSRF and open redirects
 - `@workspace/core/security-headers`: security response headers (other than CSP)
 - `@workspace/core/theme`: theme mode schema and conventions shared by the server and client
 

@@ -9,8 +9,8 @@
  * first), so the script is safe to re-run.
  *
  * Usage:
- *   pnpm run setup
- *   pnpm run setup -- --yes --name=my-app
+ *   pnpm setup:workspace
+ *   pnpm setup:workspace --yes --name=my-app
  *   node scripts/setup.ts --yes --name=my-app --worker=my-app-web --site-url=https://my-app.example.com
  *
  * Flags:
@@ -19,6 +19,8 @@
  *   --author=<text>        package.json author (default: field removed)
  *   --worker=<name>        cloudflare worker name (default: <name>-web)
  *   --site-url=<url>       production SITE_URL (default: https://<worker>.workers.dev)
+ *   --preview-site-url=<url>
+ *                          preview SITE_URL (default: derived from worker name and SITE_URL)
  *   --reset-git            reinitialize git history (destructive: deletes .git)
  *   --force                overwrite existing wrangler.jsonc / .dev.vars (backed up to *.bak)
  *   --yes                  non-interactive: accept flags and defaults without prompting
@@ -39,6 +41,9 @@ const TOKEN_WORKER_NAME = '__WORKER_NAME__'
 /** Token in `wrangler.template.jsonc` replaced with the production site URL. */
 const TOKEN_SITE_URL = '__SITE_URL__'
 
+/** Token in `wrangler.template.jsonc` replaced with the preview site URL. */
+const TOKEN_PREVIEW_SITE_URL = '__PREVIEW_SITE_URL__'
+
 /** Token in `wrangler.template.jsonc` replaced with today's date (`YYYY-MM-DD`). */
 const TOKEN_COMPATIBILITY_DATE = '__COMPATIBILITY_DATE__'
 
@@ -57,13 +62,15 @@ const WORKER_NAME_REGEX = /^[a-z0-9][a-z0-9-]{0,62}$/
 const MAX_PACKAGE_NAME_LENGTH = 214
 
 const USAGE = `
-Usage: pnpm run setup [flags]
+Usage: pnpm setup:workspace [flags]
 
   --name=<name>          workspace name for package.json (default: directory name)
   --description=<text>   package.json description (default: empty)
   --author=<text>        package.json author (default: field removed)
   --worker=<name>        cloudflare worker name (default: <name>-web)
   --site-url=<url>       production SITE_URL (default: https://<worker>.workers.dev)
+  --preview-site-url=<url>
+                         preview SITE_URL (default: derived from worker name and SITE_URL)
   --reset-git            reinitialize git history (destructive: deletes .git)
   --force                overwrite existing wrangler.jsonc / .dev.vars (backed up to *.bak)
   --yes                  non-interactive: accept flags and defaults without prompting
@@ -76,6 +83,7 @@ interface SetupAnswers {
   author: string
   workerName: string
   siteUrl: string
+  previewSiteUrl: string
   isResetGit: boolean
 }
 
@@ -174,6 +182,19 @@ function resolveWorkspaceRoot(): string {
   return workspaceRoot
 }
 
+/**
+ * Derives the default preview URL: wrangler names the preview worker `<worker>-preview` so a production
+ * URL of `https://<worker>.<subdomain>.workers.dev` maps to `https://<worker>-preview.<subdomain>.workers.dev`.
+ * The account subdomain is unknown for a production URL with a custom domain.
+ */
+function getDefaultPreviewSiteUrl(workerName: string, siteUrl: string): string {
+  const { hostname } = new URL(siteUrl)
+  const isWorkersDev = hostname.startsWith(`${workerName}.`) && hostname.endsWith('.workers.dev')
+  const parentDomain = isWorkersDev ? hostname.slice(workerName.length + 1) : 'workers.dev'
+
+  return `https://${workerName}-preview.${parentDomain}`
+}
+
 /** Resolves prompt input to the prompt's default when the user submits nothing. */
 function withDefault(value: string | undefined, defaultValue: string): string {
   return value === undefined || value.trim().length === 0 ? defaultValue : value
@@ -235,6 +256,7 @@ function applyWranglerConfig(
   const contents = readFileSync(templatePath, 'utf8')
     .replaceAll(TOKEN_WORKER_NAME, answers.workerName)
     .replaceAll(TOKEN_SITE_URL, answers.siteUrl)
+    .replaceAll(TOKEN_PREVIEW_SITE_URL, answers.previewSiteUrl)
     .replaceAll(TOKEN_COMPATIBILITY_DATE, compatibilityDate)
 
   const unresolved = contents.match(/__[A-Z0-9_]+__/g)
@@ -379,6 +401,7 @@ async function main(): Promise<void> {
       author: { type: 'string' },
       worker: { type: 'string' },
       'site-url': { type: 'string' },
+      'preview-site-url': { type: 'string' },
       'reset-git': { type: 'boolean' },
       force: { type: 'boolean' },
       yes: { type: 'boolean' },
@@ -412,6 +435,10 @@ async function main(): Promise<void> {
     values.worker === undefined ? undefined : assertFlag(values.worker, validateWorkerName, '--worker')
   const flagSiteUrl =
     values['site-url'] === undefined ? undefined : assertFlag(values['site-url'], validateSiteUrl, '--site-url')
+  const flagPreviewSiteUrl =
+    values['preview-site-url'] === undefined
+      ? undefined
+      : assertFlag(values['preview-site-url'], validateSiteUrl, '--preview-site-url')
 
   let answers: SetupAnswers
 
@@ -419,12 +446,15 @@ async function main(): Promise<void> {
     const workspaceName = flagWorkspaceName ?? assertFlag(defaultWorkspaceName, validateWorkspaceName, '--name')
     const workerName = flagWorkerName ?? assertFlag(`${workspaceName}-web`, validateWorkerName, '--worker')
 
+    const siteUrl = flagSiteUrl ?? `https://${workerName}.workers.dev`
+
     answers = {
       workspaceName,
       description: values.description ?? '',
       author: values.author ?? '',
       workerName,
-      siteUrl: flagSiteUrl ?? `https://${workerName}.workers.dev`,
+      siteUrl,
+      previewSiteUrl: flagPreviewSiteUrl ?? getDefaultPreviewSiteUrl(workerName, siteUrl),
       isResetGit: values['reset-git'] === true && hasGitRepository,
     }
   } else {
@@ -480,6 +510,19 @@ async function main(): Promise<void> {
           })
         : defaultSiteUrl)
 
+    const defaultPreviewSiteUrl = getDefaultPreviewSiteUrl(workerName, siteUrl)
+
+    const previewSiteUrl =
+      flagPreviewSiteUrl ??
+      (isWranglerConfigNeeded
+        ? await promptText({
+            message: 'Preview SITE_URL',
+            placeholder: defaultPreviewSiteUrl,
+            defaultValue: defaultPreviewSiteUrl,
+            validate: (value) => validateSiteUrl(withDefault(value, defaultPreviewSiteUrl)),
+          })
+        : defaultPreviewSiteUrl)
+
     const isResetGit =
       hasGitRepository &&
       (values['reset-git'] === true ||
@@ -488,7 +531,7 @@ async function main(): Promise<void> {
           initialValue: false,
         })))
 
-    answers = { workspaceName, description, author, workerName, siteUrl, isResetGit }
+    answers = { workspaceName, description, author, workerName, siteUrl, previewSiteUrl, isResetGit }
   }
 
   const results: StepResult[] = [

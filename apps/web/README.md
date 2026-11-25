@@ -7,6 +7,7 @@ React Router Framework Mode (SSR) application on Cloudflare Workers with Tailwin
 - `app/constants.ts` - key constants and configuration
 - `app/env.server.ts` - environment variable validation and parsing with zod v4
 - `app/entry.server.tsx` - server entrypoint that sets the CSP header (policy defined in `@workspace/core/csp`)
+- `app/middleware` - middleware registered in `app/root.tsx` (cross-origin request protection, server-initiated toasts)
 - `app/routes.ts` - route manifest (file-based routing with `@react-router/fs-routes`)
 - `app/root.tsx` - application root with Base UI providers, toast implementation, CSP
 
