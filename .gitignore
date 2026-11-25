@@ -19,6 +19,7 @@ apps/web/wrangler.jsonc
 /docs.notes
 
 # Workflow
+/BACKLOG.md
 _notes*/
 _wip*/
 *.notes.*

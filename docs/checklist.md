@@ -13,7 +13,7 @@ Delete what does not apply. Items marked **[included]** are provided by the star
 - [ ] Remove demo content: home page, example route, GitHub link
 - [ ] Review locale (`DEFAULT_LOCALE`)
 - [ ] Review `compatibility_date` in `wrangler.jsonc`; it cannot be later than the installed `wrangler` supports
-- [ ] Choose a license: add a `LICENSE` file or set `UNLICENSED` (`package.json` has `MIT` by default)
+- [ ] Choose a license: update `LICENSE` and `package.json` (or set `UNLICENSED`). The starter is MIT.
 - [ ] Rewrite the README; add `SECURITY.md` and `CODEOWNERS` as appropriate
 
 ## Domain and DNS
@@ -35,8 +35,6 @@ Delete what does not apply. Items marked **[included]** are provided by the star
 - [ ] Set secrets for each environment with different values; list new secrets in `secrets.required`
 - [ ] Use separate resources (D1, KV, R2, queues) for each environment
 - [ ] Restrict access to non-production environments (e.g. Cloudflare Access)
-- [ ] Send `X-Robots-Tag: noindex` outside of production: `robots.txt` blocks crawling but a linked URL may still be
-  indexed
 - [ ] Plan how to rotate each secret (cookie `secrets` accepts multiple: the first signs and all verify)
 
 ## Security
@@ -85,8 +83,11 @@ If the project stores data:
 - [ ] **[included]** Workers Logs are enabled
 - [ ] Set log sampling and retention; emit structured (JSON) logs
 - [ ] Do not log personal data, tokens, or cookies
-- [ ] Report server errors (`handleError` in `entry.server.tsx`) and client errors (`onError` of `HydratedRouter`) to an
-  error tracker
+- [ ] **[included]** Client errors caught by react-router and react are logged by `reportClientError()`
+- [ ] Report errors to an error tracker:
+  - `handleError` and the render `onError` in `entry.server.tsx`
+  - `reportClientError()` in `app/lib/report-client-error.ts`
+  - refer to https://reactrouter.com/how-to/instrumentation
 - [ ] Add a health check route that reports the deployed version; monitor it from outside Cloudflare
 - [ ] Alert on error rate, latency, and CPU limits
 - [ ] Set usage and billing notifications for the Cloudflare account; consider CPU `limits` in `wrangler.jsonc`
@@ -98,7 +99,9 @@ If the project stores data:
 - [ ] Add smoke tests for critical paths of the project (`apps/web/e2e`)
 - [ ] Protect the main branch: require a pull request and the CI check
 - [ ] Enable automated updates for dependencies and actions (Dependabot or Renovate)
-- [ ] Review `pnpm audit`; enable secret scanning with push protection
+- [ ] Run `pnpm audit --prod` before each release: advisories are published for versions that are already in the lockfile.
+  Then review `pnpm audit` for build tools, which run in CI and on developer machines
+- [ ] Enable secret scanning with push protection
 - [ ] If CI deploys: use an API token scoped to what it needs, stored as an environment secret
 - [ ] Plan gradual rollout (`deploy:version` and `deploy:promote`)
 - [ ] **Rehearse a rollback** (`wrangler rollback`), including migrations
@@ -106,17 +109,21 @@ If the project stores data:
 
 ## Quality
 
+- [ ] **[included]** Hashed assets are cached as immutable (`/assets/*` in `public/_headers`); never create `public/assets/`
 - [ ] Set a budget for Core Web Vitals and measure with real user data
-- [ ] Cache hashed assets as immutable (`/assets/*` in `public/_headers`; revalidated on each request by default)
 - [ ] Set cache headers for public responses; purge as required
 - [ ] Optimize images: dimensions, formats, lazy loading
 - [ ] Test with a keyboard and a screen reader: skip link, focus after navigation, page title for each route
 - [ ] Test small screens (the demo layout hides its navigation) and real devices
-- [ ] Test forms without JavaScript
+- [ ] Test forms without JavaScript (if no JS is a requirement)
 - [ ] Review error pages: 404, 500, and an error in the root loader
 - [ ] Check light and dark theme contrast, reduced motion, and zoom to 200%
 
 ## SEO and Sharing
+
+- [ ] **[included]** `robots.txt` disallows crawling and the worker sends `X-Robots-Tag: noindex` outside of production.
+  Crawlers that obey `robots.txt` do not see the header and may still index a linked URL: only restricted access
+  prevents it
 
 If the project has public pages:
 

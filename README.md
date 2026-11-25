@@ -16,6 +16,7 @@ App:
 - [nuqs](https://nuqs.dev/) for working with search/query params as state with strong typing and validation
 - CSP (strict nonce-based policy via `@workspace/core/csp`) with nonce generation in worker entrypoint
 - security headers (HSTS, referrer/permissions policies, etc.) via `@workspace/core/security-headers` plus `public/_headers` for static assets
+- immutable caching for hashed assets (`public/assets` is reserved for build output)
 - theme (light/dark/system) with route/action, hooks, and an example theme selector component
 
 Styling:
