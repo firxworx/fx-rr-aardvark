@@ -20,7 +20,9 @@ Delete what does not apply. Items marked **[included]** are provided by the star
 
 - [ ] Configure the custom domain in `wrangler.jsonc` and set `SITE_URL` to match
 - [ ] Choose a canonical host and redirect the other (`www` or apex)
-- [ ] Enable "Always Use HTTPS" for the zone
+- [ ] Enable "Always Use HTTPS" for the zone: **SSL/TLS > Edge Certificates** in the Cloudflare dashboard
+  - it is a zone setting so it cannot be set in `wrangler.jsonc`, and it applies to every host in the zone
+  - it does not apply to `workers.dev`: browsers always use https for `.dev` domains
 - [ ] Set `workers_dev` and `preview_urls` to `false` in production: otherwise the app has public URLs that bypass the WAF
   and rate limiting rules of the zone and duplicate its content
 - [ ] **Review HSTS `includeSubDomains` before using an apex domain**: browsers will require https for every subdomain
