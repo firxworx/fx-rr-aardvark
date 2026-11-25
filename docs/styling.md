@@ -55,7 +55,7 @@ The application implements a theme switch feature that enables users to override
 In stylesheets:
 
 - palette tokens are defined using single `light-dark()` instead of separate `:root` and `.dark`
-- a custom tailwind `dark` variant is defined to support the use of `light-dark()` in tailwind classes
+- custom tailwind `dark` and `not-dark` variants are defined to support the use of `light-dark()` in tailwind classes
 - the `color-scheme` property is set on the `:root` element to support system theme detection and automatic switching
 
 ## Class Merging Utilities

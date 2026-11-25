@@ -18,7 +18,7 @@ describe('cn', () => {
   })
 
   it('keeps font size and text color utilities', () => {
-    expect(cn('text-sm', 'text-fg')).toBe('text-sm text-fg')
+    expect(cn('text-sm', 'text-foreground')).toBe('text-sm text-foreground')
   })
 
   it('merges custom radius tokens', () => {

@@ -72,6 +72,32 @@ test('unknown paths respond with 404', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Not Found')
 })
 
+for (const colorScheme of ['light', 'dark'] as const) {
+  test.describe(`with ${colorScheme} color scheme`, () => {
+    test.use({ colorScheme })
+
+    test('error page link is legible', async ({ page }) => {
+      await page.goto('/does-not-exist')
+
+      const link = page.getByRole('link', { name: 'Back to home' })
+
+      // the text of a button style must not inherit the color that it uses as its background
+      const { color, backgroundColor, expectedColor } = await link.evaluate((element) => {
+        const probe = document.createElement('span')
+        probe.style.color = 'var(--primary-foreground)'
+        element.appendChild(probe)
+
+        const { color, backgroundColor } = getComputedStyle(element)
+
+        return { color, backgroundColor, expectedColor: getComputedStyle(probe).color }
+      })
+
+      expect(color).toBe(expectedColor)
+      expect(color).not.toBe(backgroundColor)
+    })
+  })
+}
+
 test('serves robots.txt and sitemap.xml', async ({ request }) => {
   const robots = await request.get('/robots.txt')
   const sitemap = await request.get('/sitemap.xml')

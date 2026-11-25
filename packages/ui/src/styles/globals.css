@@ -35,6 +35,21 @@
 }
 
 /*
+ * negation of the custom dark variant (used by coss-ui components): tailwind cannot derive it because the dark variant
+ * has multiple rules and it ignores `not-dark` classes without this definition. keep in sync with the dark variant.
+ */
+@custom-variant not-dark {
+  &:is(.light, .light *) {
+    @slot;
+  }
+  @media not (prefers-color-scheme: dark) {
+    &:not(:is(.dark, .dark *)) {
+      @slot;
+    }
+  }
+}
+
+/*
  * tailwind v4 restore hover on laptops with touchscreens.
  *
  * @see https://github.com/tailwindlabs/tailwindcss/discussions/17225
@@ -132,7 +147,7 @@
   body {
     /* relative enables backdrop-filter to work in iOS26+ safari per base-ui docs */
     @apply relative bg-background text-foreground font-sans antialiased;
-    @apply selection:bg-P-selection selection:text-P-selection-fg;
+    @apply selection:bg-P-selection selection:text-P-selection-foreground;
   }
 
   b,

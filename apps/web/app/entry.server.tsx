@@ -63,7 +63,7 @@ export default async function handleRequest(
     await body.allReady
   }
 
-  responseHeaders.set('Content-Type', 'text/html')
+  responseHeaders.set('Content-Type', 'text/html; charset=utf-8')
 
   /*
    * Each document (html response) embeds a per-request CSP nonce in `<Scripts>`, `<Links>`, and the

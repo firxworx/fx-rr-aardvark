@@ -50,6 +50,14 @@ test('documents have a strict CSP with a nonce for each request', async ({ reque
   }
 })
 
+for (const path of ['/', '/does-not-exist']) {
+  test(`${path} has a content type with charset`, async ({ request }) => {
+    const response = await request.get(path)
+
+    expect(response.headers()['content-type']).toBe('text/html; charset=utf-8')
+  })
+}
+
 test('documents are not stored by shared caches', async ({ request }) => {
   const response = await request.get('/')
 
