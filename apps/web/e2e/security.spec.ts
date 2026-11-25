@@ -11,7 +11,8 @@ async function getDocument(request: APIRequestContext): Promise<{ csp: string; n
   return { csp, nonce, html: await response.text() }
 }
 
-// static assets bypass the worker: this fails if `public/_headers` is not in sync with `SECURITY_HEADERS`
+// covers a document, a static asset, and a resource route
+// static assets bypass the worker: that case fails if `public/_headers` is not in sync with `SECURITY_HEADERS`
 for (const path of ['/', '/favicon.ico', '/robots.txt']) {
   test(`${path} has security headers`, async ({ request }) => {
     const response = await request.get(path)

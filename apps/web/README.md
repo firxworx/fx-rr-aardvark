@@ -24,7 +24,7 @@ Playwright tests in `e2e/` run against a production build in the Workers runtime
 violations and hydration errors), security headers, cross-origin protection, and theme switching.
 
 ```sh
-pnpm exec playwright install chromium # once
+pnpm --filter web exec playwright install chromium # once
 pnpm test:e2e
 ```
 
