@@ -91,6 +91,7 @@ Review the react-router application config files:
 Customize the application:
 
 - `apps/web/app/constants.ts` - app constants (e.g. `APP_NAME`, etc.)
+- `apps/web/app/seo.ts` - site-wide SEO values (default title, description, share image; refer to [seo.md](./seo.md))
 - `apps/web/public` - public assets (e.g. `favicon.ico`, `apple-touch-icon`, etc.)
 
 ## Environments

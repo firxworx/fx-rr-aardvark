@@ -8,7 +8,8 @@ Delete what does not apply. Items marked **[included]** are provided by the star
 
 - [ ] Run the setup script or complete the manual steps in [setup.md](./setup.md)
 - [ ] Commit `apps/web/wrangler.jsonc` (remove it from `.gitignore`)
-- [ ] Set app name, default title, and description in `apps/web/app/constants.ts`
+- [ ] Set the app name in `apps/web/app/constants.ts` and the default title, description, and share image in
+  `apps/web/app/seo.ts` (refer to [seo.md](./seo.md))
 - [ ] Replace favicons, touch icon, and `public/images/og-default.png`
 - [ ] Remove demo content: home page, example route, GitHub link
 - [ ] Review locale (`DEFAULT_LOCALE`)
@@ -137,10 +138,13 @@ Health checks and external monitoring:
 - [ ] **[included]** `robots.txt` disallows crawling and the worker sends `X-Robots-Tag: noindex` outside of production.
   Crawlers that obey `robots.txt` do not see the header and may still index a linked URL: only restricted access
   prevents it
+- [ ] **[included]** URLs with a trailing slash redirect to the URL without it; canonical URLs and the sitemap use the
+  same form
 
 If the project has public pages:
 
-- [ ] Title, description, canonical URL, and Open Graph metadata for each page
+- [ ] Set `seo` values for each page: title, description, and a share image where it helps (refer to [seo.md](./seo.md))
+- [ ] Set `noIndex` for pages that should not be indexed (e.g. account pages)
 - [ ] Update `sitemap.xml` (`SITEMAP_INCLUDE_PATHS`) and `robots.txt` for all routes
 - [ ] Verify the domain with search engines and submit the sitemap
 - [ ] Check link previews and structured data
