@@ -11,7 +11,7 @@ import type { Route } from './+types/root'
 import { DEFAULT_THEME_MODE } from '@workspace/core/theme'
 import { AnchoredToastProvider, ToastProvider, toastManager } from '@workspace/ui/components/toast'
 import { DEFAULT_LOCALE, DEFAULT_META_DESCRIPTION, DEFAULT_META_TITLE, IS_DEV_BUILD } from '@/constants'
-import { env } from '@/env.server'
+import { envContext } from '@/context.server'
 import { AppLayout } from '@/layout/app-layout'
 import { GeneralErrorBoundary } from '@/layout/error-boundary'
 import { RouteTransition } from '@/layout/route-transition'
@@ -53,7 +53,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   return data({
     theme,
     toast, // server-initiated toasts (rendered by App component below)
-    siteUrl: env.SITE_URL,
+    siteUrl: context.get(envContext).SITE_URL,
   })
 }
 

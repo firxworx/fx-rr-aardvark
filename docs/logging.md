@@ -36,6 +36,8 @@ Do not log expected outcomes as errors, such as invalid input or a page that doe
 `LOG_LEVEL` sets the lowest level to log. Set it for each environment in `vars` of `wrangler.jsonc` and override it for
 development in `.dev.vars`.
 
+`LOG_LEVEL` is read when the worker starts: if changed via dashboard or API (without a deploy), any isolates that are already running may keep the previous level for a while.
+
 ## Request context
 
 Workers Logs adds details of the request to each log: method, path, URL without the query string
@@ -54,8 +56,8 @@ Paths are logged. Do not put personal data or secrets in paths.
 - Render `onError` in `entry.server.tsx`: errors in content that is streamed after the shell
 - `request-logging.server.ts`: each request with its route pattern and status, at `debug` level. Deployed environments
   do not need it because Workers Logs records each request (invocation logs).
-- `env.server.ts` throws instead of logging because it runs before LogTape is configured. Invalid environment variables
-  cause a deploy to fail.
+- Validation of environment variables in `workers/app.ts` throws instead of logging because it runs before LogTape is
+  configured. Invalid environment variables cause a deploy to fail by design.
 
 ## How it works
 

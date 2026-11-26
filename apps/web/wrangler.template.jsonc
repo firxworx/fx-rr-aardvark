@@ -28,6 +28,10 @@
   "secrets": {
     "required": ["TOAST_COOKIE_SECRET"]
   },
+  // version ID, tag, and timestamp of the running version (reported by the /health route)
+  "version_metadata": {
+    "binding": "CF_VERSION_METADATA"
+  },
   // `vars`, `secrets`, and bindings are not inherited from the top level: repeat them for every environment
   // the environment is selected at build time with CLOUDFLARE_ENV (see scripts in package.json)
   "env": {
@@ -40,6 +44,9 @@
       },
       "secrets": {
         "required": ["TOAST_COOKIE_SECRET"]
+      },
+      "version_metadata": {
+        "binding": "CF_VERSION_METADATA"
       }
     }
   }

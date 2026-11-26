@@ -22,8 +22,9 @@ cp .dev.vars.example .dev.vars
 cp wrangler.template.jsonc wrangler.jsonc
 ```
 
-Replace the `__PLACEHOLDER__` values in both files. Generate a value for each secret in `.dev.vars` with
-`openssl rand -base64 32`.
+Replace the `__PLACEHOLDER__` values in both files.
+
+Generate a value for each secret in `.dev.vars` with `openssl rand -base64 32`.
 
 Run `pnpm install` to install dependencies then `pnpm typegen` to generate types (generates wrangler types):
 
@@ -91,22 +92,48 @@ To add an environment:
 
 ## Secrets
 
-Required secrets are declared in `secrets.required` in `wrangler.jsonc` (per environment) and validated in
-`apps/web/app/env.server.ts`. A deploy fails if a required secret is not set.
+### Explicit Declaration
 
-Declare every secret: undeclared values in `.dev.vars` are not loaded unless they override a name in `vars`. Builds
-include only the declared secrets so local runs of a build (`pnpm --filter web preview`) use the `vars` of the built
-environment (e.g. `ENVIRONMENT` is `production`); the dev server (`pnpm dev`) applies all overrides.
+This workspace requires secrets to be declared in `secrets.required` in `wrangler.jsonc` (per environment). Deployments
+fail by design when a required secret is not set. `apps/web/workers/app.ts` validates secrets and variables with the
+schema in `apps/web/app/env.server.ts`.
 
-Set secrets before the first deploy and whenever a value changes. Run from `apps/web` and use a different value for
-each environment:
+When `secrets.required` is set, only names in `vars` or `secrets.required` are:
+
+- loaded from `.dev.vars`
+- included in Cloudflare generated types (`pnpm typegen`)
+
+Builds include only the declared secrets so local previews (`pnpm --filter web preview`) use the `vars` of the built
+environment (e.g. `ENVIRONMENT` is `production`). The dev server (`pnpm dev`) also applies overrides of `vars` from
+`.dev.vars` (e.g. `ENVIRONMENT` is `development`).
+
+### Working with Secrets & Environment Variables
+
+`apps/web/workers/app.ts` validates environment variables when the worker starts, so a deploy or the dev server fails
+with a message that names each invalid variable. Loaders, actions, and middleware read the validated values with
+`context.get(envContext)`.
+
+Anything that holds a secret or variable should be created when handling a request instead of in module scope, e.g.
+not `const client = new ApiClient(env.API_KEY)` at the top of a file.
+
+Details regarding module scope, env caching, and the Cloudflare workers runtime:
+
+- module scope runs once per isolate (an instance of the worker that handles many requests)
+- when only secrets or variables change (`wrangler secret put` or the dashboard), Cloudflare may keep using isolates
+  that are already running, so a value created at module scope keeps the previous secret
+- the `env` of each request has the new values: `getServerEnv()` caches by that object, and the toast middleware
+  caches its cookie storage by the result
+
+Set secrets before the first deploy and whenever a value changes. Use a different value for each environment.
+
+For example to create `TOAST_COOKIE_SECRET`, change your working directory to `apps/web` and run:
 
 ```sh
 openssl rand -base64 32 | pnpm wrangler secret put TOAST_COOKIE_SECRET --env=""      # production
 openssl rand -base64 32 | pnpm wrangler secret put TOAST_COOKIE_SECRET --env=preview # preview
 ```
 
-If the worker does not exist yet wrangler creates a draft worker with that name to hold the secret.
+If a worker does not exist yet (e.g. it has never been deployed) wrangler creates a draft worker that reserves the name to hold the secret.
 
 ## Development
 

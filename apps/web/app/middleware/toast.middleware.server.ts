@@ -41,7 +41,8 @@ import {
 import * as z from 'zod'
 
 import { IS_PROD_BUILD } from '@/constants'
-import { env } from '@/env.server'
+import { envContext } from '@/context.server'
+import type { ServerEnv } from '@/env.server'
 
 /** @public */
 export type AppToastMessage = z.infer<typeof zAppToastMessage>
@@ -87,14 +88,34 @@ const toastCookieOptions = {
   path: '/',
   httpOnly: true,
   secure: IS_PROD_BUILD,
-
-  // secrets are not highly sensitive (tampering with the cookie is not a significant security risk)
-  secrets: [env.TOAST_COOKIE_SECRET],
 } satisfies AppToastCookieOptions
 
-const defaultSessionStorage = createCookieSessionStorage({
-  cookie: toastCookieOptions,
-})
+// cache by validated env: a new env (e.g. after the secret changes) creates new session storage
+const defaultSessionStorageCache = new WeakMap<ServerEnv, SessionStorage>()
+
+/**
+ * Get the default session storage for the toast cookie. Not created at module scope because a running isolate may be
+ * reused after the secret changes.
+ */
+function getDefaultSessionStorage(env: ServerEnv): SessionStorage {
+  const cached = defaultSessionStorageCache.get(env)
+
+  if (cached !== undefined) {
+    return cached
+  }
+
+  const sessionStorage = createCookieSessionStorage({
+    cookie: {
+      ...toastCookieOptions,
+      // secrets are not highly sensitive (tampering with the cookie is not a significant security risk)
+      secrets: [env.TOAST_COOKIE_SECRET],
+    },
+  })
+
+  defaultSessionStorageCache.set(env, sessionStorage)
+
+  return sessionStorage
+}
 
 /**
  * Helper method used to get the toast data from the current request and purge the flash storage from the session.
@@ -128,9 +149,9 @@ async function processRequest(
 
 export function toastMiddleware(options?: { customSession?: SessionStorage }): MiddlewareFunction {
   const { customSession } = options || {}
-  const sessionStorage = customSession || defaultSessionStorage
 
   return async function toastMiddleware({ request, context }, next) {
+    const sessionStorage = customSession ?? getDefaultSessionStorage(context.get(envContext))
     const { toast, headers } = await processRequest(request, sessionStorage)
 
     context.set(toastContext, toast ?? null)
