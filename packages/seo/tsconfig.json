@@ -1,0 +1,5 @@
+{
+  "extends": "@workspace/tsconfig/react-library",
+  "include": ["src/**/*.ts", "src/**/*.tsx", "test/**/*.ts", "test/**/*.tsx", "vitest.config.ts"],
+  "exclude": ["node_modules", "src/**/_*"]
+}

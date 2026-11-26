@@ -24,6 +24,7 @@
     "@fontsource-variable/inter": "catalog:",
     "@workspace/core": "workspace:*",
     "@workspace/logger": "workspace:*",
+    "@workspace/seo": "workspace:*",
     "@workspace/tsconfig": "workspace:*",
     "@workspace/ui": "workspace:*",
     "cn": "catalog:",
