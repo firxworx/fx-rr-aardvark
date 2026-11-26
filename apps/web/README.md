@@ -45,4 +45,7 @@ Update the tests when you replace the demo routes.
 
 ## Routing
 
+`/health` reports the environment and the deployed version (`version_metadata` binding in `wrangler.jsonc`) for
+uptime monitoring.
+
 Ensure the resource routes for `sitemap.xml` and `robots.txt` are maintained and kept in sync for any special or reserved routes that may be added to the project and should be excluded from search indexes (e.g. `actions`, `api`, etc.).

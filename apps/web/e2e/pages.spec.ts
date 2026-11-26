@@ -111,6 +111,20 @@ test('serves robots.txt and sitemap.xml', async ({ request }) => {
   expect(await sitemap.text()).toContain('<urlset')
 })
 
+test('health route reports the environment and version', async ({ request }) => {
+  const response = await request.get('/health')
+
+  expect(response.status()).toBe(200)
+  expect(response.headers()['content-type']).toContain('application/json')
+  expect(response.headers()['cache-control']).toBe('no-store')
+  expect(response.headers()['x-robots-tag']).toBe('noindex')
+
+  const body = await response.json()
+
+  expect(body).toMatchObject({ status: 'ok', environment: 'production' })
+  expect(typeof body.version?.id).toBe('string')
+})
+
 // tests run with ENVIRONMENT=production: the worker sends `X-Robots-Tag: noindex` in other environments
 for (const path of ['/', '/sitemap.xml']) {
   test(`${path} may be indexed in production`, async ({ request }) => {

@@ -97,7 +97,7 @@ Refer to [logging.md](./logging.md).
   - `handleError` and the render `onError` in `entry.server.tsx`
   - `reportClientError()` in `app/lib/report-client-error.ts`
   - refer to https://reactrouter.com/how-to/instrumentation
-- [ ] Add a health check route that reports the deployed version; monitor it from outside Cloudflare
+- [ ] **[included]** `/health` reports the environment and the deployed version: monitor it from outside Cloudflare
 - [ ] Alert on error rate, latency, and CPU limits
 - [ ] Set usage and billing notifications for the Cloudflare account; consider CPU `limits` in `wrangler.jsonc`
 
