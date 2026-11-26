@@ -165,3 +165,11 @@ Run the dev server from workspace root:
 ```bash
 pnpm dev
 ```
+
+## Additional Considerations
+
+The following considerations are omitted from this repository because they can vary significantly depending on project
+requirements and team preferences:
+
+Consider enforcement of commit message style with tools like `@commitlint/cli` + `@commitlint/config-conventional`;
+use them alongside tools such as `lefthook` or `husky` to run commitlint on commit.
