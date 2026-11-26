@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { getServerEnv, parseEnv } from '@/env.server'
+import { parseEnv } from '@/env.server'
 
 const VALID_ENV = {
   ENVIRONMENT: 'production',
@@ -39,21 +39,5 @@ describe('parseEnv', () => {
 
   it('rejects a site URL with a trailing slash', () => {
     expect(() => parseEnv({ ...VALID_ENV, SITE_URL: 'https://example.com/' })).toThrow(/trailing slash/)
-  })
-})
-
-describe('getServerEnv', () => {
-  it('parses once for the same env object', () => {
-    const source = { ...VALID_ENV }
-
-    expect(getServerEnv(source)).toBe(getServerEnv(source))
-  })
-
-  it('parses again for a new env object (e.g. after a secret changes)', () => {
-    const first = getServerEnv({ ...VALID_ENV })
-    const second = getServerEnv({ ...VALID_ENV, TOAST_COOKIE_SECRET: 'y'.repeat(32) })
-
-    expect(second).not.toBe(first)
-    expect(second.TOAST_COOKIE_SECRET).toBe('y'.repeat(32))
   })
 })

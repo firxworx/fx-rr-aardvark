@@ -90,31 +90,18 @@ const toastCookieOptions = {
   secure: IS_PROD_BUILD,
 } satisfies AppToastCookieOptions
 
-// cache by validated env: a new env (e.g. after the secret changes) creates new session storage
-const defaultSessionStorageCache = new WeakMap<ServerEnv, SessionStorage>()
-
 /**
- * Get the default session storage for the toast cookie. Not created at module scope because a running isolate may be
- * reused after the secret changes.
+ * Create the default session storage for the toast cookie for a request. Not created at module scope because a running
+ * isolate may be reused after the secret changes.
  */
-function getDefaultSessionStorage(env: ServerEnv): SessionStorage {
-  const cached = defaultSessionStorageCache.get(env)
-
-  if (cached !== undefined) {
-    return cached
-  }
-
-  const sessionStorage = createCookieSessionStorage({
+function createDefaultSessionStorage(env: ServerEnv): SessionStorage {
+  return createCookieSessionStorage({
     cookie: {
       ...toastCookieOptions,
       // secrets are not highly sensitive (tampering with the cookie is not a significant security risk)
       secrets: [env.TOAST_COOKIE_SECRET],
     },
   })
-
-  defaultSessionStorageCache.set(env, sessionStorage)
-
-  return sessionStorage
 }
 
 /**
@@ -151,7 +138,7 @@ export function toastMiddleware(options?: { customSession?: SessionStorage }): M
   const { customSession } = options || {}
 
   return async function toastMiddleware({ request, context }, next) {
-    const sessionStorage = customSession ?? getDefaultSessionStorage(context.get(envContext))
+    const sessionStorage = customSession ?? createDefaultSessionStorage(context.get(envContext))
     const { toast, headers } = await processRequest(request, sessionStorage)
 
     context.set(toastContext, toast ?? null)

@@ -21,6 +21,9 @@ export type ServerEnv = Readonly<z.infer<typeof zServerEnv>>
 /**
  * Parse and validate server environment variables.
  *
+ * `workers/app.ts` parses the `env` of each request (a few microseconds) and sets the result as `envContext`: do not
+ * cache the result across requests because a running isolate may be reused after a secret or variable changes.
+ *
  * @throws {Error} if a variable is missing or invalid (the message names variables but does not include values)
  */
 export function parseEnv(source: unknown): ServerEnv {
@@ -31,28 +34,4 @@ export function parseEnv(source: unknown): ServerEnv {
   }
 
   return Object.freeze(parsed.data)
-}
-
-// cache by `env` object: parse once while the object is unchanged, and again when Cloudflare provides a new one
-// (an isolate may be reused when only bindings, vars, or secrets change)
-const serverEnvCache = new WeakMap<object, ServerEnv>()
-
-/**
- * Get validated server environment variables for the `env` object of a handler (cached).
- *
- * Request handlers read the result from `envContext` (set in `workers/app.ts`) instead of calling this function.
- *
- * @throws {Error} if a variable is missing or invalid
- */
-export function getServerEnv(env: object): ServerEnv {
-  const cached = serverEnvCache.get(env)
-
-  if (cached !== undefined) {
-    return cached
-  }
-
-  const serverEnv = parseEnv(env)
-  serverEnvCache.set(env, serverEnv)
-
-  return serverEnv
 }
