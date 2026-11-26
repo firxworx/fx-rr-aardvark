@@ -17,26 +17,18 @@ export function NoWrap({ children }: { children: React.ReactNode }): React.JSX.E
 
 export const indexFeatures = [
   {
-    title: 'nuqs',
-    description: 'Type-safe search params state management.',
-  },
-  {
-    title: 'toaster',
-    description: (
-      <>
-        Custom toasts inspired by <Pkg>remix-toast</Pkg> and coss-ui.
-      </>
-    ),
-  },
-  {
     title: 'csp',
     description: <>Strict nonce-based content security policy.</>,
   },
   {
-    title: 'search engines',
+    title: 'headers',
+    description: <>Security and cache headers for worker and static assets.</>,
+  },
+  {
+    title: 'env',
     description: (
       <>
-        Wired to generate <Pkg>robots.txt</Pkg> and <Pkg>sitemap.xml</Pkg>.
+        <Pkg>zod</Pkg> parsing & validation of environment variables.
       </>
     ),
   },
@@ -49,12 +41,36 @@ export const indexFeatures = [
     ),
   },
   {
-    title: 'environment',
+    title: 'logging',
     description: (
       <>
-        <Pkg>zod</Pkg> parsing & validation of server env variables.
+        Structured JSON logs with <Pkg>logtape</Pkg>.
       </>
     ),
+  },
+  {
+    title: 'nuqs',
+    description: 'Type-safe search params and URL state management.',
+  },
+  {
+    title: 'toaster',
+    description: (
+      <>
+        Custom toasts inspired by <Pkg>remix-toast</Pkg> and coss-ui.
+      </>
+    ),
+  },
+  {
+    title: 'search crawlers',
+    description: (
+      <>
+        Routes for <Pkg>robots.txt</Pkg> and <Pkg>sitemap.xml</Pkg>.
+      </>
+    ),
+  },
+  {
+    title: 'seo',
+    description: <>Title, canonical, Open Graph, and JSON-LD tags from route values.</>,
   },
 ] satisfies FeatureItem[]
 
@@ -82,7 +98,6 @@ export const typographyFeatures = [
       </>
     ),
   },
-
   {
     title: 'typeset',
     description: (
@@ -97,14 +112,33 @@ export const typographyFeatures = [
   },
 ] satisfies FeatureItem[]
 
-export const toolsFeatures = [
+export const agenticFeatures = [
   {
     title: 'agents',
     description: (
       <>
-        Ready for AI with <Pkg>AGENTS.md</Pkg> and screenshot tooling.
+        Includes <Pkg>AGENTS.md</Pkg>, <Pkg>CLAUDE.md</Pkg>, and docs for agents and humans.
       </>
     ),
+  },
+  {
+    title: 'skills',
+    description: (
+      <>
+        Recommended skills pinned in <Pkg>skills-lock.json</Pkg>.
+      </>
+    ),
+  },
+  {
+    title: 'agent tools',
+    description: <>Custom screenshot script tailored for the workspace.</>,
+  },
+] satisfies FeatureItem[]
+
+export const toolsFeatures = [
+  {
+    title: 'actions',
+    description: <>GitHub actions workflow for continuous integration.</>,
   },
   {
     title: 'biome',
@@ -115,11 +149,38 @@ export const toolsFeatures = [
     ),
   },
   {
+    title: 'instrumentation',
+    description: <>Wired for observability and monitoring platforms.</>,
+  },
+  {
+    title: 'playwright',
+    description: (
+      <>
+        End-to-end (e2e) testing with <Pkg>playwright</Pkg>.
+      </>
+    ),
+  },
+  {
     title: 'vitest',
     description: (
       <>
         Unit and component testing with <Pkg>react-testing-library</Pkg>.
       </>
     ),
+  },
+] satisfies FeatureItem[]
+
+export const deploymentFeatures = [
+  {
+    title: 'checklist',
+    description: <>Audit checklist for production readiness.</>,
+  },
+  {
+    title: 'preview',
+    description: <>Preview deployments on a separate worker.</>,
+  },
+  {
+    title: 'production',
+    description: <>Production deployments on the main worker.</>,
   },
 ] satisfies FeatureItem[]

@@ -7,6 +7,8 @@ import { cn } from '@workspace/ui/lib/style'
 import { envContext } from '@/context.server'
 import { LayoutContainer, PageLayout } from '@/layout/app-layout'
 import {
+  agenticFeatures,
+  deploymentFeatures,
   type FeatureItem,
   indexFeatures,
   NoWrap,
@@ -31,8 +33,8 @@ export default function IndexRoute({ loaderData: { mode } }: Route.ComponentProp
       <FeaturesSection
         description={
           <p>
-            Kick-start the development of new projects with a template that wires up the necessities and leaves the rest
-            to you.
+            Kick-start the development of new projects with a template that wires up production-grade necessities and
+            leaves the rest to you.
           </p>
         }
         features={indexFeatures}
@@ -46,6 +48,13 @@ export default function IndexRoute({ loaderData: { mode } }: Route.ComponentProp
           </p>
         }
         features={stylingFeatures}
+        // uncomment when the setup skill ships (BACKLOG.md) and import `InfoIcon`
+        // trailer={
+        //   <div className="flex flex-col sm:flex-row justify-center items-center gap-2 border border-border p-4 rounded-lg text-base bg-card">
+        //     <InfoIcon className="size-5 inline shrink-0" aria-hidden="true" />
+        //     <p>A custom agent skill is included to reset to minimal styling.</p>
+        //   </div>
+        // }
       />
       <FeaturesSection
         heading="Typography"
@@ -53,14 +62,23 @@ export default function IndexRoute({ loaderData: { mode } }: Route.ComponentProp
         features={typographyFeatures}
       />
       <FeaturesSection
-        heading="Tooling"
+        heading="Agentic Development"
+        description={<p>Ready for AI-powered development workflows with docs, skills, and tools.</p>}
+        features={agenticFeatures}
+      />
+      <FeaturesSection
+        heading="Quality Assurance"
         description={
           <p>
-            Popular, modern tools familiar to most developers in the ecosystem are configured and{' '}
-            <NoWrap>ready to use</NoWrap>.
+            Modern development tools are configured and <NoWrap>ready to use</NoWrap>.
           </p>
         }
         features={toolsFeatures}
+      />
+      <FeaturesSection
+        heading="Deployment"
+        description={<p>Ships ready to deploy on Cloudflare Workers.</p>}
+        features={deploymentFeatures}
       />
       <section className="py-6 sm:py-12 md:py-16 bg-muted">
         <LayoutContainer>
@@ -107,10 +125,36 @@ interface FeaturesSectionProps {
   heading?: string
   description?: string | string[] | React.ReactNode
   features: FeatureItem[]
+  trailer?: React.ReactNode
   className?: string
 }
 
-function FeaturesSection({ heading, description, features, className }: FeaturesSectionProps): React.JSX.Element {
+function BlockContent({
+  content,
+  className,
+}: {
+  content: string | string[] | React.ReactNode
+  className?: string
+}): React.JSX.Element {
+  return (
+    <div className={cn('flex flex-col gap-4 text-muted-foreground md:text-lg max-w-[60ch] *:text-pretty', className)}>
+      {typeof content === 'string' && <p>{content}</p>}
+      {Array.isArray(content) &&
+        content.length > 0 &&
+        content.every((desc) => typeof desc === 'string') &&
+        content.map((desc, index) => <p key={index}>{desc}</p>)}
+      {React.isValidElement(content) && <>{content}</>}
+    </div>
+  )
+}
+
+function FeaturesSection({
+  heading,
+  description,
+  features,
+  trailer,
+  className,
+}: FeaturesSectionProps): React.JSX.Element {
   return (
     <section className={cn('border-b border-border py-12 sm:py-16', className)}>
       <LayoutContainer className="flex flex-col items-center gap-6 md:gap-8 text-center">
@@ -118,16 +162,7 @@ function FeaturesSection({ heading, description, features, className }: Features
           <h2 className="text-2xl leading-tight font-bold tracking-tight text-pretty md:text-3xl">
             {heading ?? 'Features'}
           </h2>
-          {description ? (
-            <div className="flex flex-col gap-4 text-muted-foreground md:text-lg max-w-[60ch] *:text-pretty">
-              {typeof description === 'string' && <p>{description}</p>}
-              {Array.isArray(description) &&
-                description.length > 0 &&
-                description.every((desc) => typeof desc === 'string') &&
-                description.map((desc, index) => <p key={index}>{desc}</p>)}
-              {React.isValidElement(description) && <>{description}</>}
-            </div>
-          ) : null}
+          {description ? <BlockContent content={description} /> : null}
         </header>
         <div className="grid gap-4 sm:gap-6 w-full grid-cols-2 sm:grid-cols-4 lg:grid-cols-6">
           {features.map((feature, index) => (
@@ -145,6 +180,7 @@ function FeaturesSection({ heading, description, features, className }: Features
             </div>
           ))}
         </div>
+        {trailer && <BlockContent content={trailer} />}
       </LayoutContainer>
     </section>
   )
