@@ -52,6 +52,18 @@ test('error pages are noindex without a canonical URL or Open Graph tags', async
   expect(html).not.toContain('ld+json')
 })
 
+test('redirects URLs with a trailing slash to the same host', async ({ request, baseURL }) => {
+  const response = await request.get('/example/?a=1', { maxRedirects: 0 })
+  // absolute URL: a path that starts with `//` would be resolved as a URL of another host
+  const doubleSlash = await request.get(`${baseURL}//evil.com/`, { maxRedirects: 0 })
+
+  // tests run with ENVIRONMENT=production: other environments use 307
+  expect(response.status()).toBe(308)
+  expect(response.headers().location).toBe(`${baseURL}/example?a=1`)
+  expect(doubleSlash.status()).toBe(308)
+  expect(doubleSlash.headers().location).toBe(`${baseURL}//evil.com`)
+})
+
 test('keeps one set of tags after hydration and client navigation', async ({ page }) => {
   await page.goto('/', { waitUntil: 'networkidle' })
 

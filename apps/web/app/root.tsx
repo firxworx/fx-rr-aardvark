@@ -20,6 +20,7 @@ import { CSP_NONCE_META_PROPERTY, useNonceContext } from '@/lib/nonce.context'
 import { getTheme } from '@/lib/theme.server'
 import { crossOriginMiddleware } from '@/middleware/cross-origin.middleware.server'
 import { getToast, toastMiddleware } from '@/middleware/toast.middleware.server'
+import { trailingSlashMiddleware } from '@/middleware/trailing-slash.middleware.server'
 import { SEO_CONFIG } from '@/seo'
 
 // inter @font-face css is bundled into the root route css (rendered by <Links />); see preload in links()
@@ -31,7 +32,7 @@ import stylesheet from '@/styles/app.css?url'
  *
  * @see https://github.com/code-forge-io/remix-toast (README for middleware mode; the basis for this implementation)
  */
-export const middleware = [crossOriginMiddleware(), toastMiddleware()]
+export const middleware = [crossOriginMiddleware(), trailingSlashMiddleware(), toastMiddleware()]
 
 /**
  * Refer to `entry.server.tsx` and `workers/app.ts` for security headers; the CSP is defined in `@workspace/core/csp`.
