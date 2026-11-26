@@ -1,62 +1,106 @@
-export type FeatureItem = {
-  title: string
-  description: React.ReactNode
-}
+import { AppWindowIcon, SearchIcon, ServerIcon, ShieldCheckIcon } from 'lucide-react'
 
-export function Pkg({ children }: { children: React.ReactNode }): React.JSX.Element {
-  return (
-    <code className="rounded bg-muted text-muted-foreground px-1.5 py-0.5 font-mono text-sm sm:text-sm font-semibold whitespace-nowrap">
-      {children}
-    </code>
-  )
-}
+import type { FeatureGroup, FeatureItem } from './components/sections'
+import { NoWrap, Pkg } from './components/text'
 
-export function NoWrap({ children }: { children: React.ReactNode }): React.JSX.Element {
-  return <span className="whitespace-nowrap">{children}</span>
-}
-
-export const indexFeatures = [
+export const indexFeatureGroups = [
   {
-    title: 'nuqs',
-    description: 'Type-safe search params state management.',
+    heading: 'Runtime',
+    icon: ServerIcon,
+    features: [
+      {
+        title: 'env',
+        description: (
+          <>
+            <Pkg>zod</Pkg> parsing & validation of environment variables.
+          </>
+        ),
+      },
+      {
+        title: 'context',
+        description: (
+          <>
+            <Pkg>react-router</Pkg> context set via worker entrypoint.
+          </>
+        ),
+      },
+      {
+        title: 'logging',
+        description: (
+          <>
+            Structured JSON logs with <Pkg>@logtape</Pkg>.
+          </>
+        ),
+      },
+    ],
   },
   {
-    title: 'toaster',
-    description: (
-      <>
-        Custom toasts inspired by <Pkg>remix-toast</Pkg> and coss-ui.
-      </>
-    ),
+    heading: 'Headers',
+    icon: ShieldCheckIcon,
+    features: [
+      {
+        title: 'csp',
+        description: <>Strict nonce-based content security policy.</>,
+      },
+      {
+        title: 'security',
+        description: <>Security headers and permissions policy.</>,
+      },
+      {
+        title: 'cache',
+        description: <>Cache headers for worker and static assets.</>,
+      },
+    ],
   },
   {
-    title: 'csp',
-    description: <>Strict nonce-based content security policy.</>,
+    heading: 'Interface',
+    icon: AppWindowIcon,
+    features: [
+      {
+        title: 'transitions',
+        description: (
+          <>
+            Animated route changes with <Pkg>&lt;ViewTransition&gt;</Pkg>.
+          </>
+        ),
+      },
+      {
+        title: 'nuqs',
+        description: <>Type-safe search params and URL state management.</>,
+      },
+      {
+        title: 'toaster',
+        description: (
+          <>
+            Custom toasts inspired by <Pkg>remix-toast</Pkg> and coss-ui.
+          </>
+        ),
+      },
+    ],
   },
   {
-    title: 'search engines',
-    description: (
-      <>
-        Wired to generate <Pkg>robots.txt</Pkg> and <Pkg>sitemap.xml</Pkg>.
-      </>
-    ),
+    heading: 'SEO',
+    icon: SearchIcon,
+    features: [
+      {
+        title: 'canonical',
+        description: <>Canonical URLs and trailing slash redirects.</>,
+      },
+      {
+        title: 'meta',
+        description: <>Title, Open Graph, and JSON-LD from route values.</>,
+      },
+      {
+        title: 'crawlers',
+        description: (
+          <>
+            Routes for <Pkg>robots.txt</Pkg> and <Pkg>sitemap.xml</Pkg>.
+          </>
+        ),
+      },
+    ],
   },
-  {
-    title: 'context',
-    description: (
-      <>
-        <Pkg>react-router</Pkg> context set via worker entrypoint.
-      </>
-    ),
-  },
-  {
-    title: 'environment',
-    description: (
-      <>
-        <Pkg>zod</Pkg> parsing & validation of server env variables.
-      </>
-    ),
-  },
-] satisfies FeatureItem[]
+] satisfies FeatureGroup[]
 
 export const stylingFeatures = [
   {
@@ -82,7 +126,6 @@ export const typographyFeatures = [
       </>
     ),
   },
-
   {
     title: 'typeset',
     description: (
@@ -97,14 +140,33 @@ export const typographyFeatures = [
   },
 ] satisfies FeatureItem[]
 
-export const toolsFeatures = [
+export const agenticFeatures = [
   {
     title: 'agents',
     description: (
       <>
-        Ready for AI with <Pkg>AGENTS.md</Pkg> and screenshot tooling.
+        Includes <Pkg>AGENTS.md</Pkg>, <Pkg>CLAUDE.md</Pkg>, and docs for agents and humans.
       </>
     ),
+  },
+  {
+    title: 'skills',
+    description: (
+      <>
+        Recommended skills pinned in <Pkg>skills-lock.json</Pkg>.
+      </>
+    ),
+  },
+  {
+    title: 'agent tools',
+    description: <>Custom screenshot script tailored for the workspace.</>,
+  },
+] satisfies FeatureItem[]
+
+export const toolsFeatures = [
+  {
+    title: 'actions',
+    description: <>GitHub actions workflow for continuous integration.</>,
   },
   {
     title: 'biome',
@@ -115,11 +177,38 @@ export const toolsFeatures = [
     ),
   },
   {
+    title: 'instrumentation',
+    description: <>Wired for observability and monitoring platforms.</>,
+  },
+  {
+    title: 'playwright',
+    description: (
+      <>
+        End-to-end (e2e) testing with <Pkg>playwright</Pkg>.
+      </>
+    ),
+  },
+  {
     title: 'vitest',
     description: (
       <>
         Unit and component testing with <Pkg>react-testing-library</Pkg>.
       </>
     ),
+  },
+] satisfies FeatureItem[]
+
+export const deploymentFeatures = [
+  {
+    title: 'checklist',
+    description: <>Audit checklist for production readiness.</>,
+  },
+  {
+    title: 'preview',
+    description: <>Preview deployments on a separate worker.</>,
+  },
+  {
+    title: 'production',
+    description: <>Production deployments on the main worker.</>,
   },
 ] satisfies FeatureItem[]
