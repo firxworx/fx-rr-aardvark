@@ -97,15 +97,15 @@ export function FeaturesSection({
           </h2>
           {description ? <BlockContent content={description} /> : null}
         </header>
-        <div className="grid gap-4 sm:gap-6 w-full grid-cols-2 sm:grid-cols-4 lg:grid-cols-6">
+        <div className="grid gap-3 sm:gap-6 w-full grid-cols-2 sm:grid-cols-4 md:grid-cols-6">
           {features.map((feature, index) => (
             <div
               key={index}
               className={cn(
-                'col-span-2 flex flex-col items-center gap-2 sm:gap-4 text-center border border-border px-6 py-6 min-w-0 rounded-lg bg-card',
-                features.length % 2 === 1 && index === features.length - 1 && 'sm:max-lg:col-start-2',
-                features.length % 3 === 1 && index === features.length - 1 && 'lg:col-start-3',
-                features.length % 3 === 2 && index === features.length - 2 && 'lg:col-start-2',
+                'col-span-2 flex flex-col items-center gap-1 sm:gap-2 text-center border border-border px-6 md:max-lg:px-4 py-4 sm:py-6 min-w-0 rounded-lg bg-card',
+                features.length % 2 === 1 && index === features.length - 1 && 'sm:max-md:col-start-2',
+                features.length % 3 === 1 && index === features.length - 1 && 'md:col-start-3',
+                features.length % 3 === 2 && index === features.length - 2 && 'md:col-start-2',
               )}
             >
               <h3 className="text-base font-semibold tracking-tight text-pretty md:text-lg">{feature.title}</h3>
