@@ -21,6 +21,15 @@ Key configuration files:
 - `apps/web/react-router.config.ts`
 - `apps/web/vite.config.ts`
 
+## Unit Tests
+
+Vitest tests in `test/`: `*.test.ts` runs in Node.js and `*.test.tsx` in jsdom with React Testing Library (refer to
+`vitest.config.ts`). Modules that import `cloudflare:workers` cannot be tested here.
+
+```sh
+pnpm --filter web test
+```
+
 ## Smoke Tests
 
 Playwright tests in `e2e/` run against a production build in the Workers runtime and cover page loads (including CSP

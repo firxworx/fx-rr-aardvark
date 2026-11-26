@@ -73,6 +73,8 @@ Deploys via wrangler; app has `wrangler.jsonc`.
   - Use `error` level only for failures that need attention.
   - Read `docs/logging.md` before changing logging or observability settings.
 - Only names listed under `vars` or `secrets.required` in `wrangler.jsonc` are loaded from `.dev.vars`.
+- Unit tests live in `apps/web/test/`: `*.test.ts` runs in Node.js and `*.test.tsx` in jsdom.
+  - Modules that import `cloudflare:workers` cannot be tested there: keep logic in plain functions.
 - Never create `apps/web/public/assets`: `/assets/` is reserved for hashed build output and cached as immutable. Use
   another directory such as `public/images`.
 
