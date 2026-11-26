@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { Link } from 'react-router'
+import type { LucideIcon } from 'lucide-react'
 
 import { cn } from '@workspace/ui/lib/style'
 import { LayoutContainer } from '@/layout/app-layout'
@@ -11,6 +12,12 @@ const GITHUB_REPO_URL = 'https://github.com/firxworx/fx-rr-aardvark'
 export type FeatureItem = {
   title: string
   description: React.ReactNode
+}
+
+export type FeatureGroup = {
+  heading: string
+  icon: LucideIcon
+  features: FeatureItem[]
 }
 
 export function HeroSection({ className }: { className?: string }): React.JSX.Element {
@@ -32,7 +39,7 @@ export function HeroSection({ className }: { className?: string }): React.JSX.El
               rel="noopener noreferrer"
               target="_blank"
               to={GITHUB_REPO_URL}
-              className="flex items-center gap-2 px-4 py-2 bg-P-link/7 border border-border rounded-lg font-semibold text-P-link tracking-tight"
+              className="flex items-center gap-2 px-4 py-2 bg-P-link/7 hover:bg-P-link/10 border border-border rounded-lg font-semibold text-P-link tracking-tight transition-colors"
             >
               <GitHubIcon className="size-5" aria-hidden="true" />
               <span className="inline sm:hidden">
@@ -109,5 +116,66 @@ export function FeaturesSection({
         {trailer && <BlockContent content={trailer} />}
       </LayoutContainer>
     </section>
+  )
+}
+
+interface FeatureGroupsSectionProps {
+  heading?: string
+  description?: React.ReactNode
+  groups: FeatureGroup[]
+  className?: string
+}
+
+/**
+ * Features grouped under subheadings: one card per group, in a two-column grid from `md` up (cards in a row share a
+ * height).
+ */
+export function FeatureGroupsSection({
+  heading,
+  description,
+  groups,
+  className,
+}: FeatureGroupsSectionProps): React.JSX.Element {
+  return (
+    <section className={cn('border-b border-border py-12 sm:py-16', className)}>
+      <LayoutContainer className="flex flex-col items-center gap-6 md:gap-10">
+        <header className="flex flex-col items-center gap-4 text-center">
+          <h2 className="text-2xl leading-tight font-bold tracking-tight text-pretty md:text-3xl">
+            {heading ?? 'Features'}
+          </h2>
+          {description ? (
+            <div className="max-w-[60ch] text-muted-foreground md:text-lg *:text-pretty">{description}</div>
+          ) : null}
+        </header>
+        <div className="grid w-full max-w-5xl gap-4 sm:gap-6 md:grid-cols-2">
+          {groups.map((group) => (
+            <FeatureGroupCard key={group.heading} group={group} />
+          ))}
+        </div>
+      </LayoutContainer>
+    </section>
+  )
+}
+
+function FeatureGroupCard({ group }: { group: FeatureGroup }): React.JSX.Element {
+  const Icon = group.icon
+
+  return (
+    <div className="overflow-hidden rounded-lg border border-border bg-card">
+      <div className="flex items-center gap-3 border-b border-border px-5 py-4 sm:px-6">
+        <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-P-link/10 text-P-link">
+          <Icon className="size-5" aria-hidden="true" />
+        </span>
+        <h3 className="text-lg font-semibold tracking-tight">{group.heading}</h3>
+      </div>
+      <dl className="divide-y divide-border">
+        {group.features.map((feature) => (
+          <div key={feature.title} className="flex flex-col gap-1 px-5 py-4 sm:px-6">
+            <dt className="font-semibold tracking-tight">{feature.title}</dt>
+            <dd className="text-pretty text-muted-foreground">{feature.description}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
   )
 }

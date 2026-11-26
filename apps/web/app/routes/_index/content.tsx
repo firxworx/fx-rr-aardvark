@@ -1,64 +1,106 @@
-import type { FeatureItem } from './components/sections'
+import { AppWindowIcon, SearchIcon, ServerIcon, ShieldCheckIcon } from 'lucide-react'
+
+import type { FeatureGroup, FeatureItem } from './components/sections'
 import { NoWrap, Pkg } from './components/text'
 
-export const indexFeatures = [
+export const indexFeatureGroups = [
   {
-    title: 'csp',
-    description: <>Strict nonce-based content security policy.</>,
+    heading: 'Runtime',
+    icon: ServerIcon,
+    features: [
+      {
+        title: 'env',
+        description: (
+          <>
+            <Pkg>zod</Pkg> parsing & validation of environment variables.
+          </>
+        ),
+      },
+      {
+        title: 'context',
+        description: (
+          <>
+            <Pkg>react-router</Pkg> context set via worker entrypoint.
+          </>
+        ),
+      },
+      {
+        title: 'logging',
+        description: (
+          <>
+            Structured JSON logs with <Pkg>@logtape</Pkg>.
+          </>
+        ),
+      },
+    ],
   },
   {
-    title: 'headers',
-    description: <>Security and cache headers for worker and static assets.</>,
+    heading: 'Headers',
+    icon: ShieldCheckIcon,
+    features: [
+      {
+        title: 'csp',
+        description: <>Strict nonce-based content security policy.</>,
+      },
+      {
+        title: 'security',
+        description: <>Security headers and permissions policy.</>,
+      },
+      {
+        title: 'cache',
+        description: <>Cache headers for worker and static assets.</>,
+      },
+    ],
   },
   {
-    title: 'env',
-    description: (
-      <>
-        <Pkg>zod</Pkg> parsing & validation of environment variables.
-      </>
-    ),
+    heading: 'Interface',
+    icon: AppWindowIcon,
+    features: [
+      {
+        title: 'transitions',
+        description: (
+          <>
+            Animated route changes with <Pkg>&lt;ViewTransition&gt;</Pkg>.
+          </>
+        ),
+      },
+      {
+        title: 'nuqs',
+        description: <>Type-safe search params and URL state management.</>,
+      },
+      {
+        title: 'toaster',
+        description: (
+          <>
+            Custom toasts inspired by <Pkg>remix-toast</Pkg> and coss-ui.
+          </>
+        ),
+      },
+    ],
   },
   {
-    title: 'context',
-    description: (
-      <>
-        <Pkg>react-router</Pkg> context set via worker entrypoint.
-      </>
-    ),
+    heading: 'SEO',
+    icon: SearchIcon,
+    features: [
+      {
+        title: 'canonical',
+        description: <>Canonical URLs and trailing slash redirects.</>,
+      },
+      {
+        title: 'meta',
+        description: <>Title, Open Graph, and JSON-LD from route values.</>,
+      },
+      {
+        title: 'crawlers',
+        description: (
+          <>
+            Routes for <Pkg>robots.txt</Pkg> and <Pkg>sitemap.xml</Pkg>.
+          </>
+        ),
+      },
+    ],
   },
-  {
-    title: 'logging',
-    description: (
-      <>
-        Structured JSON logs with <Pkg>logtape</Pkg>.
-      </>
-    ),
-  },
-  {
-    title: 'nuqs',
-    description: 'Type-safe search params and URL state management.',
-  },
-  {
-    title: 'toaster',
-    description: (
-      <>
-        Custom toasts inspired by <Pkg>remix-toast</Pkg> and coss-ui.
-      </>
-    ),
-  },
-  {
-    title: 'search crawlers',
-    description: (
-      <>
-        Routes for <Pkg>robots.txt</Pkg> and <Pkg>sitemap.xml</Pkg>.
-      </>
-    ),
-  },
-  {
-    title: 'seo',
-    description: <>Title, canonical, Open Graph, and JSON-LD tags from route values.</>,
-  },
-] satisfies FeatureItem[]
+] satisfies FeatureGroup[]
 
 export const stylingFeatures = [
   {

@@ -3,12 +3,12 @@ import type { Route } from './+types/route'
 import { envContext } from '@/context.server'
 import { LayoutContainer, PageLayout } from '@/layout/app-layout'
 import { ClosingSection } from './components/closing-section'
-import { FeaturesSection, HeroSection } from './components/sections'
+import { FeatureGroupsSection, FeaturesSection, HeroSection } from './components/sections'
 import { NoWrap, Pkg } from './components/text'
 import {
   agenticFeatures,
   deploymentFeatures,
-  indexFeatures,
+  indexFeatureGroups,
   stylingFeatures,
   toolsFeatures,
   typographyFeatures,
@@ -24,14 +24,14 @@ export default function IndexRoute({ loaderData: { mode } }: Route.ComponentProp
   return (
     <PageLayout variant="full-width">
       <HeroSection className="bg-muted" />
-      <FeaturesSection
+      <FeatureGroupsSection
         description={
           <p>
-            Kick-start the development of new projects with a template that wires up production-grade necessities and
-            leaves the rest to you.
+            Kick-start the development of new server-rendered projects with a template that wires up production-grade
+            necessities and leaves the rest to you.
           </p>
         }
-        features={indexFeatures}
+        groups={indexFeatureGroups}
       />
       <FeaturesSection
         heading="Styling"
