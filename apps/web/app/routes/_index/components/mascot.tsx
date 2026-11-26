@@ -10,6 +10,9 @@ interface MascotProps extends Omit<React.ComponentProps<'svg'>, 'children'> {
  *
  * Inline SVG renders with the first paint (no request). Ids are unique per instance so it can render more than once
  * on a page.
+ *
+ * The viewBox starts at y -0.5 so the outlines of the feet (bottom at 199.5) end flush with the bottom edge: the
+ * mascot stands on a border with no gap.
  */
 export function Mascot({ title, ...props }: MascotProps): React.JSX.Element {
   const id = React.useId()
@@ -23,7 +26,7 @@ export function Mascot({ title, ...props }: MascotProps): React.JSX.Element {
       xmlns="http://www.w3.org/2000/svg"
       width={200}
       height={200}
-      viewBox="0 0 200 200"
+      viewBox="0 -0.5 200 200"
       role={hasTitle ? 'img' : undefined}
       aria-labelledby={hasTitle ? titleId : undefined}
       aria-hidden={hasTitle ? undefined : true}

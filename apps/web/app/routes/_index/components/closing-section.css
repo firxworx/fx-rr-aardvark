@@ -1,0 +1,51 @@
+/*
+ * Closing section of the home page: the mascot peeks out of its burrow (the bottom border of the section)
+ * and climbs out as the end of the page scrolls into view.
+ *
+ * Decorative progressive enhancement: browsers without scroll-driven animations and users who prefer
+ * reduced motion see the mascot in its final standing state.
+ */
+@supports ((animation-timeline: view()) and (animation-range: entry)) {
+  @media (prefers-reduced-motion: no-preference) {
+    .burrow {
+      /* hide the mascot below the ground; negative insets leave room above for the hop */
+      clip-path: inset(-25% -25% 0);
+      view-timeline: --burrow;
+    }
+
+    .burrow-climber {
+      animation: burrow-climb linear both;
+      animation-timeline: --burrow;
+      /*
+       * starts once the ground line is visible and ends before the page does: the bars below leave ~145px of scroll on
+       * phones and ~230px from `md` up
+       */
+      animation-range: contain 0% contain 100px;
+    }
+
+    @media (width >= 40rem) {
+      .burrow-climber {
+        animation-range: contain 0% contain 140px;
+      }
+    }
+
+    @media (width >= 48rem) {
+      .burrow-climber {
+        animation-range: contain 0% contain 180px;
+      }
+    }
+  }
+}
+
+/* starts with the head and ears out of the burrow so the section never looks empty */
+@keyframes burrow-climb {
+  from {
+    translate: 0 45%;
+  }
+  80% {
+    translate: 0 -6%;
+  }
+  to {
+    translate: 0 0;
+  }
+}

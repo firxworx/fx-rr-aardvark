@@ -2,6 +2,7 @@ import type { Route } from './+types/route'
 
 import { envContext } from '@/context.server'
 import { LayoutContainer, PageLayout } from '@/layout/app-layout'
+import { ClosingSection } from './components/closing-section'
 import { FeaturesSection, HeroSection } from './components/sections'
 import { NoWrap, Pkg } from './components/text'
 import {
@@ -73,6 +74,7 @@ export default function IndexRoute({ loaderData: { mode } }: Route.ComponentProp
         description={<p>Ships ready to deploy on Cloudflare Workers.</p>}
         features={deploymentFeatures}
       />
+      <ClosingSection />
       <section className="py-6 sm:py-12 md:py-16 bg-muted">
         <LayoutContainer>
           <p className="text-sm sm:text-base font-semibold text-muted-foreground text-center">
