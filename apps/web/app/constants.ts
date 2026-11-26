@@ -8,9 +8,6 @@ export const DEFAULT_LOCALE = 'en' as const
 
 export const MAIN_ELEMENT_ID = 'main'
 
-export const DEFAULT_META_TITLE = 'Acme'
-export const DEFAULT_META_DESCRIPTION = 'React Router SSR starter app template in a pnpm workspace.'
-
 export const NAV_LINKS = [
   { label: 'Home', to: '/' },
   { label: 'Example', to: '/example' },
