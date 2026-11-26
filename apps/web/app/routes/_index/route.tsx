@@ -4,7 +4,7 @@ import { Link } from 'react-router'
 import type { Route } from './+types/route'
 
 import { cn } from '@workspace/ui/lib/style'
-import { env } from '@/env.server'
+import { envContext } from '@/context.server'
 import { LayoutContainer, PageLayout } from '@/layout/app-layout'
 import {
   type FeatureItem,
@@ -18,9 +18,9 @@ import {
 
 const GITHUB_REPO_URL = 'https://github.com/firxworx/fx-rr-aardvark'
 
-export function loader({}: Route.LoaderArgs) {
+export function loader({ context }: Route.LoaderArgs) {
   return {
-    mode: env.ENVIRONMENT,
+    mode: context.get(envContext).ENVIRONMENT,
   }
 }
 

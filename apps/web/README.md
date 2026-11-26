@@ -2,12 +2,13 @@
 
 React Router Framework Mode (SSR) application on Cloudflare Workers with TailwindCSS and Base UI.
 
-- `/workers/app.ts` - worker entrypoint (provides `cloudflareContext` and `nonceContext` to react-router context; applies security headers)
+- `/workers/app.ts` - worker entrypoint (validates environment variables at startup; provides `cloudflareContext`,
+  `envContext`, and `nonceContext` to react-router context; applies security headers)
 - `/public/_headers` - cache and security headers for static assets (keep security headers in sync with
   `@workspace/core/security-headers`)
 - `/public/assets` - **must not exist**: `/assets/` is reserved for build output, which is cached as immutable
 - `app/constants.ts` - key constants and configuration
-- `app/env.server.ts` - environment variable validation and parsing with zod v4
+- `app/env.server.ts` - zod v4 schema for environment variables (read them with `context.get(envContext)`)
 - `app/entry.server.tsx` - server entrypoint that sets the CSP header (policy defined in `@workspace/core/csp`)
 - `app/entry.client.tsx` - client entrypoint with error hooks (attach an error tracker in `app/lib/report-client-error.ts`)
 - `app/middleware` - middleware registered in `app/root.tsx` (cross-origin request protection, server-initiated toasts)

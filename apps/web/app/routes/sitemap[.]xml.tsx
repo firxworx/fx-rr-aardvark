@@ -1,5 +1,7 @@
+import type { Route } from './+types/sitemap[.]xml'
+
 import { SITEMAP_INCLUDE_PATHS } from '@/constants'
-import { env } from '@/env.server'
+import { envContext } from '@/context.server'
 
 // 1 hour cache (crawlers do not need a fresher sitemap for static pages)
 const CACHE_CONTROL = 'public, max-age=3600'
@@ -14,8 +16,9 @@ export function getCanonicalUrl(origin: string, pathname: string): string {
 /**
  * Resource route for `/sitemap.xml` (wired declaratively in `routes.ts`, outside the root layout).
  */
-export function loader(): Response {
-  const urls = SITEMAP_INCLUDE_PATHS.map((path) => `  <url><loc>${getCanonicalUrl(env.SITE_URL, path)}</loc></url>`)
+export function loader({ context }: Route.LoaderArgs): Response {
+  const { SITE_URL } = context.get(envContext)
+  const urls = SITEMAP_INCLUDE_PATHS.map((path) => `  <url><loc>${getCanonicalUrl(SITE_URL, path)}</loc></url>`)
   const body = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',

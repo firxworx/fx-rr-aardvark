@@ -63,6 +63,10 @@ Deploys via wrangler; app has `wrangler.jsonc`.
 - Environment awareness: do not rely on `import.meta.env.PROD` or `NODE_ENV` to distinguish Cloudflare environments
   - use explicit `ENVIRONMENT` var from the Worker env (set per environment in `wrangler.jsonc`).
 - Any Cloudflare bindings (D1, R2, Queues, KV, etc) should come from context; never import them globally.
+- Environment variables: read validated values with `context.get(envContext)` (set in `workers/app.ts`).
+  - Never import `env` from `cloudflare:workers` in app code.
+  - Never create values or clients from secrets at module scope: an isolate may be reused after a secret changes.
+  - Add new variables to the schema in `app/env.server.ts`.
 - Import shared components from `@workspace/ui`; do not duplicate components into the app.
 - Consider if coss-ui then shadcn/ui has a component before creating a new one.
 - Validate all input at the boundary with Zod schemas.

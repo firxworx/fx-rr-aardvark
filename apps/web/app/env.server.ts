@@ -1,10 +1,9 @@
-import { env as cloudflareEnv } from 'cloudflare:workers'
 import * as z from 'zod'
 
 /**
  * Zod schema for validating server environment variables.
  */
-const zEnv = z.object({
+const zServerEnv = z.object({
   ENVIRONMENT: z.enum(['development', 'preview', 'production']),
   LOG_LEVEL: z.enum(['trace', 'debug', 'info', 'warning', 'error', 'fatal']),
   SITE_URL: z.url().refine((value) => !value.endsWith('/'), {
@@ -14,21 +13,45 @@ const zEnv = z.object({
 })
 
 /**
- * Parsed and validated server environment variables.
- *
- * The worker entry point imports this module at startup so that a deploy with invalid values fails. Throw instead of
- * logging: LogTape is not configured yet.
+ * Validated server environment variables. Bindings (D1, KV, etc.) are not included: get them from `cloudflareContext`.
  */
-export const env = (() => {
-  const parsed = zEnv.safeParse(cloudflareEnv)
+export type ServerEnv = Readonly<z.infer<typeof zServerEnv>>
 
-  if (parsed.success === false) {
-    // messages of zod errors include names of variables but not their values
+/**
+ * Parse and validate server environment variables.
+ *
+ * @throws {Error} if a variable is missing or invalid (the message names variables but does not include values)
+ */
+export function parseEnv(source: unknown): ServerEnv {
+  const parsed = zServerEnv.safeParse(source)
+
+  if (!parsed.success) {
     throw new Error(`Invalid environment variables:\n${z.prettifyError(parsed.error)}`)
   }
 
-  const validatedData = parsed.data
-  Object.freeze(validatedData) // ensure immutability
+  return Object.freeze(parsed.data)
+}
 
-  return validatedData
-})()
+// cache by `env` object: parse once while the object is unchanged, and again when Cloudflare provides a new one
+// (an isolate may be reused when only bindings, vars, or secrets change)
+const serverEnvCache = new WeakMap<object, ServerEnv>()
+
+/**
+ * Get validated server environment variables for the `env` object of a handler (cached).
+ *
+ * Request handlers read the result from `envContext` (set in `workers/app.ts`) instead of calling this function.
+ *
+ * @throws {Error} if a variable is missing or invalid
+ */
+export function getServerEnv(env: object): ServerEnv {
+  const cached = serverEnvCache.get(env)
+
+  if (cached !== undefined) {
+    return cached
+  }
+
+  const serverEnv = parseEnv(env)
+  serverEnvCache.set(env, serverEnv)
+
+  return serverEnv
+}
