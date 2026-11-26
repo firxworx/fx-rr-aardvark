@@ -59,8 +59,12 @@ If you use VSCode review `.vscode/settings.json` and customize to your liking (o
 
 You can set up the workspace manually or use the included setup script: `setup:workspace`.
 
-- See [docs/setup.md](./docs/setup.md) for manual and scripted setup steps.
+The setup guide covers important points about working with this workspace and customizing it for your project:
+
+- See [docs/setup.md](./docs/setup.md) for key points plus details of manual and scripted setup steps.
 - See [apps/web/README.md](./apps/web/README.md) for react-router application configuration and customization.
+
+`AGENTS.md` is a valuable resource for human developers to understand the workspace layout and key conventions.
 
 ## Commands
 
