@@ -3,53 +3,39 @@
  *
  * Revised from original to use `light-dark()` instead of a separate set of `.dark`
  * theme tokens for a single set of css variables that work in both light and dark mode.
+ *
+ * Started from the coss-ui palette and revised (not kept in sync with either library):
+ * - greys are fixed oklch values (vs. `color-mix()`) so devtools show the real color and values are easy to mix
+ *   - light surfaces: background 1 > card 0.9925 > sidebar 0.985 (neutral-50)
+ *   - dark surfaces: sidebar 0.18 < background 0.2 < card and popover 0.22
+ *   - muted and sidebar text meet WCAG AA (4.5:1) on every surface including muted and accent fills
+ * - muted, accent, secondary, border, and input are translucent so they layer on any surface
  */
 :root {
   --radius: 0.625rem;
 
   /* surface & text */
-  --background: light-dark(var(--color-white), color-mix(in srgb, var(--color-neutral-950) 95%, var(--color-white)));
+  --background: light-dark(var(--color-white), oklch(0.2 0 0));
   --foreground: light-dark(var(--color-neutral-800), var(--color-neutral-100));
   /* light: tinted vs. background (coss-ui and shadcn/ui use white) so cards stand apart without a shadow */
-  --card: light-dark(
-    oklch(0.9925 0 0) /* oklab midpoint of white and neutral-50 */,
-    color-mix(in srgb, var(--color-neutral-950) 93.1%, var(--color-white))
-  );
+  --card: light-dark(oklch(0.9925 0 0), oklch(0.22 0 0));
   --card-foreground: light-dark(var(--color-neutral-800), var(--color-neutral-100));
-  --popover: light-dark(var(--color-white), color-mix(in srgb, var(--color-neutral-950) 93.1%, var(--color-white)));
+  --popover: light-dark(var(--color-white), oklch(0.22 0 0));
   --popover-foreground: light-dark(var(--color-neutral-800), var(--color-neutral-100));
 
   /* intent */
   --primary: light-dark(var(--color-neutral-800), var(--color-neutral-100));
   --primary-foreground: light-dark(var(--color-neutral-50), var(--color-neutral-800));
-  --secondary: light-dark(
-    color-mix(in oklab, var(--color-black) 4%, transparent),
-    color-mix(in oklab, var(--color-white) 4%, transparent)
-  );
+  --secondary: light-dark(oklch(0 0 0 / 4%), oklch(1 0 0 / 4%));
   --secondary-foreground: light-dark(var(--color-neutral-800), var(--color-neutral-100));
-  --muted: light-dark(
-    color-mix(in oklab, var(--color-black) 4%, transparent),
-    color-mix(in oklab, var(--color-white) 4%, transparent)
-  );
-  --muted-foreground: light-dark(
-    color-mix(in srgb, var(--color-neutral-500) 90%, var(--color-black)),
-    color-mix(in srgb, var(--color-neutral-500) 90%, var(--color-white))
-  );
-  --accent: light-dark(
-    color-mix(in oklab, var(--color-black) 4%, transparent),
-    color-mix(in oklab, var(--color-white) 4%, transparent)
-  );
+  --muted: light-dark(oklch(0 0 0 / 4%), oklch(1 0 0 / 4%));
+  --muted-foreground: light-dark(oklch(0.52 0 0), oklch(0.64 0 0));
+  --accent: light-dark(oklch(0 0 0 / 4%), oklch(1 0 0 / 4%));
   --accent-foreground: light-dark(var(--color-neutral-800), var(--color-neutral-100));
 
   /* chrome */
-  --border: light-dark(
-    color-mix(in oklab, var(--color-black) 8%, transparent),
-    color-mix(in oklab, var(--color-white) 6%, transparent)
-  );
-  --input: light-dark(
-    color-mix(in oklab, var(--color-black) 10%, transparent),
-    color-mix(in oklab, var(--color-white) 8%, transparent)
-  );
+  --border: light-dark(oklch(0 0 0 / 8%), oklch(1 0 0 / 6%));
+  --input: light-dark(oklch(0 0 0 / 10%), oklch(1 0 0 / 8%));
   --ring: light-dark(var(--color-sky-400), var(--color-sky-500));
 
   /*
@@ -62,7 +48,8 @@
    * this can lead to styling differences when integrating coss-ui and shadcn/ui components
    * so take care to ensure any destructive text is legible and the overall look-and-feel is consistent.
    */
-  --destructive: light-dark(var(--color-red-500), color-mix(in oklab, var(--color-red-500) 90%, var(--color-white)));
+  /* dark: red-500 with 10% white mixed in oklab */
+  --destructive: light-dark(var(--color-red-500), oklch(0.673 0.213 25.331));
   --destructive-foreground: light-dark(var(--color-red-700), var(--color-red-400));
   --info: var(--color-blue-500);
   --info-foreground: light-dark(var(--color-blue-700), var(--color-blue-400));
@@ -79,22 +66,13 @@
   --chart-5: light-dark(var(--color-violet-600), var(--color-violet-400));
 
   /* sidebar - shared */
-  --sidebar: light-dark(var(--color-neutral-50), color-mix(in srgb, var(--color-neutral-950) 97%, var(--color-white)));
-  --sidebar-foreground: light-dark(
-    color-mix(in srgb, var(--color-neutral-800) 64%, var(--color-neutral-50)),
-    color-mix(in srgb, var(--color-neutral-100) 64%, var(--color-neutral-950))
-  );
+  --sidebar: light-dark(var(--color-neutral-50), oklch(0.18 0 0));
+  --sidebar-foreground: light-dark(oklch(0.53 0 0), oklch(0.71 0 0));
   --sidebar-primary: light-dark(var(--color-neutral-800), var(--color-neutral-100));
   --sidebar-primary-foreground: light-dark(var(--color-neutral-50), var(--color-neutral-800));
-  --sidebar-accent: light-dark(
-    color-mix(in oklab, var(--color-black) 4%, transparent),
-    color-mix(in oklab, var(--color-white) 4%, transparent)
-  );
+  --sidebar-accent: light-dark(oklch(0 0 0 / 4%), oklch(1 0 0 / 4%));
   --sidebar-accent-foreground: light-dark(var(--color-neutral-800), var(--color-neutral-100));
-  --sidebar-border: light-dark(
-    color-mix(in oklab, var(--color-black) 6%, transparent),
-    color-mix(in oklab, var(--color-white) 5%, transparent)
-  );
+  --sidebar-border: light-dark(oklch(0 0 0 / 6%), oklch(1 0 0 / 5%));
   --sidebar-ring: var(--color-neutral-400);
 }
 
