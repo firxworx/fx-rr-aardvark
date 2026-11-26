@@ -35,12 +35,33 @@ export function LayoutContainer({
 }
 
 /**
+ * Link to skip the header and navigation: visually hidden until it receives focus (first stop of the tab order).
+ * Its target is the `<main>` element of `PageLayout`.
+ */
+function SkipLink(): React.JSX.Element {
+  return (
+    <a
+      href={`#${MAIN_ELEMENT_ID}`}
+      className={cn(
+        'sr-only rounded-md bg-primary font-medium text-primary-foreground shadow-md',
+        // `not-sr-only` resets padding: set it with the same variant
+        'focus:not-sr-only focus:fixed focus:start-4 focus:top-3 focus:z-50 focus:px-4 focus:py-2',
+        'focus-visible:cx-focus-ring',
+      )}
+    >
+      Skip to main content
+    </a>
+  )
+}
+
+/**
  * Root layout for the application intended to render as a child of document body (see `root.tsx`).
  * Implements recommendation from Base UI docs to use a root div element with `isolation:isolate`.
  */
 export function AppLayout({ className, children, ...restProps }: AppLayoutProps): React.JSX.Element {
   return (
     <div id="root" className={cn('root isolate flex min-h-svh flex-col', className)} {...restProps}>
+      <SkipLink />
       <header className="border-b border-border outline-none">
         <LayoutContainer className="grid grid-cols-[1fr_auto_1fr] items-center gap-6 h-16 text-base">
           <NavLink to={href('/')} className="block col-start-1 justify-self-start font-bold">

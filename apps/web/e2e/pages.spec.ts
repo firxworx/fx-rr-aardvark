@@ -87,6 +87,21 @@ for (const viewport of [
   })
 }
 
+test('skip link is the first tab stop and moves focus past the header', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'networkidle' })
+  await page.keyboard.press('Tab')
+
+  const skipLink = page.getByRole('link', { name: 'Skip to main content' })
+
+  await expect(skipLink).toBeFocused()
+  await expect(skipLink).toBeInViewport()
+
+  await page.keyboard.press('Enter')
+  await page.keyboard.press('Tab')
+
+  await expect(page.locator('main :focus')).toHaveCount(1)
+})
+
 for (const colorScheme of ['light', 'dark'] as const) {
   test.describe(`with ${colorScheme} color scheme`, () => {
     test.use({ colorScheme })
