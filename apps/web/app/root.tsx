@@ -13,7 +13,7 @@ import { AnchoredToastProvider, ToastProvider, toastManager } from '@workspace/u
 import { DEFAULT_LOCALE, DEFAULT_META_DESCRIPTION, DEFAULT_META_TITLE, IS_DEV_BUILD } from '@/constants'
 import { envContext } from '@/context.server'
 import { AppLayout } from '@/layout/app-layout'
-import { GeneralErrorBoundary } from '@/layout/error-boundary'
+import { GeneralErrorBoundary, getErrorInfo } from '@/layout/error-boundary'
 import { RouteTransition } from '@/layout/route-transition'
 import { CSP_NONCE_META_PROPERTY, useNonceContext } from '@/lib/nonce.context'
 import { getTheme } from '@/lib/theme.server'
@@ -57,7 +57,11 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   })
 }
 
-export function meta(): Route.MetaDescriptors {
+export function meta({ error }: Route.MetaArgs): Route.MetaDescriptors {
+  if (error !== undefined && error !== null) {
+    return [{ title: `${getErrorInfo(error).message} | ${DEFAULT_META_TITLE}` }]
+  }
+
   return [{ title: DEFAULT_META_TITLE }, { name: 'description', content: DEFAULT_META_DESCRIPTION }]
 }
 
