@@ -8,10 +8,12 @@ React Router Framework Mode (SSR) application on Cloudflare Workers with Tailwin
   `@workspace/core/security-headers`)
 - `/public/assets` - **must not exist**: `/assets/` is reserved for build output, which is cached as immutable
 - `app/constants.ts` - key constants and configuration
+- `app/seo.ts` - site-wide SEO values (title, description, share image; refer to `docs/seo.md`)
 - `app/env.server.ts` - zod v4 schema for environment variables (read them with `context.get(envContext)`)
 - `app/entry.server.tsx` - server entrypoint that sets the CSP header (policy defined in `@workspace/core/csp`)
 - `app/entry.client.tsx` - client entrypoint with error hooks (attach an error tracker in `app/lib/report-client-error.ts`)
-- `app/middleware` - middleware registered in `app/root.tsx` (cross-origin request protection, server-initiated toasts)
+- `app/middleware` - middleware registered in `app/root.tsx` (cross-origin request protection, trailing slash
+  redirects, server-initiated toasts)
 - `app/routes.ts` - route manifest (file-based routing with `@react-router/fs-routes`)
 - `app/root.tsx` - application root with Base UI providers, toast implementation, CSP
 

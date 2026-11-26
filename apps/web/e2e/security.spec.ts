@@ -41,7 +41,10 @@ test('documents have a strict CSP with a nonce for each request', async ({ reque
   // the client reads the nonce from this tag so that it hydrates with the same value as the server
   expect(first.html).toContain(`<meta property="csp-nonce" nonce="${first.nonce}"`)
 
-  const scriptTags = first.html.match(/<script\b[^>]*>/g) ?? []
+  // JSON-LD scripts are data blocks that browsers do not run: the CSP does not apply to them
+  const scriptTags = (first.html.match(/<script\b[^>]*>/g) ?? []).filter(
+    (scriptTag) => !scriptTag.includes('type="application/ld+json"'),
+  )
 
   expect(scriptTags.length).toBeGreaterThan(0)
 

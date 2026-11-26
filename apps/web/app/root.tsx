@@ -9,8 +9,9 @@ import type { $ZodConfig } from 'zod/v4/core'
 import type { Route } from './+types/root'
 
 import { DEFAULT_THEME_MODE } from '@workspace/core/theme'
+import { DocumentSeo, ErrorSeo } from '@workspace/seo'
 import { AnchoredToastProvider, ToastProvider, toastManager } from '@workspace/ui/components/toast'
-import { DEFAULT_LOCALE, DEFAULT_META_DESCRIPTION, DEFAULT_META_TITLE, IS_DEV_BUILD } from '@/constants'
+import { DEFAULT_LOCALE, IS_DEV_BUILD } from '@/constants'
 import { envContext } from '@/context.server'
 import { AppLayout } from '@/layout/app-layout'
 import { GeneralErrorBoundary, getErrorInfo } from '@/layout/error-boundary'
@@ -19,6 +20,8 @@ import { CSP_NONCE_META_PROPERTY, useNonceContext } from '@/lib/nonce.context'
 import { getTheme } from '@/lib/theme.server'
 import { crossOriginMiddleware } from '@/middleware/cross-origin.middleware.server'
 import { getToast, toastMiddleware } from '@/middleware/toast.middleware.server'
+import { trailingSlashMiddleware } from '@/middleware/trailing-slash.middleware.server'
+import { SEO_CONFIG } from '@/seo'
 
 // inter @font-face css is bundled into the root route css (rendered by <Links />); see preload in links()
 import '@fontsource-variable/inter'
@@ -29,7 +32,7 @@ import stylesheet from '@/styles/app.css?url'
  *
  * @see https://github.com/code-forge-io/remix-toast (README for middleware mode; the basis for this implementation)
  */
-export const middleware = [crossOriginMiddleware(), toastMiddleware()]
+export const middleware = [crossOriginMiddleware(), trailingSlashMiddleware(), toastMiddleware()]
 
 /**
  * Refer to `entry.server.tsx` and `workers/app.ts` for security headers; the CSP is defined in `@workspace/core/csp`.
@@ -53,16 +56,8 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   return data({
     theme,
     toast, // server-initiated toasts (rendered by App component below)
-    siteUrl: context.get(envContext).SITE_URL,
+    siteUrl: context.get(envContext).SITE_URL, // origin of canonical, og:url, and og:image URLs
   })
-}
-
-export function meta({ error }: Route.MetaArgs): Route.MetaDescriptors {
-  if (error !== undefined && error !== null) {
-    return [{ title: `${getErrorInfo(error).message} | ${DEFAULT_META_TITLE}` }]
-  }
-
-  return [{ title: DEFAULT_META_TITLE }, { name: 'description', content: DEFAULT_META_DESCRIPTION }]
 }
 
 export function Layout({ children }: { children: React.ReactNode }): React.JSX.Element {
@@ -80,6 +75,7 @@ export function Layout({ children }: { children: React.ReactNode }): React.JSX.E
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta property={CSP_NONCE_META_PROPERTY} nonce={nonce} />
+        {/* route `meta` exports: not for SEO tags, which `DocumentSeo` renders (refer to docs/seo.md) */}
         <Meta />
         <Links nonce={nonce} />
       </head>
@@ -107,7 +103,7 @@ export function Layout({ children }: { children: React.ReactNode }): React.JSX.E
  * @see https://base-ui.com/react/utils/csp-provider
  */
 export default function App({ loaderData }: Route.ComponentProps): React.JSX.Element {
-  const { toast } = loaderData
+  const { toast, siteUrl } = loaderData
   const nonce = useNonceContext()
 
   // zod config jitless must run before zod loads on the client to avoid CSP unsafe-eval errors
@@ -141,6 +137,8 @@ export default function App({ loaderData }: Route.ComponentProps): React.JSX.Ele
 
   return (
     <>
+      {/* title, meta, and link tags from the `seo` values of routes (refer to docs/seo.md) */}
+      <DocumentSeo config={SEO_CONFIG} siteUrl={siteUrl} strict={IS_DEV_BUILD} />
       <script
         nonce={nonce}
         dangerouslySetInnerHTML={{
@@ -160,6 +158,14 @@ export default function App({ loaderData }: Route.ComponentProps): React.JSX.Ele
   )
 }
 
-export function ErrorBoundary(): React.JSX.Element {
-  return <GeneralErrorBoundary isDevelopment={IS_DEV_BUILD} />
+/**
+ * Error pages render instead of `App` (and its `DocumentSeo`): `ErrorSeo` sets their title and `noindex`.
+ */
+export function ErrorBoundary({ error }: Route.ErrorBoundaryProps): React.JSX.Element {
+  return (
+    <>
+      <ErrorSeo config={SEO_CONFIG} title={getErrorInfo(error).message} />
+      <GeneralErrorBoundary isDevelopment={IS_DEV_BUILD} />
+    </>
+  )
 }

@@ -359,6 +359,9 @@ importers:
       '@workspace/logger':
         specifier: workspace:*
         version: link:../../packages/logger
+      '@workspace/seo':
+        specifier: workspace:*
+        version: link:../../packages/seo
       '@workspace/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/tsconfig
@@ -458,6 +461,37 @@ importers:
       '@workspace/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/tsconfig
+      typescript:
+        specifier: 'catalog:'
+        version: 7.0.2
+
+  packages/seo:
+    dependencies:
+      '@workspace/core':
+        specifier: workspace:*
+        version: link:../core
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.7
+    devDependencies:
+      '@types/react':
+        specifier: 'catalog:'
+        version: 19.3.0
+      '@types/react-dom':
+        specifier: 'catalog:'
+        version: 19.3.0(@types/react@19.3.0)
+      '@workspace/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/tsconfig
+      react:
+        specifier: 'catalog:'
+        version: 19.3.1
+      react-dom:
+        specifier: 'catalog:'
+        version: 19.3.1(react@19.3.1)
+      react-router:
+        specifier: 'catalog:'
+        version: 8.5.2(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       typescript:
         specifier: 'catalog:'
         version: 7.0.2

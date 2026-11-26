@@ -59,6 +59,28 @@ Pass `--yes` (with `--name`, `--worker`, `--site-url`, ...) to run unattended; o
 Ensure the `SITE_URL` var in `wrangler.jsonc` is in the correct format: `https://<worker_name>.<subdomain>.workers.dev`.
 This step is necessary because there is currently no way for the `wrangler` CLI to determine your `workers.dev` subdomain prior to publishing.
 
+## Agent Skills
+
+AI coding agent skills are managed using the [skills CLI](https://www.skills.sh/docs/cli).
+
+`skills-lock.json` pins a few skills for agents (react-router, modern-web-guidance) to a commit of their source.
+
+Installed skills (`.agents/skills`, `.claude/skills`) are not committed to the repository; restore them from the lockfile with the `skills` CLI (`pnx` runs a package like `pnpm dlx` and is the `pnpm` equivalent to `npx`):
+
+```sh
+pnx skills install --dry-run    # show what would be installed
+pnx skills install              # restore from skills-lock.json (experimental)
+```
+
+Review the lockfile and remove any skills that your project does not need.
+
+`pnx skills update` updates skills to their latest versions and changes the lockfile. Skills are instructions for
+agents: review the changes before committing them.
+
+Custom skills for the workspace use the `fx-` prefix to namespace them and are committed (refer to `.gitignore`).
+
+If you do not use Claude Code you can safely delete `CLAUDE.md` and the `.claude` directory if they exist.
+
 ## Customization
 
 Review the react-router application config files:
@@ -69,6 +91,7 @@ Review the react-router application config files:
 Customize the application:
 
 - `apps/web/app/constants.ts` - app constants (e.g. `APP_NAME`, etc.)
+- `apps/web/app/seo.ts` - site-wide SEO values (default title, description, share image; refer to [seo.md](./seo.md))
 - `apps/web/public` - public assets (e.g. `favicon.ico`, `apple-touch-icon`, etc.)
 
 ## Environments
@@ -142,3 +165,11 @@ Run the dev server from workspace root:
 ```bash
 pnpm dev
 ```
+
+## Additional Considerations
+
+The following considerations are omitted from this repository because they can vary significantly depending on project
+requirements and team preferences:
+
+Consider enforcement of commit message style with tools like `@commitlint/cli` + `@commitlint/config-conventional`;
+use them alongside tools such as `lefthook` or `husky` to run commitlint on commit.

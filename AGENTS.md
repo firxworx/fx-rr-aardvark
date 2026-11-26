@@ -19,6 +19,7 @@ All packages are under `@workspace/` namespace e.g. `@workspace/ui` for the shar
 
 - `packages/core` - shared utilities
 - `packages/logger` - structured logging for server code (LogTape; refer to `docs/logging.md`)
+- `packages/seo` - SEO tags (title, canonical, Open Graph, JSON-LD) from route values (refer to `docs/seo.md`)
 - `packages/ui` - reusable UI components and global styles (tailwindcss v4)
 - `packages/ui/src/styles/globals.css` — entrypoint for global styles
 - `tooling/tsconfig` - shared TypeScript config presets
@@ -70,6 +71,9 @@ Deploys via wrangler; app has `wrangler.jsonc`.
 - Import shared components from `@workspace/ui`; do not duplicate components into the app.
 - Consider if coss-ui then shadcn/ui has a component before creating a new one.
 - Validate all input at the boundary with Zod schemas.
+- SEO: set `seo` in a route `handle` or return it from the loader (refer to `docs/seo.md`).
+  - Never set SEO tags (title, description, canonical, robots, Open Graph) with a route `meta` export or by rendering
+    `<title>`, `<meta>`, or `<link>` elements in routes: they duplicate the tags of `<DocumentSeo />`.
 - Logging: server code uses `createLogger('<name>')` from `@workspace/logger`, never `console`.
   - Use a constant message with values as properties.
   - Pass errors as `error`: `logger.error('Failed to save', { error, id })`.

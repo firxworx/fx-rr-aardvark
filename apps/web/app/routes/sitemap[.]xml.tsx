@@ -1,17 +1,11 @@
 import type { Route } from './+types/sitemap[.]xml'
 
+import { getCanonicalUrl } from '@workspace/seo'
 import { SITEMAP_INCLUDE_PATHS } from '@/constants'
 import { envContext } from '@/context.server'
 
 // 1 hour cache (crawlers do not need a fresher sitemap for static pages)
 const CACHE_CONTROL = 'public, max-age=3600'
-
-/**
- * Resolve a pathname against the site origin with trailing slashes stripped (root keeps its '/').
- */
-export function getCanonicalUrl(origin: string, pathname: string): string {
-  return new URL(pathname.replace(/\/+$/, '') || '/', origin).href
-}
 
 /**
  * Resource route for `/sitemap.xml` (wired declaratively in `routes.ts`, outside the root layout).
