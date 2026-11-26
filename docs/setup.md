@@ -121,8 +121,8 @@ Details regarding module scope, env caching, and the Cloudflare workers runtime:
 - module scope runs once per isolate (an instance of the worker that handles many requests)
 - when only secrets or variables change (`wrangler secret put` or the dashboard), Cloudflare may keep using isolates
   that are already running, so a value created at module scope keeps the previous secret
-- the `env` of each request has the new values: `getServerEnv()` caches by that object, and the toast middleware
-  caches its cookie storage by the result
+- the `env` of each request has the new values: `workers/app.ts` parses it for each request, and the toast middleware
+  creates its cookie storage for each request
 
 Set secrets before the first deploy and whenever a value changes. Use a different value for each environment.
 

@@ -1,11 +1,10 @@
 import type { Route } from './+types/route'
 
-import { cloudflareContext } from '@/context.server'
+import { envContext } from '@/context.server'
 import { PageLayout } from '@/layout/app-layout'
 
 export function loader({ context }: Route.LoaderArgs) {
-  const { env } = context.get(cloudflareContext)
-  return { env: env.ENVIRONMENT }
+  return { env: context.get(envContext).ENVIRONMENT }
 }
 
 export default function ExampleRoute({ loaderData: { env } }: Route.ComponentProps): React.JSX.Element {

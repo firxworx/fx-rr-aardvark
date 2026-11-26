@@ -69,7 +69,37 @@ test('unknown paths respond with 404', async ({ page }) => {
   const response = await page.goto('/does-not-exist')
 
   expect(response?.status()).toBe(404)
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Not Found')
+  await expect(page.getByRole('heading', { level: 1, name: '404 Not Found' })).toBeVisible()
+  await expect(page).toHaveTitle(/^404 Not Found/)
+})
+
+// error pages render without the app layout and only scroll if their content does not fit
+for (const viewport of [
+  { width: 1440, height: 900 },
+  { width: 390, height: 664 },
+]) {
+  test(`error page fits a ${viewport.width}x${viewport.height} viewport`, async ({ page }) => {
+    await page.setViewportSize(viewport)
+    await page.goto('/does-not-exist')
+
+    await expect(page.getByRole('banner')).toHaveCount(0)
+    expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBe(viewport.height)
+  })
+}
+
+test('skip link is the first tab stop and moves focus past the header', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'networkidle' })
+  await page.keyboard.press('Tab')
+
+  const skipLink = page.getByRole('link', { name: 'Skip to main content' })
+
+  await expect(skipLink).toBeFocused()
+  await expect(skipLink).toBeInViewport()
+
+  await page.keyboard.press('Enter')
+  await page.keyboard.press('Tab')
+
+  await expect(page.locator('main :focus')).toHaveCount(1)
 })
 
 for (const colorScheme of ['light', 'dark'] as const) {
