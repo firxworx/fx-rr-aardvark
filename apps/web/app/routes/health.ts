@@ -5,8 +5,8 @@ import { cloudflareContext, envContext } from '@/context.server'
 /**
  * Resource route for `/health`: reports the environment and the deployed version for uptime monitoring.
  *
- * The version comes from the `CF_VERSION_METADATA` binding (`version_metadata` in `wrangler.jsonc`): compare `id`
- * with the output of `wrangler deployments list`. It does not check dependencies such as databases.
+ * The version comes from the `CF_VERSION_METADATA` binding (`version_metadata` in `wrangler.jsonc`):
+ * compare `id` with the output of `wrangler deployments list`.
  *
  * @see https://developers.cloudflare.com/workers/runtime-apis/bindings/version-metadata/
  */

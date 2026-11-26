@@ -13,7 +13,8 @@ const zServerEnv = z.object({
 })
 
 /**
- * Validated server environment variables. Bindings (D1, KV, etc.) are not included: get them from `cloudflareContext`.
+ * Validated server environment variables (excludes Cloudflare bindings such as D1 and KV: get them from
+ * `cloudflareContext`).
  */
 export type ServerEnv = Readonly<z.infer<typeof zServerEnv>>
 

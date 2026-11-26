@@ -90,16 +90,20 @@ Refer to [logging.md](./logging.md).
 - [ ] **[included]** Workers Issues is enabled: errors and 5xx responses are grouped. It may incur costs.
 - [ ] Set up notifications for Issues (automations)
 - [ ] Estimate the cost of logs at expected traffic; review `LOG_LEVEL` and `head_sampling_rate`
-- [ ] Do not log personal data, tokens, or cookies; check that paths do not contain any
+- [ ] Do not log personal data, tokens, or cookies; check that paths do not contain sensitive information
 - [ ] Workers Logs are kept for up to seven days: export logs if they must be kept longer (OpenTelemetry or Logpush)
 - [ ] **[included]** Client errors caught by react-router and react are logged by `reportClientError()`
 - [ ] Report errors to an error tracker:
   - `handleError` and the render `onError` in `entry.server.tsx`
   - `reportClientError()` in `app/lib/report-client-error.ts`
   - refer to https://reactrouter.com/how-to/instrumentation
-- [ ] **[included]** `/health` reports the environment and the deployed version: monitor it from outside Cloudflare
 - [ ] Alert on error rate, latency, and CPU limits
 - [ ] Set usage and billing notifications for the Cloudflare account; consider CPU `limits` in `wrangler.jsonc`
+
+Health checks and external monitoring:
+
+- [ ] **[included]** `/health` reports the environment and the deployed version: monitor it from outside Cloudflare
+- [ ] Add any necessary custom health checks (`/health`) for critical dependencies (databases, external APIs, etc.)
 
 ## CI and Release
 
@@ -109,9 +113,9 @@ Refer to [logging.md](./logging.md).
 - [ ] Protect the main branch: require a pull request and the CI check
 - [ ] Enable automated updates for dependencies and actions (Dependabot or Renovate)
 - [ ] Run `pnpm audit --prod` before each release: advisories are published for versions that are already in the lockfile.
-  Then review `pnpm audit` for build tools, which run in CI and on developer machines
+- [ ] Review `pnpm audit` results for build tools, which run in CI and on developer machines.
 - [ ] Enable secret scanning with push protection
-- [ ] If CI deploys: use an API token scoped to what it needs, stored as an environment secret
+- [ ] If CI deploys: use an API token scoped to what it needs (least privilege), stored as an environment secret
 - [ ] Plan gradual rollout (`deploy:version` and `deploy:promote`)
 - [ ] **Rehearse a rollback** (`wrangler rollback`), including migrations
 - [ ] Check a tab that was open before a deploy: it may request assets of the previous version
