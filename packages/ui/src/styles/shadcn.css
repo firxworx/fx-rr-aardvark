@@ -10,7 +10,11 @@
   /* surface & text */
   --background: light-dark(var(--color-white), color-mix(in srgb, var(--color-neutral-950) 95%, var(--color-white)));
   --foreground: light-dark(var(--color-neutral-800), var(--color-neutral-100));
-  --card: light-dark(var(--color-white), color-mix(in srgb, var(--color-neutral-950) 93.1%, var(--color-white)));
+  /* light: tinted vs. background (coss-ui and shadcn/ui use white) so cards stand apart without a shadow */
+  --card: light-dark(
+    oklch(0.9925 0 0) /* oklab midpoint of white and neutral-50 */,
+    color-mix(in srgb, var(--color-neutral-950) 93.1%, var(--color-white))
+  );
   --card-foreground: light-dark(var(--color-neutral-800), var(--color-neutral-100));
   --popover: light-dark(var(--color-white), color-mix(in srgb, var(--color-neutral-950) 93.1%, var(--color-white)));
   --popover-foreground: light-dark(var(--color-neutral-800), var(--color-neutral-100));
